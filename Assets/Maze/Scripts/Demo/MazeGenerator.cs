@@ -11,7 +11,7 @@ namespace Project.Procedural.MazeGeneration
         [ContextMenu("Execute Generation Algorithm")]
         void Execute()
         {
-            Grid grid = new(10, 10);
+            Grid grid = new(4, 4);
             grid.Execute(GenerationType);
             grid.DisplayGrid(DisplayMode);
         }

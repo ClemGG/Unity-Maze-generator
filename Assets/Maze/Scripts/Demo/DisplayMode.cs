@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Project.Procedural.MazeGeneration
 {
@@ -6,8 +7,8 @@ namespace Project.Procedural.MazeGeneration
     public enum DisplayMode : byte
     {
         Print,
-        ASCII,
-        UI,
+        UIAscii,
+        UIImage,
         Sprite,
         ThreeD,
     }
@@ -25,7 +26,7 @@ namespace Project.Procedural.MazeGeneration
                     Debug.Log(grid.ToString());
                     break;
 #endif
-                case DisplayMode.UI:
+                case DisplayMode.UIImage:
                     DisplayOnUI(grid);
                     break;
             }
@@ -47,6 +48,39 @@ namespace Project.Procedural.MazeGeneration
         private static void DisplayOnUI(Grid grid)
         {
             Canvas canvas = Object.FindObjectOfType<Canvas>();
+            RectTransform bg = (RectTransform)canvas.transform.GetChild(0);
+
+            //cleanup pooler
+            for (int i = 0; i < bg.childCount; i++)
+            {
+                Transform child = bg.GetChild(i);
+                DemoPrefabPoolers.UIImagePooler.ReturnToPool(child.gameObject, child.name.Replace("(Clone)", ""));
+            }
+
+            float imgWidth = bg.rect.width / grid.Columns;
+            float imgHeight = bg.rect.height / grid.Rows;
+
+            for (int i = 0; i < grid.Rows; i++)
+            {
+                for (int j = 0; j < grid.Columns; j++)
+                {
+                    Cell curCell = grid[i, j];
+
+                    RectTransform cell = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("cell ui img").GetComponent<RectTransform>();
+                    cell.SetParent(bg);
+                    //cell.name = $"cell #{cell.GetSiblingIndex()}";
+
+                    cell.anchorMin = cell.anchorMax = new Vector2(0f, 1f);
+                    cell.pivot = new Vector2(0f, 1f);
+                    cell.anchoredPosition = new Vector3(imgWidth * j, -imgHeight * i, 0);
+
+                    cell.localScale = Vector3.one;
+
+                    cell.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, imgWidth);
+                    cell.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, imgHeight);
+                }
+                
+            }
         }
     }
 }
