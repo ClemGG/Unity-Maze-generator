@@ -13,7 +13,7 @@ namespace Project.Procedural.MazeGeneration
 
         private Cell[][] _grid;
 
-
+        
         public Grid(int rows, int columns)
         {
             Rows = rows;

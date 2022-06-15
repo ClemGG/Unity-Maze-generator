@@ -50,10 +50,18 @@ namespace Project.Procedural.MazeGeneration
             Canvas canvas = Object.FindObjectOfType<Canvas>();
             RectTransform bg = (RectTransform)canvas.transform.GetChild(0);
 
-            //cleanup pooler
+            //cleanup pooler.
+            //stored temp. in an array to avoid bg's resizing
+            Transform[] children = new Transform[bg.childCount];
             for (int i = 0; i < bg.childCount; i++)
             {
-                Transform child = bg.GetChild(i);
+                children[i] = bg.GetChild(i);
+            }
+            for (int i = 0; i < children.Length; i++)
+            {
+                Transform child = children[i];
+                child.SetParent(bg.parent);
+                child.gameObject.SetActive(false);
                 DemoPrefabPoolers.UIImagePooler.ReturnToPool(child.gameObject, child.name.Replace("(Clone)", ""));
             }
 
@@ -68,6 +76,7 @@ namespace Project.Procedural.MazeGeneration
 
                     RectTransform cell = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("cell ui img").GetComponent<RectTransform>();
                     cell.SetParent(bg);
+                    cell.gameObject.SetActive(true);
                     //cell.name = $"cell #{cell.GetSiblingIndex()}";
 
                     cell.anchorMin = cell.anchorMax = new Vector2(0f, 1f);
