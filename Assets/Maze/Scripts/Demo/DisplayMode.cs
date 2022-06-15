@@ -69,73 +69,77 @@ namespace Project.Procedural.MazeGeneration
             float cellWidth = bg.rect.width / grid.Columns;
             float cellHeight = bg.rect.height / grid.Rows;
 
-            //Spawn cell imgs
-            for (int i = 0; i < grid.Rows; i++)
-            {
-                for (int j = 0; j < grid.Columns; j++)
-                {
-
-                    Cell curCell = grid[i, j];
-
-                    RectTransform cell = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("cell ui img").GetComponent<RectTransform>();
-                    cell.SetParent(bg);
-                    cell.gameObject.SetActive(true);
-                    //cell.name = $"cell #{cell.GetSiblingIndex()}";
-
-                    cell.anchorMin = cell.anchorMax = new Vector2(0f, 1f);
-                    cell.pivot = new Vector2(0f, 1f);
-                    cell.anchoredPosition = new Vector3(cellWidth * j, -cellHeight * i, 0);
-
-                    cell.localScale = Vector3.one;
-
-                    cell.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, cellWidth);
-                    cell.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, cellHeight);
-
-                }
-
-            }
-
             //Scale shortest dimension to not overlap too much with cell img
             float lineX = .5f;
-            float lineY = .5f; 
+            float lineY = .5f;
             float lineWidth = 5f;
             float lineHeight = 5f;
 
-
-            //Spawn line imgs
+            //Spawn cell imgs
             for (int i = 0; i <= grid.Rows; i++)
             {
-                RectTransform line = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
-                line.SetParent(bg);
-                line.gameObject.SetActive(true);
-                //line.name = $"line #{line.GetSiblingIndex()}";
+                for (int j = 0; j <= grid.Columns; j++)
+                {
+                    Cell curCell = grid[i, j];
 
-                line.anchorMin = line.anchorMax = new Vector2(0f, 1f);
-                line.pivot = new Vector2(0f, 0.5f);
-                line.anchoredPosition = new Vector3(0, -cellHeight * i - lineY, 0);
+                    if (j < grid.Columns && i < grid.Rows)
+                    {
 
-                line.localScale = Vector3.one;
+                        RectTransform cell = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("cell ui img").GetComponent<RectTransform>();
+                        cell.SetParent(bg);
+                        cell.gameObject.SetActive(true);
+                        //cell.name = $"cell #{cell.GetSiblingIndex()}";
 
-                line.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, bg.rect.width);
-                line.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, lineHeight);
-            }
-            for (int i = 0; i <= grid.Columns; i++)
-            {
+                        cell.anchorMin = cell.anchorMax = new Vector2(0f, 1f);
+                        cell.pivot = new Vector2(0f, 1f);
+                        cell.anchoredPosition = new Vector3(cellWidth * j, -cellHeight * i, 0);
 
-                RectTransform line = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
-                line.SetParent(bg);
-                line.gameObject.SetActive(true);
-                //line.name = $"line #{line.GetSiblingIndex()}";
+                        cell.localScale = Vector3.one;
 
-                line.anchorMin = line.anchorMax = new Vector2(0f, 1f);
-                line.pivot = new Vector2(0.5f, 1f);
-                line.anchoredPosition = new Vector3(cellWidth * i - lineX, 0, 0);
+                        cell.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, cellWidth);
+                        cell.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, cellHeight);
+                    }
 
-                line.localScale = Vector3.one;
 
-                line.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lineWidth);
-                line.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, bg.rect.height);
 
+                    if (j < grid.Columns)
+                    {
+                        //bool shouldDrawLineH = curCell.North is null || !curCell.IsLinked(curCell.South);
+
+                        //Horizontal lines
+                        RectTransform lineH = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
+                        lineH.SetParent(bg);
+                        lineH.gameObject.SetActive(true);
+
+                        lineH.anchorMin = lineH.anchorMax = new Vector2(0f, 1f);
+                        lineH.pivot = new Vector2(0f, 0.5f);
+                        lineH.anchoredPosition = new Vector3(cellWidth * j, -cellHeight * i - lineY, 0);
+
+                        lineH.localScale = Vector3.one;
+
+                        lineH.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, cellWidth);
+                        lineH.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, lineHeight);
+                    }
+
+                    if (i < grid.Rows)
+                    {
+                        //bool shouldDrawLineV = curCell.West is null || !curCell.IsLinked(curCell.East);
+
+                        //Vertical lines
+                        RectTransform lineV = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
+                        lineV.SetParent(bg);
+                        lineV.gameObject.SetActive(true);
+
+                        lineV.anchorMin = lineV.anchorMax = new Vector2(0f, 1f);
+                        lineV.pivot = new Vector2(0.5f, 1f);
+                        lineV.anchoredPosition = new Vector3(cellWidth * j - lineX, -cellHeight * i, 0);
+
+                        lineV.localScale = Vector3.one;
+
+                        lineV.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lineWidth);
+                        lineV.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, cellHeight);
+                    }
+                }
 
             }
 

@@ -9,6 +9,14 @@ namespace Project.Procedural.MazeGeneration
         [field: SerializeField] private GenerationType GenerationType { get; set; } = GenerationType.BinaryTree;
 
 
+#if UNITY_EDITOR
+
+        private void OnValidate()
+        {
+            GridSize = new(Mathf.Clamp(GridSize.x, 4, 100), Mathf.Clamp(GridSize.y, 4, 100));
+        }
+#endif
+
         [ContextMenu("Execute Generation Algorithm")]
         void Execute()
         {
