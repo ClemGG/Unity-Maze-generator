@@ -27,7 +27,7 @@ namespace Project.Procedural.MazeGeneration
         {
             get
             {
-                if(row >= 0 && row < Columns && column >= 0 && column < Rows)
+                if(row >= 0 && row < Rows && column >= 0 && column < Columns)
                 {
                     return _grid[row][column];
                 }
@@ -84,7 +84,11 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-
+        //Describes what to use to represent the Cell in the display classes
+        protected virtual string ContentsOf(Cell cell)
+        {
+            return " ";
+        }
 
         public override string ToString()
         {
@@ -108,7 +112,7 @@ namespace Project.Procedural.MazeGeneration
                         cell = new(-1, -1);
                     }
 
-                    var body = "   ";   //3 spaces for the Cell's body
+                    var body = $" {ContentsOf(cell)} ";   //3 spaces for the Cell's body
                     var eastBoundary = cell.IsLinked(cell.East) ? " " : "|";
                     top = string.Concat(top, body, eastBoundary);
 

@@ -81,5 +81,34 @@ namespace Project.Procedural.MazeGeneration
             }
             return Links.ContainsKey(cell);
         }
+
+
+        //Uses Dijkstra’s solving algorithm
+        public Distances GetDistances()
+        {
+            Distances distances = new(this);
+            Cell[] frontier = new Cell[] { this };
+
+            while(frontier.Length > 0)
+            {
+                List<Cell> newFrontier = new();
+                foreach (Cell cell in frontier)
+                {
+                    foreach (Cell linked in cell.GetAllLinkedCells())
+                    {
+                        if(distances[linked] == -1)
+                        {
+                            distances[linked] = distances[cell] + 1;
+                            newFrontier.Add(linked);
+                        }
+                    }
+                }
+
+                frontier = newFrontier.ToArray();
+            }
+            return distances;
+        }
+
+
     }
 }
