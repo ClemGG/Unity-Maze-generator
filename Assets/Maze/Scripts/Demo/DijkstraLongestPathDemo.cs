@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class DijkstraDemo : MonoBehaviour
+    public class DijkstraLongestPathDemo : MonoBehaviour
     {
         [field: SerializeField] private Vector2Int GridSize { get; set; } = new(4, 4);
         [field: SerializeField] private DisplayMode DisplayMode { get; set; } = DisplayMode.Print;
@@ -25,11 +25,12 @@ namespace Project.Procedural.MazeGeneration
 
             Cell start = grid[0, 0];
             Distances distances = start.GetDistances();
-            grid.Distances = distances;
-            grid.DisplayGrid(DisplayMode);
+            (Cell newStart, int distance) = distances.Max();
 
-            grid.Distances = distances.PathTo(grid[grid.Rows - 1, 0]);
-            print("path from northwest corner to southwest corner:");
+            var newDistances = newStart.GetDistances();
+            (Cell goal, int goalDistance) = newDistances.Max();
+            grid.Distances = newDistances.PathTo(goal);
+
             grid.DisplayGrid(DisplayMode);
         }
     }

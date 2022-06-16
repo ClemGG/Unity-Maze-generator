@@ -31,7 +31,7 @@ namespace Project.Procedural.MazeGeneration
             }
             set
             {
-                Cells.Add(cell, value);
+                Cells[cell] = value;
             }
         }
 
@@ -68,6 +68,24 @@ namespace Project.Procedural.MazeGeneration
 
 
             return breadcrumbs;
+        }
+
+        //returns cell furthest to the root cell
+        public (Cell, int) Max()
+        {
+            int maxDst = 0;
+            Cell maxCell = Root;
+
+            foreach (Cell cell in GetAllCells())
+            {
+                if(Cells[cell] > maxDst)
+                {
+                    maxCell = cell;
+                    maxDst = Cells[cell];
+                }
+            }
+
+            return (maxCell, maxDst);
         }
     }
 }

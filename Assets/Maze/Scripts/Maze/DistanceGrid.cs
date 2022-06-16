@@ -16,7 +16,7 @@ namespace Project.Procedural.MazeGeneration
         {
             if(Distances is not null && Distances[cell] != -1)
             {
-                Distances[cell].ToString();
+                return Distances[cell].ToString();
             }
             return base.ContentsOf(cell);
         }
