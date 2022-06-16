@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Project.Procedural.MazeGeneration
 {
@@ -74,24 +75,29 @@ namespace Project.Procedural.MazeGeneration
 
             foreach (Cell cell in grid.EachCell())
             {
-                #region Spawn cell imgs
+                Color cellColor = grid.BackgroundColorFor(cell);
 
-                RectTransform cellImg = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("cell ui img").GetComponent<RectTransform>();
-                cellImg.SetParent(Bg);
-                cellImg.gameObject.SetActive(true);
-                //cell.name = $"cell #{cell.GetSiblingIndex()}";
+                if (cellColor.r > -0.5f)
+                {
+                    #region Spawn cell imgs
 
-                cellImg.anchorMin = cellImg.anchorMax = new Vector2(0f, 1f);
-                cellImg.pivot = new Vector2(0f, 1f);
-                cellImg.anchoredPosition = new Vector3(cellWidth * cell.Column, -cellHeight * cell.Row, 0);
+                    RectTransform cellImg = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("cell ui img").GetComponent<RectTransform>();
+                    cellImg.SetParent(Bg);
+                    cellImg.gameObject.SetActive(true);
+                    //cell.name = $"cell #{cell.GetSiblingIndex()}";
 
-                cellImg.localScale = Vector3.one;
+                    cellImg.anchorMin = cellImg.anchorMax = new Vector2(0f, 1f);
+                    cellImg.pivot = new Vector2(0f, 1f);
+                    cellImg.anchoredPosition = new Vector3(cellWidth * cell.Column, -cellHeight * cell.Row, 0);
 
-                cellImg.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, cellWidth);
-                cellImg.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, cellHeight);
+                    cellImg.localScale = Vector3.one;
 
-                #endregion
+                    cellImg.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, cellWidth);
+                    cellImg.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, cellHeight);
 
+                    cellImg.GetComponent<Image>().color = cellColor;
+                    #endregion
+                }
             }
 
             foreach (Cell cell in grid.EachCell())

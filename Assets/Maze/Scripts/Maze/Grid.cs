@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
@@ -88,6 +89,11 @@ namespace Project.Procedural.MazeGeneration
         protected virtual string ContentsOf(Cell cell)
         {
             return " ";
+        }
+
+        public virtual Color BackgroundColorFor(Cell cell)
+        {
+            return new(-1, -1, -1, 1);
         }
 
         public override string ToString()
