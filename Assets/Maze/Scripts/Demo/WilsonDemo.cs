@@ -2,10 +2,9 @@ using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class ColoredGridDemo : MonoBehaviour
+    public class WilsonDemo : MonoBehaviour
     {
         [field: SerializeField] private Vector2Int GridSize { get; set; } = new(4, 4);
-        [field: SerializeField] private GenerationType GenerationType { get; set; } = GenerationType.BinaryTree;
 
 
 #if UNITY_EDITOR
@@ -20,7 +19,7 @@ namespace Project.Procedural.MazeGeneration
         void Execute()
         {
             var grid = new ColoredGrid(GridSize.x, GridSize.y);
-            grid.Execute(GenerationType);
+            grid.Execute(GenerationType.Wilson);
 
             Cell start = grid[grid.Rows / 2, grid.Columns / 2];
             grid.SetDistances(start.GetDistances());

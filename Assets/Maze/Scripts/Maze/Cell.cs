@@ -16,7 +16,7 @@ namespace Project.Procedural.MazeGeneration
         //Cells joined by a passage to this Cell
         public Dictionary<Cell, bool> Links { get; set; }
 
-        private List<Cell> _neighbors;
+        private List<Cell> _neighbors = new();
         public List<Cell> Neighbors
         {
             get

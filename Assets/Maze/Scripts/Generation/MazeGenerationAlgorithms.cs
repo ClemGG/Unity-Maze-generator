@@ -5,6 +5,8 @@ namespace Project.Procedural.MazeGeneration
     {
         BinaryTree,
         Sidewinder,
+        AldousBroder,
+        Wilson,
     }
 
 
@@ -19,6 +21,12 @@ namespace Project.Procedural.MazeGeneration
                     break;
                 case GenerationType.Sidewinder:
                     Sidewinder.Execute(grid);
+                    break;
+                case GenerationType.AldousBroder:
+                    AldousBroder.Execute(grid);
+                    break;
+                case GenerationType.Wilson:
+                    Wilson.Execute(grid);
                     break;
             }
         }

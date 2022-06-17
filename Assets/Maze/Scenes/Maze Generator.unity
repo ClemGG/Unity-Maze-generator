@@ -136,6 +136,8 @@ GameObject:
   - component: {fileID: 1146565889}
   - component: {fileID: 1146565891}
   - component: {fileID: 1146565890}
+  - component: {fileID: 1146565892}
+  - component: {fileID: 1146565893}
   m_Layer: 0
   m_Name: Maze Generator
   m_TagString: Untagged
@@ -201,7 +203,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <GridSize>k__BackingField: {x: 25, y: 25}
-  <DisplayMode>k__BackingField: 2
   <GenerationType>k__BackingField: 0
 --- !u!114 &1146565891
 MonoBehaviour:
@@ -218,3 +219,29 @@ MonoBehaviour:
   <GridSize>k__BackingField: {x: 4, y: 4}
   <DisplayMode>k__BackingField: 0
   <GenerationType>k__BackingField: 0
+--- !u!114 &1146565892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146565886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9c481775dcf70d46bc19b1de6b6b176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <GridSize>k__BackingField: {x: 6, y: 6}
+--- !u!114 &1146565893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146565886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1de5721089f7c1c4fa6d3100d6ce7fdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <GridSize>k__BackingField: {x: 10, y: 10}
