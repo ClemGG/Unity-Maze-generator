@@ -13,7 +13,7 @@ namespace Project.Procedural.MazeGeneration
 
         private void OnValidate()
         {
-            GridSize = new(Mathf.Clamp(GridSize.x, 4, 100), Mathf.Clamp(GridSize.y, 4, 100));
+            GridSize = new(Mathf.Clamp(GridSize.x, 1, 100), Mathf.Clamp(GridSize.y, 1, 100));
         }
 #endif
 
