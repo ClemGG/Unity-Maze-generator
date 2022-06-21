@@ -37,29 +37,31 @@ namespace Project.Procedural.MazeGeneration
                 else
                 {
                     current = null;
-                }
 
-                foreach (Cell cell in grid.EachCell())
-                {
-
-                    List<Cell> visitedCells = new();
-                    for (int i = 0; i < cell.Neighbors.Count; i++)
+                    foreach (Cell cell in grid.EachCell())
                     {
-                        Cell vNeighbor = cell.Neighbors[i];
-                        if (vNeighbor.Links.Count > 0)
+
+                        List<Cell> visitedCells = new();
+                        for (int i = 0; i < cell.Neighbors.Count; i++)
                         {
-                            unvisitedCells.Add(vNeighbor);
+                            Cell vNeighbor = cell.Neighbors[i];
+                            if (vNeighbor.Links.Count > 0)
+                            {
+                                visitedCells.Add(vNeighbor);
+                            }
+                        }
+
+                        if (cell.Links.Count == 0 && visitedCells.Count > 0)
+                        {
+                            current = cell;
+                            Cell neighbor = visitedCells.Sample();
+                            current.Link(neighbor);
+                            break;
                         }
                     }
-
-                    if(cell.Links.Count == 0 && visitedCells.Count > 0)
-                    {
-                        current = cell;
-                        Cell neighbor = visitedCells.Sample();
-                        current.Link(neighbor);
-                        break;
-                    }
                 }
+
+               
             }
         }
     }

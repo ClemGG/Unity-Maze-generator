@@ -29,7 +29,7 @@ namespace Project.Procedural.MazeGeneration
             float dark = Mathf.Round(255f * intensity);
             float bright = 128f + Mathf.Round(127f * intensity);
 
-            return new(bright / 255f, bright / 255f, dark / 255f, 1f);
+            return new(dark / 255f, bright / 255f, bright / 255f, 1f);
         }
     }
 }
