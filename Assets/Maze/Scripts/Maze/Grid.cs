@@ -134,5 +134,20 @@ namespace Project.Procedural.MazeGeneration
 
             return output.ToString();
         }
+
+
+        public List<Cell> GetDeadends()
+        {
+            List<Cell> deadends = new();
+            foreach (Cell cell in EachCell())
+            {
+                if(cell.Links.Count == 1)
+                {
+                    deadends.Add(cell);
+                }
+            }
+
+            return deadends;
+        }
     }
 }

@@ -1,17 +1,5 @@
 namespace Project.Procedural.MazeGeneration
 {
-
-    public enum GenerationType : byte
-    {
-        BinaryTree,
-        Sidewinder,
-        AldousBroder,
-        Wilson,
-        HuntAndKill,
-        RecursiveBacktracker,
-    }
-
-
     public static class MazeGenerationAlgorithms
     {
         public static void Execute(this Grid grid, GenerationType algorithm)
@@ -32,6 +20,9 @@ namespace Project.Procedural.MazeGeneration
                     break;
                 case GenerationType.HuntAndKill:
                     HuntAndKill.Execute(grid);
+                    break;
+                case GenerationType.RecursiveBacktracker:
+                    RecursiveBacktracker.Execute(grid);
                     break;
             }
         }
