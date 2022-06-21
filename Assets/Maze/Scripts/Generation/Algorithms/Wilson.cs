@@ -34,7 +34,7 @@ namespace Project.Procedural.MazeGeneration
                     }
                     else
                     {
-                        path = path.GetRange(0, position);
+                        path = path.GetRange(0, position + 1);
                     }
                 }
 

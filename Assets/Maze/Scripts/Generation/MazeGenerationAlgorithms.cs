@@ -7,6 +7,8 @@ namespace Project.Procedural.MazeGeneration
         Sidewinder,
         AldousBroder,
         Wilson,
+        HuntAndKill,
+        RecursiveBacktracker,
     }
 
 
@@ -27,6 +29,9 @@ namespace Project.Procedural.MazeGeneration
                     break;
                 case GenerationType.Wilson:
                     Wilson.Execute(grid);
+                    break;
+                case GenerationType.HuntAndKill:
+                    HuntAndKill.Execute(grid);
                     break;
             }
         }
