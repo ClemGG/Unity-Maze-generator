@@ -10,8 +10,8 @@ namespace Project.Procedural.MazeGeneration
     {
         public static void Execute(Grid grid)
         {
-            Cell cell = grid.RandomCell;
-            int unvisited = grid.Size - 1;
+            Cell cell = grid.RandomCell();
+            int unvisited = grid.Size() - 1;
 
             while(unvisited > 0)
             {

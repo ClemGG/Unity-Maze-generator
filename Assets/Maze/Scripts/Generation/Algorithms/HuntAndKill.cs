@@ -14,7 +14,7 @@ namespace Project.Procedural.MazeGeneration
     {
         public static void Execute(Grid grid)
         {
-            Cell current = grid.RandomCell;
+            Cell current = grid.RandomCell();
 
             while(current is not null)
             {

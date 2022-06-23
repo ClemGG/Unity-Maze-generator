@@ -2,7 +2,7 @@ namespace Project.Procedural.MazeGeneration
 {
     public static class MazeGenerationAlgorithms
     {
-        public static void Execute(this Grid grid, GenerationType algorithm)
+        public static void Execute(this Grid grid, GenerationType algorithm, Cell start = null)
         {
             switch (algorithm)
             {
@@ -22,7 +22,7 @@ namespace Project.Procedural.MazeGeneration
                     HuntAndKill.Execute(grid);
                     break;
                 case GenerationType.RecursiveBacktracker:
-                    RecursiveBacktracker.Execute(grid);
+                    RecursiveBacktracker.Execute(grid, start);
                     break;
             }
         }

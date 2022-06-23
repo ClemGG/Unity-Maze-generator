@@ -9,7 +9,7 @@ namespace Project.Procedural.MazeGeneration
 
         public static void Execute(Grid grid)
         {
-            List<Cell> unvisited = new(grid.Size);
+            List<Cell> unvisited = new(grid.Size());
             foreach (Cell cell in grid.EachCell())
             {
                 unvisited.Add(cell);

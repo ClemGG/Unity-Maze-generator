@@ -9,10 +9,10 @@ namespace Project.Procedural.MazeGeneration
         public int Rows { get; }
         public int Columns { get; }
 
-        public int Size => Rows * Columns;
-        public Cell RandomCell => _grid[Rows.Sample()][Columns.Sample()];
+        public virtual int Size() => Rows * Columns;
+        public virtual Cell RandomCell() => _grid[Rows.Sample()][Columns.Sample()];
 
-        private Cell[][] _grid;
+        protected Cell[][] _grid;
 
         
         public Grid(int rows, int columns)
@@ -37,7 +37,7 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-        private void PrepareGrid()
+        protected virtual void PrepareGrid()
         {
             _grid = new Cell[Rows][];
 
@@ -52,7 +52,7 @@ namespace Project.Procedural.MazeGeneration
 
         }
 
-        private void ConfigureCells()
+        protected virtual void ConfigureCells()
         {
             for(int i = 0; i < Rows; i++)
             {

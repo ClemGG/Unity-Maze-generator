@@ -6,10 +6,10 @@ namespace Project.Procedural.MazeGeneration
 {
     public static class RecursiveBacktracker
     {
-        public static void Execute(Grid grid)
+        public static void Execute(Grid grid, Cell startCell = null)
         {
             Stack<Cell> stack = new();
-            Cell start = grid.RandomCell;
+            Cell start = startCell is null ? grid.RandomCell() : startCell;
             stack.Push(start);
 
             while(stack.Count > 0)
