@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace Project.Procedural.MazeGeneration
 {
     public class Mask
@@ -25,6 +27,12 @@ namespace Project.Procedural.MazeGeneration
 
                 return count;
             }
+        }
+
+
+        public Mask FromText(File file)
+        {
+
         }
 
 
