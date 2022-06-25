@@ -93,7 +93,7 @@ namespace Project.Procedural.MazeGeneration
 
         public virtual Color BackgroundColorFor(Cell cell)
         {
-            return new(-1, -1, -1, 1);
+            return new(1, 1, 1, 1);
         }
 
         public override string ToString()

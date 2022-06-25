@@ -17,9 +17,7 @@ namespace Project.Procedural.MazeGeneration
     public enum DisplayMode : byte
     {
         Print,
-        UIAscii,
         UIImage,
-        Sprite,
         ThreeD,
     }
 

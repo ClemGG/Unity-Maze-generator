@@ -16,6 +16,7 @@ namespace Project.Procedural.MazeGeneration
         }
 #endif
 
+
         [ContextMenu("Execute Generation Algorithm")]
         void Execute()
         {
