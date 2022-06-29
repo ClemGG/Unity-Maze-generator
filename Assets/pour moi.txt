@@ -1,0 +1,3 @@
+Pour l'instant, ce projet ne contient que les librairies pour un labyrinthe en 2D orthogonal (avec des cellules carrées).
+
+Les autres formes de labyrinthes (polaires, hexa, etc.) demandent de jouer avec des UIs d'une façon qu'Unity ne permet pas par défaut. Je vais pas m'emmerder à chercher tout ça ou à acheter une asset payante pour le faire, donc on s'arrêtera là. On continuera le tuto du mec avec du C# pur, vu que le langage a des librairies pour ça. Ce qu'on a déjà suffira pour notre jeu.

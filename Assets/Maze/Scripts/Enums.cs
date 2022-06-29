@@ -18,7 +18,11 @@ namespace Project.Procedural.MazeGeneration
     {
         Print,
         UIImage,
-        ThreeD,
+    }
+
+    public enum MazeType : byte
+    {
+        Orthogonal, //Gamma
     }
 
     public static class Enums

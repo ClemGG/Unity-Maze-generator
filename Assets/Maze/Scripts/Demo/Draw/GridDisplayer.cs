@@ -8,7 +8,7 @@ namespace Project.Procedural.MazeGeneration
         public static bool ShouldClearConsole { get; set; } = false;
 
 
-        public static void DisplayGrid(this Grid grid, DisplayMode mode)
+        public static void DisplayGrid(this Grid grid, DisplayMode mode, MazeType mazeType = MazeType.Orthogonal)
         {
             switch (mode)
             {
@@ -19,7 +19,12 @@ namespace Project.Procedural.MazeGeneration
                     break;
 #endif
                 case DisplayMode.UIImage:
-                    OrthogonalMaze.DisplayOnUI(grid);
+                    switch (mazeType)
+                    {
+                        case MazeType.Orthogonal:
+                            OrthogonalMaze.DisplayOnUI(grid);
+                            break;
+                    }
                     break;
             }
         }
