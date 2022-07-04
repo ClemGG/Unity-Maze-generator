@@ -149,5 +149,62 @@ namespace Project.Procedural.MazeGeneration
 
             return deadends;
         }
+
+        //Removes dead ends from the maze to create a braided (imperfect) maze.
+        //The higher the braidRate, the more deadends are removed.
+        public void Braid(float braidRate = 1f)
+        {
+            List<Cell> deadends = GetDeadends();
+            //Shuffles the list of dead ends
+            List<Cell> shuffledDeadends = new(deadends.Count);
+            while (deadends.Count > 0)
+            {
+                int rand = deadends.Count.Sample();
+                Cell deadend = deadends[rand];
+                deadends.Remove(deadend);
+                shuffledDeadends.Add(deadend);
+            }
+
+            foreach (Cell cell in shuffledDeadends)
+            {
+                float braidRand = 1f.Sample();
+
+                //Checks links.count to avoid repeating a cell
+                if(cell.Links.Count != 1 || braidRand > braidRate)
+                {
+                    break;
+                }
+
+                //get unlinked neighbors
+                List<Cell> neighbors = new(cell.Neighbors.Count);
+                foreach (Cell neighbor in cell.Neighbors)
+                {
+                    if (!cell.IsLinked(neighbor))
+                    {
+                        neighbors.Add(neighbor);
+                    }
+                }
+
+                //get the best neighbor
+                //optimizes by prefering to link 2 deadends together
+                List<Cell> best = new(neighbors.Count);
+                foreach (Cell n in neighbors)
+                {
+                    if (n.Links.Count == 1)
+                    {
+                        best.Add(n);
+                    }
+                }
+
+                if (best.Count == 0)
+                {
+                    best = neighbors;
+                }
+
+                Cell bestNeighbor = best.Sample();
+                cell.Link(bestNeighbor);
+            }
+
+        }
     }
 }

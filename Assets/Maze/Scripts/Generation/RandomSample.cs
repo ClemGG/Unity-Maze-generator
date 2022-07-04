@@ -34,5 +34,15 @@ namespace Project.Procedural.MazeGeneration
             }
             return Random.Range(start, length);
         }
+
+        public static float Sample(this float length, float start = 0f)
+        {
+            if (Mathf.Approximately(length, 0f))
+            {
+                Debug.LogError("Sample Error : Length is 0f. Defaulted to 0f to avoid range error.");
+                return 0f;
+            }
+            return Random.Range(start, length);
+        }
     }
 }
