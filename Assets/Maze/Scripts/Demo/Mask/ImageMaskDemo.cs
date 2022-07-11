@@ -16,7 +16,7 @@ namespace Project.Procedural.MazeGeneration
                 throw new("Error : The text file is missing.");
             }
 
-            Mask m = Mask.FromPNG(ImageAsset, Extension);
+            Mask m = Mask.FromImgFile(ImageAsset, Extension);
 
             var grid = new MaskedGrid(m.Rows, m.Columns);
             grid.SetMask(m);

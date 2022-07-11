@@ -37,7 +37,10 @@ namespace Project.Procedural.MazeGeneration
         }
 
 
-
+        public static void DisplayOnMesh(Grid grid)
+        {
+            Debug.Log("3D");
+        }
 
         public static void DisplayOnUI(Grid grid)
         {

@@ -18,6 +18,16 @@ namespace Project.Procedural.MazeGeneration
                     Debug.Log(grid.ToString());
                     break;
 #endif
+
+                case DisplayMode.Mesh:
+                    switch (mazeType)
+                    {
+                        case MazeType.Orthogonal:
+                            OrthogonalMaze.DisplayOnMesh(grid);
+                            break;
+                    }
+                    break;
+
                 case DisplayMode.UIImage:
                     switch (mazeType)
                     {

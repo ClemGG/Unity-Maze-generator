@@ -68,7 +68,7 @@ namespace Project.Procedural.MazeGeneration
 
             return m;
         }
-        public static Mask FromPNG(Texture2D imageAsset, string extension)
+        public static Mask FromImgFile(Texture2D imageAsset, string extension)
         {
             byte[] texData = File.ReadAllBytes($"{Application.dataPath}/Maze/StreamingAssets/Masks/{imageAsset.name}{extension}");
 

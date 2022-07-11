@@ -18,6 +18,7 @@ namespace Project.Procedural.MazeGeneration
     {
         Print,
         UIImage,
+        Mesh,
     }
 
     public enum MazeType : byte
