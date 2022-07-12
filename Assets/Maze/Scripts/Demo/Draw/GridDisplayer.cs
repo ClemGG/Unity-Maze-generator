@@ -8,7 +8,7 @@ namespace Project.Procedural.MazeGeneration
         public static bool ShouldClearConsole { get; set; } = false;
 
 
-        public static void DisplayGrid(this Grid grid, DisplayMode mode, MazeType mazeType = MazeType.Orthogonal)
+        public static void DisplayGrid(this Grid grid, DisplayMode mode, float inset = 0f, MazeType mazeType = MazeType.Orthogonal)
         {
             switch (mode)
             {
@@ -23,7 +23,7 @@ namespace Project.Procedural.MazeGeneration
                     switch (mazeType)
                     {
                         case MazeType.Orthogonal:
-                            OrthogonalMaze.DisplayOnMesh(grid);
+                            OrthogonalMaze.DisplayOnMesh(grid, inset);
                             break;
                     }
                     break;
@@ -32,7 +32,7 @@ namespace Project.Procedural.MazeGeneration
                     switch (mazeType)
                     {
                         case MazeType.Orthogonal:
-                            OrthogonalMaze.DisplayOnUI(grid);
+                            OrthogonalMaze.DisplayOnUI(grid, inset);
                             break;
                     }
                     break;
