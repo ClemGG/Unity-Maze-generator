@@ -36,14 +36,17 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
+        #region 3D Mesh
 
         public static void DisplayOnMesh(Grid grid, float inset = 0f)
         {
             Debug.Log("3D");
         }
 
+        #endregion
 
 
+        #region UI
 
         public static void DisplayOnUI(Grid grid, float inset = 0f)
         {
@@ -82,7 +85,7 @@ namespace Project.Procedural.MazeGeneration
 
                     if (!Mathf.Approximately(inset, 0f))
                     {
-                        //DisplayCellImgWithInset(cell, maxCellSize, x, y, inset, true);
+                        DisplayCellImgWithInset(grid, cell, maxCellSize, i, j, x, y, inset);
                     }
                     else
                     {
@@ -107,12 +110,12 @@ namespace Project.Procedural.MazeGeneration
 
                     if (!Mathf.Approximately(inset, 0f))
                     {
-                        //DisplayLineImgWithInset(cell, maxCellSize, x, y, inset, false);
+                        DisplayLineImgWithInset(cell, maxCellSize, x, y, inset);
                     }
                     else
                     {
 
-                        DisplayLineImgWithoutInset(cell, maxCellSize, i, j);
+                        DisplayLineImgWithoutInset(cell, maxCellSize);
                     }
                 }
             }
@@ -124,33 +127,49 @@ namespace Project.Procedural.MazeGeneration
 
 
 
-        private static void DisplayCellImgWithInset()
+
+        private static float[] CellCoordsWithInset(float x, float y, float cellSize, float inset)
+        {
+            float x1 = x;
+            float x4 = x + cellSize;
+            float x2 = x1 + inset;
+            float x3 = x4 - inset;
+
+            float y1 = y;
+            float y4 = y + cellSize;
+            float y2 = y1 + inset;
+            float y3 = y4 - inset;
+
+            return new float []{x1, x2, x3, x4, y1, y2, y3, y4};
+        }
+
+
+
+        private static void DisplayCellImgWithInset(Grid grid, Cell cell, float cellSize, int i, int j, float x, float y, float inset)
+        {
+            float[] coords = CellCoordsWithInset(x, y, cellSize, inset);
+
+            DrawCell(new Vector2(cellSize, cellSize),
+                new Vector3(cellSize * j, -cellSize * i, 0),
+                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+        }
+
+
+        private static void DisplayLineImgWithInset(Cell cell, float cellSize, float x, float y, float inset)
         {
 
         }
-        private static void DisplayLineImgWithInset()
-        {
-
-        }
+        
+        
         private static void DisplayCellImgWithoutInset(Grid grid, Cell cell, float cellSize, int i, int j)
         {
-            RectTransform cellImg = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("cell ui img").GetComponent<RectTransform>();
-            cellImg.SetParent(Bg);
-            cellImg.gameObject.SetActive(true);
-            //cell.name = $"cell #{cell.GetSiblingIndex()}";
-
-            cellImg.pivot = cellImg.anchorMin = cellImg.anchorMax = new Vector2(0f, 1f);
-            cellImg.anchoredPosition = new Vector3(cellSize * j, -cellSize * i, 0);
-
-            cellImg.localScale = Vector3.one;
-
-            cellImg.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, cellSize);
-            cellImg.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, cellSize);
-
-            Color cellColor = (cell is null) ? Color.black : grid.BackgroundColorFor(cell);
-            cellImg.GetComponent<Image>().color = cellColor;
+            DrawCell(new Vector2(cellSize, cellSize),
+                new Vector3(cellSize * j, -cellSize * i, 0),
+                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
         }
-        private static void DisplayLineImgWithoutInset(Cell cell, float cellSize, int i, int j)
+        
+        
+        private static void DisplayLineImgWithoutInset(Cell cell, float cellSize)
         {
             if (cell is null) return;
 
@@ -161,200 +180,78 @@ namespace Project.Procedural.MazeGeneration
             float lineHeight = 5f;
 
 
-            Vector2 anchorsH = new(0f, 1f);
+            Vector2 anchorH = new(0f, 1f);
             Vector2 pivotH = new(0f, 1f);
-            Vector2 anchorsV = new(0f, 1f);
+            Vector2 anchorV = new(0f, 1f);
             Vector2 pivotV = new(0.5f, 1f);
 
             if (cell.North is null)
             {
-                RectTransform lineN = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
-                lineN.SetParent(Bg);
-                lineN.gameObject.SetActive(true);
-
-                lineN.anchorMin = lineN.anchorMax = anchorsH;
-                lineN.pivot = pivotH;
-                lineN.anchoredPosition = new Vector3(cellSize * cell.Column, -cellSize * cell.Row - lineY, 0);
-                lineN.localScale = Vector3.one;
-
-                lineN.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, cellSize);
-                lineN.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, lineHeight);
+                //Line North
+                DrawLine(anchorH, pivotH,
+                    new Vector2(cellSize, lineHeight), 
+                    new Vector3(cellSize * cell.Column, -cellSize * cell.Row - lineY, 0));
             }
 
             if (cell.West is null)
             {
-
                 //Line West
-                RectTransform lineW = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
-                lineW.SetParent(Bg);
-                lineW.gameObject.SetActive(true);
-
-                lineW.anchorMin = lineW.anchorMax = anchorsV;
-                lineW.pivot = pivotV;
-                lineW.anchoredPosition = new Vector3(cellSize * cell.Column - lineX, -cellSize * cell.Row, 0);
-                lineW.localScale = Vector3.one;
-
-                lineW.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lineWidth);
-                lineW.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, cellSize);
+                DrawLine(anchorV, pivotV,
+                    new Vector2(lineWidth, cellSize),
+                    new Vector3(cellSize * cell.Column - lineX, -cellSize * cell.Row, 0));
             }
 
             if (!cell.IsLinked(cell.East))
             {
                 //Line East
-                RectTransform lineE = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
-                lineE.SetParent(Bg);
-                lineE.gameObject.SetActive(true);
-
-                lineE.anchorMin = lineE.anchorMax = anchorsV;
-                lineE.pivot = pivotV;
-                lineE.anchoredPosition = new Vector3(cellSize * (cell.Column + 1) - lineX, -cellSize * cell.Row, 0);
-                lineE.localScale = Vector3.one;
-
-                lineE.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lineWidth);
-                lineE.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, cellSize);
+                DrawLine(anchorV, pivotV,
+                    new Vector2(lineWidth, cellSize),
+                    new Vector3(cellSize * (cell.Column + 1) - lineX, -cellSize * cell.Row, 0));
             }
 
             if (!cell.IsLinked(cell.South))
             {
                 //Line South
-                RectTransform lineS = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
-                lineS.SetParent(Bg);
-                lineS.gameObject.SetActive(true);
-
-                lineS.anchorMin = lineS.anchorMax = anchorsH;
-                lineS.pivot = pivotH;
-                lineS.anchoredPosition = new Vector3(cellSize * cell.Column, -cellSize * (cell.Row + 1) - lineY, 0);
-                lineS.localScale = Vector3.one;
-
-                lineS.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, cellSize);
-                lineS.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, lineHeight);
+                DrawLine(anchorH, pivotH,
+                    new Vector2(cellSize, lineHeight),
+                    new Vector3(cellSize * cell.Column, -cellSize * (cell.Row + 1) - lineY, 0));
             }
         }
 
-        //public static void DisplayOnUI(Grid grid)
-        //{
 
 
 
-        //    float maxCellSize = Mathf.Min(Bg.rect.width / grid.Columns, Bg.rect.height / grid.Rows);
-        //    float cellWidth = maxCellSize;
-        //    float cellHeight = maxCellSize;
 
-        //    //Scale shortest dimension to not overlap too much with cell img
-        //    float lineX = .5f;
-        //    float lineY = .5f;
-        //    float lineWidth = 5f;
-        //    float lineHeight = 5f;
+        private static void DrawCell(Vector2 size, Vector3 anchoredPos, Color col)
+        {
+            RectTransform cellImg = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("cell ui img").GetComponent<RectTransform>();
+            cellImg.SetParent(Bg);
+            cellImg.gameObject.SetActive(true);
 
+            cellImg.pivot = cellImg.anchorMin = cellImg.anchorMax = new Vector2(0f, 1f);
+            cellImg.anchoredPosition = anchoredPos;
+            cellImg.localScale = Vector3.one;
 
-        //    Vector2 anchorsH = new(0f, 1f);
-        //    Vector2 pivotH = new(0f, 1f);
-        //    Vector2 anchorsV = new(0f, 1f);
-        //    Vector2 pivotV = new(0.5f, 1f);
+            cellImg.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
+            cellImg.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
 
-        //    for (int i = 0; i < grid.Rows; i++)
-        //    {
-        //        for (int j = 0; j < grid.Columns; j++)
-        //        {
-        //            Cell cell = grid[i, j];
+            cellImg.GetComponent<Image>().color = col;
+        }
 
-        //            Color cellColor = (cell is null) ? Color.black : grid.BackgroundColorFor(cell);
+        private static void DrawLine(Vector2 anchor, Vector2 pivot, Vector2 size, Vector3 anchoredPos)
+        {
+            RectTransform line = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
+            line.SetParent(Bg);
+            line.gameObject.SetActive(true);
 
-        //            #region Spawn cell imgs
+            line.anchorMin = line.anchorMax = anchor;
+            line.pivot = pivot;
+            line.anchoredPosition = anchoredPos;
+            line.localScale = Vector3.one;
 
-        //            RectTransform cellImg = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("cell ui img").GetComponent<RectTransform>();
-        //            cellImg.SetParent(Bg);
-        //            cellImg.gameObject.SetActive(true);
-        //            //cell.name = $"cell #{cell.GetSiblingIndex()}";
-
-        //            cellImg.anchorMin = cellImg.anchorMax = new Vector2(0f, 1f);
-        //            cellImg.pivot = new Vector2(0f, 1f);
-        //            cellImg.anchoredPosition = new Vector3(cellWidth * j, -cellHeight * i, 0);
-
-        //            cellImg.localScale = Vector3.one;
-
-        //            cellImg.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, cellWidth);
-        //            cellImg.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, cellHeight);
-
-        //            cellImg.GetComponent<Image>().color = cellColor;
-
-        //            #endregion
-        //        }
-        //    }
-
-        //    for (int i = 0; i < grid.Rows; i++)
-        //    {
-        //        for (int j = 0; j < grid.Columns; j++)
-        //        {
-        //            Cell cell = grid[i, j];
-        //            if (cell is null) continue;
-
-        //            if (cell.North is null)
-        //            {
-        //                RectTransform lineN = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
-        //                lineN.SetParent(Bg);
-        //                lineN.gameObject.SetActive(true);
-
-        //                lineN.anchorMin = lineN.anchorMax = anchorsH;
-        //                lineN.pivot = pivotH;
-        //                lineN.anchoredPosition = new Vector3(cellWidth * cell.Column, -cellHeight * cell.Row - lineY, 0);
-        //                lineN.localScale = Vector3.one;
-
-        //                lineN.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, cellWidth);
-        //                lineN.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, lineHeight);
-        //            }
-
-        //            if (cell.West is null)
-        //            {
-
-        //                //Line West
-        //                RectTransform lineW = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
-        //                lineW.SetParent(Bg);
-        //                lineW.gameObject.SetActive(true);
-
-        //                lineW.anchorMin = lineW.anchorMax = anchorsV;
-        //                lineW.pivot = pivotV;
-        //                lineW.anchoredPosition = new Vector3(cellWidth * cell.Column - lineX, -cellHeight * cell.Row, 0);
-        //                lineW.localScale = Vector3.one;
-
-        //                lineW.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lineWidth);
-        //                lineW.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, cellHeight);
-        //            }
-
-        //            if (!cell.IsLinked(cell.East))
-        //            {
-        //                //Line East
-        //                RectTransform lineE = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
-        //                lineE.SetParent(Bg);
-        //                lineE.gameObject.SetActive(true);
-
-        //                lineE.anchorMin = lineE.anchorMax = anchorsV;
-        //                lineE.pivot = pivotV;
-        //                lineE.anchoredPosition = new Vector3(cellWidth * (cell.Column + 1) - lineX, -cellHeight * cell.Row, 0);
-        //                lineE.localScale = Vector3.one;
-
-        //                lineE.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lineWidth);
-        //                lineE.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, cellHeight);
-        //            }
-
-        //            if (!cell.IsLinked(cell.South))
-        //            {
-        //                //Line South
-        //                RectTransform lineS = DemoPrefabPoolers.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
-        //                lineS.SetParent(Bg);
-        //                lineS.gameObject.SetActive(true);
-
-        //                lineS.anchorMin = lineS.anchorMax = anchorsH;
-        //                lineS.pivot = pivotH;
-        //                lineS.anchoredPosition = new Vector3(cellWidth * cell.Column, -cellHeight * (cell.Row + 1) - lineY, 0);
-        //                lineS.localScale = Vector3.one;
-
-        //                lineS.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, cellWidth);
-        //                lineS.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, lineHeight);
-        //            }
-        //        }
-        //    }
-
-        //}
+            line.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
+            line.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+        }
+        #endregion
     }
 }
