@@ -10,7 +10,18 @@ namespace Project.Procedural.MazeGeneration
         public int Columns { get; }
 
         public virtual int Size() => Rows * Columns;
-        public virtual Cell RandomCell() => _grid[Rows.Sample()][Columns.Sample()];
+        public virtual Cell RandomCell()
+        {
+            Cell cell;
+            do
+            {
+                cell = _grid[Rows.Sample()][Columns.Sample()];
+            } 
+            while (cell is null);
+
+            return cell;
+        }
+
 
         protected Cell[][] _grid;
 

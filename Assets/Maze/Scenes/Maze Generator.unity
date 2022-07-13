@@ -146,8 +146,8 @@ GameObject:
   - component: {fileID: 1146565899}
   - component: {fileID: 1146565900}
   - component: {fileID: 1146565901}
-  - component: {fileID: 1146565902}
   - component: {fileID: 1146565903}
+  - component: {fileID: 1146565902}
   m_Layer: 0
   m_Name: Maze Generator
   m_TagString: Untagged
@@ -393,7 +393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <GridSize>k__BackingField: {x: 10, y: 10}
-  <Inset>k__BackingField: 0
+  <Inset>k__BackingField: 0.261
   <BraidRate>k__BackingField: 1
-  <ImageAsset>k__BackingField: {fileID: 0}
+  <ImageAsset>k__BackingField: {fileID: 2800000, guid: 91822a5881ac70d40b7c74e8ec29ab3e, type: 3}
   <Extension>k__BackingField: .png

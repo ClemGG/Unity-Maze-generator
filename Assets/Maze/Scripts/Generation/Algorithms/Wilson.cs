@@ -12,6 +12,8 @@ namespace Project.Procedural.MazeGeneration
             List<Cell> unvisited = new(grid.Size());
             foreach (Cell cell in grid.EachCell())
             {
+                if (cell is null) continue;
+
                 unvisited.Add(cell);
             }
 
@@ -20,7 +22,13 @@ namespace Project.Procedural.MazeGeneration
 
             while(unvisited.Count > 0)
             {
-                Cell cell = unvisited.Sample();
+                Cell cell;
+                do
+                {
+                    cell = unvisited.Sample();
+                }
+                while (cell is null);
+
                 List<Cell> path = new() { cell };
 
                 while (unvisited.Contains(cell))

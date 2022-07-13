@@ -3,7 +3,7 @@ using Project.Pool;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public static class DemoPrefabPoolers
+    public static class MazePrefabs
     {
         public static ClassPooler<GameObject> UIImagePooler = new
             (

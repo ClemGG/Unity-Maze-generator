@@ -21,6 +21,15 @@ namespace Project.Procedural.MazeGeneration
         }
 #endif
 
+
+        [ContextMenu("Cleanup UI")]
+        void CleanupUI()
+        {
+            OrthogonalMaze.CleanupMesh();
+        }
+
+
+
         [ContextMenu("Execute Generation Algorithm")]
         void Execute()
         {
@@ -37,7 +46,7 @@ namespace Project.Procedural.MazeGeneration
                 (grid as MaskedGrid).SetMask(m);
             }
 
-            grid.Execute(GenerationType.RecursiveBacktracker);
+            grid.Execute(GenerationType);
             grid.Braid(BraidRate);
 
             Cell start = grid[grid.Rows / 2, grid.Columns / 2];

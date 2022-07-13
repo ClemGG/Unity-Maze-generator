@@ -40,6 +40,7 @@ namespace Project.Procedural.MazeGeneration
 
                     foreach (Cell cell in grid.EachCell())
                     {
+                        if (cell is null) continue;
 
                         List<Cell> visitedCells = new();
                         for (int i = 0; i < cell.Neighbors.Count; i++)

@@ -18,12 +18,12 @@ namespace Project.Procedural.MazeGeneration
             {
                 _neighbors = new();
 
-                if (cell.North is not null) _neighbors.Add(cell.North);
-                if (cell.East is not null) _neighbors.Add(cell.East);
+                if (cell.North != null) _neighbors.Add(cell.North);
+                if (cell.East != null) _neighbors.Add(cell.East);
 
                 Cell neighbor = _neighbors.Sample();
 
-                if (neighbor is not null) cell.Link(neighbor);
+                if (neighbor != null) cell.Link(neighbor);
             }
         }
     }

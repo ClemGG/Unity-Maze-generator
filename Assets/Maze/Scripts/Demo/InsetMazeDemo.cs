@@ -19,6 +19,16 @@ namespace Project.Procedural.MazeGeneration
         }
 #endif
 
+
+
+
+        [ContextMenu("Cleanup UI")]
+        void CleanupUI()
+        {
+            OrthogonalMaze.CleanupUI();
+        }
+
+
         [ContextMenu("Execute Generation Algorithm")]
         void Execute()
         {
