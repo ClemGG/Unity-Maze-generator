@@ -141,6 +141,8 @@ namespace Project.Procedural.MazeGeneration
             List<Cell> deadends = new();
             foreach (Cell cell in EachCell())
             {
+                if (cell is null) continue; //In case we have a mask
+
                 if(cell.Links.Count == 1)
                 {
                     deadends.Add(cell);

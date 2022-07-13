@@ -5,7 +5,10 @@ namespace Project.Procedural.MazeGeneration
     public class InsetMazeDemo : MonoBehaviour
     {
         [field: SerializeField] private Vector2Int GridSize { get; set; } = new(4, 4);
-        [field: SerializeField, Range(0f, 1f)] private float Inset { get; set; } = 0f;
+        [field: SerializeField, Range(0f, .5f)] private float Inset { get; set; } = 0f;
+        [field: SerializeField, Range(0f, 1f)] private float BraidRate { get; set; } = 1f;
+        [field: SerializeField] private Texture2D ImageAsset { get; set; }
+        [field: SerializeField] private string Extension { get; set; } = ".png";
 
 
 #if UNITY_EDITOR
@@ -19,11 +22,25 @@ namespace Project.Procedural.MazeGeneration
         [ContextMenu("Execute Generation Algorithm")]
         void Execute()
         {
-            var grid = new ColoredGrid(GridSize.x, GridSize.y);
+            Grid grid;
+
+            if (ImageAsset == null)
+            {
+                grid = new ColoredGrid(GridSize.x, GridSize.y);
+            }
+            else
+            {
+                Mask m = Mask.FromImgFile(ImageAsset, Extension);
+                grid = new MaskedGrid(m.Rows, m.Columns);
+                (grid as MaskedGrid).SetMask(m);
+            }
+
             grid.Execute(GenerationType.RecursiveBacktracker);
+            grid.Braid(BraidRate);
 
             Cell start = grid[grid.Rows / 2, grid.Columns / 2];
-            grid.SetDistances(start.GetDistances());
+            (grid as ColoredGrid).SetDistances(start.GetDistances());
+
 
             grid.DisplayGrid(DisplayMode.UIImage, Inset);
         }

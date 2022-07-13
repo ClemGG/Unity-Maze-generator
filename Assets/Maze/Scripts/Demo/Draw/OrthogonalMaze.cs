@@ -80,10 +80,12 @@ namespace Project.Procedural.MazeGeneration
                 {
                     Cell cell = grid[i, j];
 
+                    if (cell is null) continue;
+
                     float x = cell.Column * maxCellSize;
                     float y = cell.Row * maxCellSize;
 
-                    if (!Mathf.Approximately(inset, 0f))
+                    if (!Mathf.Approximately(inset, 0f) && !Mathf.Approximately(inset, .5f * maxCellSize))
                     {
                         DisplayCellImgWithInset(grid, cell, maxCellSize, i, j, x, y, inset);
                     }
@@ -105,10 +107,12 @@ namespace Project.Procedural.MazeGeneration
                 {
                     Cell cell = grid[i, j];
 
+                    if (cell is null) continue;
+
                     float x = cell.Column * maxCellSize;
                     float y = cell.Row * maxCellSize;
 
-                    if (!Mathf.Approximately(inset, 0f))
+                    if (!Mathf.Approximately(inset, 0f) && !Mathf.Approximately(inset, .5f * maxCellSize))
                     {
                         DisplayLineImgWithInset(cell, maxCellSize, x, y, inset);
                     }
@@ -128,7 +132,7 @@ namespace Project.Procedural.MazeGeneration
 
 
 
-        private static float[] CellCoordsWithInset(float x, float y, float cellSize, float inset)
+        private static (Vector4, Vector4) CellCoordsWithInset(float x, float y, float cellSize, float inset)
         {
             float x1 = x;
             float x4 = x + cellSize;
@@ -140,27 +144,155 @@ namespace Project.Procedural.MazeGeneration
             float y2 = y1 + inset;
             float y3 = y4 - inset;
 
-            return new float []{x1, x2, x3, x4, y1, y2, y3, y4};
+            return (new(x1, x2, x3, x4), new( y1, y2, y3, y4));
         }
 
 
 
         private static void DisplayCellImgWithInset(Grid grid, Cell cell, float cellSize, int i, int j, float x, float y, float inset)
         {
-            float[] coords = CellCoordsWithInset(x, y, cellSize, inset);
+            //(Vector4 xc, Vector4 yc) = CellCoordsWithInset(x, y, cellSize, inset);
+            //float x1 = xc.x;
+            //float x2 = xc.y;
+            //float x3 = xc.z;
+            //float x4 = xc.w;
 
-            DrawCell(new Vector2(cellSize, cellSize),
-                new Vector3(cellSize * j, -cellSize * i, 0),
-                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+            //float y1 = yc.x;
+            //float y2 = yc.y;
+            //float y3 = yc.z;
+            //float y4 = yc.w;
+
+            //DrawCell(new Vector2(cellSize - inset, cellSize - inset),
+            //    new Vector3(x, -y, 0),
+            //    (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
         }
 
 
         private static void DisplayLineImgWithInset(Cell cell, float cellSize, float x, float y, float inset)
         {
 
+            //Scale shortest dimension to not overlap too much with cell img
+            float lineX = .5f;
+            float lineY = .5f;
+
+            //width and height of the UI Image in pixels
+            //TODO : Scale these sizes for smaller cells
+            float lineWidth = 5f;
+            float lineHeight = 5f;
+
+
+            Vector2 anchorH = new(0f, 1f);
+            Vector2 pivotH = new(0f, 1f);
+            Vector2 anchorV = new(0f, 1f);
+            Vector2 pivotV = new(0.5f, 1f);
+
+            (Vector4 xc, Vector4 yc) = CellCoordsWithInset(x, y, cellSize, inset);
+            float x1 = xc.x;
+            float x2 = xc.y;
+            float x3 = xc.z;
+            float x4 = xc.w;
+
+            float y1 = yc.x;
+            float y2 = yc.y;
+            float y3 = yc.z;
+            float y4 = yc.w;
+
+            Vector3 pos, size;
+
+            if (cell.IsLinked(cell.North))
+            {
+                pos = new(x2, -y1);
+                size = new(lineWidth, inset);
+
+                //Line V
+                DrawLine(anchorV, pivotV, size, pos);
+
+                pos = new(x3, -y1);
+                size = new(lineWidth, inset);
+
+                //Line V
+                DrawLine(anchorV, pivotV, size, pos);
+            }
+            else
+            {
+                pos = new(x2, -y2);
+                size = new(cellSize - inset, lineHeight);
+
+                //Line H
+                DrawLine(anchorH, pivotH, size, pos);
+            }
+            if (cell.IsLinked(cell.South))
+            {
+                pos = new(x2, -y3);
+                size = new(lineWidth, inset);
+
+                //Line V
+                DrawLine(anchorV, pivotV, size, pos);
+
+                pos = new(x3, -y3);
+                size = new(lineWidth, inset);
+
+                //Line V
+                DrawLine(anchorV, pivotV, size, pos);
+            }
+            else
+            {
+
+                pos = new(x2, -y3);
+                size = new(cellSize - inset, lineHeight);
+
+                //Line H
+                DrawLine(anchorH, pivotH, size, pos);
+            }
+            if (cell.IsLinked(cell.West))
+            {
+                pos = new(x1, -y2);
+                size = new(inset, lineHeight);
+
+                //Line H
+                DrawLine(anchorH, pivotH, size, pos);
+
+                pos = new(x1, -y3);
+                size = new(inset, lineHeight);
+
+                //Line H
+                DrawLine(anchorH, pivotH, size, pos);
+            }
+            else
+            {
+
+                pos = new(x2, -y2);
+                size = new(lineWidth, cellSize - inset);
+
+                //Line V
+                DrawLine(anchorV, pivotV, size, pos);
+            }
+            if (cell.IsLinked(cell.East))
+            {
+                pos = new(x3, -y2);
+                size = new(inset, lineHeight);
+
+                //Line H
+                DrawLine(anchorH, pivotH, size, pos);
+
+                pos = new(x3, -y3);
+                size = new(inset, lineHeight);
+
+                //Line H
+                DrawLine(anchorH, pivotH, size, pos);
+            }
+            else
+            {
+
+                pos = new(x3, -y2);
+                size = new(lineWidth, cellSize - inset);
+
+                //Line V
+                DrawLine(anchorV, pivotV, size, pos);
+            }
         }
-        
-        
+
+
         private static void DisplayCellImgWithoutInset(Grid grid, Cell cell, float cellSize, int i, int j)
         {
             DrawCell(new Vector2(cellSize, cellSize),
@@ -171,11 +303,11 @@ namespace Project.Procedural.MazeGeneration
         
         private static void DisplayLineImgWithoutInset(Cell cell, float cellSize)
         {
-            if (cell is null) return;
-
             //Scale shortest dimension to not overlap too much with cell img
             float lineX = .5f;
             float lineY = .5f;
+
+            //width and height of the UI Image in pixels
             float lineWidth = 5f;
             float lineHeight = 5f;
 

@@ -1,6 +1,6 @@
 namespace Project.Procedural.MazeGeneration
 {
-    public class MaskedGrid : Grid
+    public class MaskedGrid : ColoredGrid
     {
         public Mask Mask { get; private set; }
 
