@@ -377,6 +377,7 @@ MonoBehaviour:
   <GenerationType>k__BackingField: 0
   <GridSize>k__BackingField: {x: 10, y: 10}
   <BraidRate>k__BackingField: 1
+  <Inset>k__BackingField: 0
   <ImageAsset>k__BackingField: {fileID: 0}
   <Extension>k__BackingField: .png
 --- !u!114 &1146565903

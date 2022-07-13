@@ -177,8 +177,7 @@ namespace Project.Procedural.MazeGeneration
 
             //width and height of the UI Image in pixels
             //TODO : Scale these sizes for smaller cells
-            float lineWidth = 5f;
-            float lineHeight = 5f;
+            float lineThickness = 5f;
 
 
             Vector2 anchorH = new(0f, 1f);
@@ -201,36 +200,34 @@ namespace Project.Procedural.MazeGeneration
 
             if (cell.IsLinked(cell.North))
             {
+                size = new(lineThickness, inset + lineThickness);
                 pos = new(x2, -y1);
-                size = new(lineWidth, inset);
 
                 //Line V
                 DrawLine(anchorV, pivotV, size, pos);
 
                 pos = new(x3, -y1);
-                size = new(lineWidth, inset);
 
                 //Line V
                 DrawLine(anchorV, pivotV, size, pos);
             }
             else
             {
+                size = new(cellSize - inset * 2f, lineThickness);
                 pos = new(x2, -y2);
-                size = new(cellSize - inset * 2f, lineHeight);
 
                 //Line H
                 DrawLine(anchorH, pivotH, size, pos);
             }
             if (cell.IsLinked(cell.South))
             {
+                size = new(lineThickness, inset + lineThickness);
                 pos = new(x2, -y3);
-                size = new(lineWidth, inset);
 
                 //Line V
                 DrawLine(anchorV, pivotV, size, pos);
 
                 pos = new(x3, -y3);
-                size = new(lineWidth, inset);
 
                 //Line V
                 DrawLine(anchorV, pivotV, size, pos);
@@ -238,22 +235,21 @@ namespace Project.Procedural.MazeGeneration
             else
             {
 
+                size = new(cellSize - inset * 2f, lineThickness);
                 pos = new(x2, -y3);
-                size = new(cellSize - inset * 2f, lineHeight);
 
                 //Line H
                 DrawLine(anchorH, pivotH, size, pos);
             }
             if (cell.IsLinked(cell.West))
             {
+                size = new(inset, lineThickness);
                 pos = new(x1, -y2);
-                size = new(inset, lineHeight);
 
                 //Line H
                 DrawLine(anchorH, pivotH, size, pos);
 
                 pos = new(x1, -y3);
-                size = new(inset, lineHeight);
 
                 //Line H
                 DrawLine(anchorH, pivotH, size, pos);
@@ -261,22 +257,21 @@ namespace Project.Procedural.MazeGeneration
             else
             {
 
+                size = new(lineThickness, cellSize - inset * 2f + lineThickness);
                 pos = new(x2, -y2);
-                size = new(lineWidth, cellSize - inset * 2f);
 
                 //Line V
                 DrawLine(anchorV, pivotV, size, pos);
             }
             if (cell.IsLinked(cell.East))
             {
+                size = new(inset, lineThickness);
                 pos = new(x3, -y2);
-                size = new(inset, lineHeight);
 
                 //Line H
                 DrawLine(anchorH, pivotH, size, pos);
 
                 pos = new(x3, -y3);
-                size = new(inset, lineHeight);
 
                 //Line H
                 DrawLine(anchorH, pivotH, size, pos);
@@ -284,8 +279,8 @@ namespace Project.Procedural.MazeGeneration
             else
             {
 
+                size = new(lineThickness, cellSize - inset * 2f + lineThickness);
                 pos = new(x3, -y2);
-                size = new(lineWidth, cellSize - inset * 2f);
 
                 //Line V
                 DrawLine(anchorV, pivotV, size, pos);
@@ -303,17 +298,13 @@ namespace Project.Procedural.MazeGeneration
         
         private static void DisplayLineImgWithoutInset(Cell cell, float cellSize)
         {
-            //Scale shortest dimension to not overlap too much with cell img
-            float lineX = .5f;
-            float lineY = .5f;
 
             //width and height of the UI Image in pixels
-            float lineWidth = 5f;
-            float lineHeight = 5f;
+            float lineThickness = 5f;
 
 
             Vector2 anchorH = new(0f, 1f);
-            Vector2 pivotH = new(0f, 1f);
+            Vector2 pivotH = new(0f, 0.5f);
             Vector2 anchorV = new(0f, 1f);
             Vector2 pivotV = new(0.5f, 1f);
 
@@ -321,32 +312,32 @@ namespace Project.Procedural.MazeGeneration
             {
                 //Line North
                 DrawLine(anchorH, pivotH,
-                    new Vector2(cellSize, lineHeight), 
-                    new Vector3(cellSize * cell.Column, -cellSize * cell.Row - lineY, 0));
+                    new Vector2(cellSize, lineThickness), 
+                    new Vector3(cellSize * cell.Column, -cellSize * cell.Row, 0));
             }
 
             if (cell.West is null)
             {
                 //Line West
                 DrawLine(anchorV, pivotV,
-                    new Vector2(lineWidth, cellSize),
-                    new Vector3(cellSize * cell.Column - lineX, -cellSize * cell.Row, 0));
+                    new Vector2(lineThickness, cellSize + lineThickness),
+                    new Vector3(cellSize * cell.Column, -cellSize * cell.Row + lineThickness / 2f, 0));
             }
 
             if (!cell.IsLinked(cell.East))
             {
                 //Line East
                 DrawLine(anchorV, pivotV,
-                    new Vector2(lineWidth, cellSize),
-                    new Vector3(cellSize * (cell.Column + 1) - lineX, -cellSize * cell.Row, 0));
+                    new Vector2(lineThickness, cellSize + lineThickness),
+                    new Vector3(cellSize * (cell.Column + 1), -cellSize * cell.Row + lineThickness / 2f, 0));
             }
 
             if (!cell.IsLinked(cell.South))
             {
                 //Line South
                 DrawLine(anchorH, pivotH,
-                    new Vector2(cellSize, lineHeight),
-                    new Vector3(cellSize * cell.Column, -cellSize * (cell.Row + 1) - lineY, 0));
+                    new Vector2(cellSize, lineThickness),
+                    new Vector3(cellSize * cell.Column, -cellSize * (cell.Row + 1), 0));
             }
         }
 

@@ -7,6 +7,7 @@ namespace Project.Procedural.MazeGeneration
         [field: SerializeField] private GenerationType GenerationType { get; set; } = GenerationType.BinaryTree;
         [field: SerializeField] private Vector2Int GridSize { get; set; } = new(4, 4);
         [field: SerializeField, Range(0f, 1f)] private float BraidRate { get; set; } = 1f;
+        [field: SerializeField, Range(0f, .5f)] private float Inset { get; set; } = 0f;
         [field: SerializeField] private Texture2D ImageAsset { get; set; }
         [field: SerializeField] private string Extension { get; set; } = ".png";
 
@@ -25,9 +26,9 @@ namespace Project.Procedural.MazeGeneration
         {
             Grid grid;
 
-            if (ImageAsset is null)
+            if (ImageAsset == null)
             {
-                grid = new Grid(GridSize.x, GridSize.y);
+                grid = new ColoredGrid(GridSize.x, GridSize.y);
             }
             else
             {
@@ -36,11 +37,14 @@ namespace Project.Procedural.MazeGeneration
                 (grid as MaskedGrid).SetMask(m);
             }
 
-
-
-            grid.Execute(GenerationType);
+            grid.Execute(GenerationType.RecursiveBacktracker);
             grid.Braid(BraidRate);
-            grid.DisplayGrid(DisplayMode.Mesh);
+
+            Cell start = grid[grid.Rows / 2, grid.Columns / 2];
+            (grid as ColoredGrid).SetDistances(start.GetDistances());
+
+
+            grid.DisplayGrid(DisplayMode.Mesh, Inset);
         }
     }
 }
