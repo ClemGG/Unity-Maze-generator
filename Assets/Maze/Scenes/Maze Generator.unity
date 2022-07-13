@@ -393,7 +393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <GridSize>k__BackingField: {x: 10, y: 10}
-  <Inset>k__BackingField: 0.1
-  <BraidRate>k__BackingField: 0
+  <Inset>k__BackingField: 0
+  <BraidRate>k__BackingField: 1
   <ImageAsset>k__BackingField: {fileID: 0}
   <Extension>k__BackingField: .png

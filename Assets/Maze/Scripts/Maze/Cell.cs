@@ -43,6 +43,8 @@ namespace Project.Procedural.MazeGeneration
         //is recorded on both cells
         public void Link(Cell cell, bool bidi = true)
         {
+            if (cell is null) return;
+
             if (!Links.ContainsKey(cell))
             {
                 Links.Add(cell, true);

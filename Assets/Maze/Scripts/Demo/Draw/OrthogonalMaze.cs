@@ -151,33 +151,60 @@ namespace Project.Procedural.MazeGeneration
 
         private static void DisplayCellImgWithInset(Grid grid, Cell cell, float cellSize, int i, int j, float x, float y, float inset)
         {
-            //(Vector4 xc, Vector4 yc) = CellCoordsWithInset(x, y, cellSize, inset);
-            //float x1 = xc.x;
-            //float x2 = xc.y;
-            //float x3 = xc.z;
-            //float x4 = xc.w;
+            (Vector4 xc, Vector4 yc) = CellCoordsWithInset(x, y, cellSize, inset);
+            float x1 = xc.x;
+            float x2 = xc.y;
+            float x3 = xc.z;
+            float x4 = xc.w;
 
-            //float y1 = yc.x;
-            //float y2 = yc.y;
-            //float y3 = yc.z;
-            //float y4 = yc.w;
+            float y1 = yc.x;
+            float y2 = yc.y;
+            float y3 = yc.z;
+            float y4 = yc.w;
 
-            //DrawCell(new Vector2(cellSize - inset, cellSize - inset),
-            //    new Vector3(x, -y, 0),
-            //    (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+            //Draws the img for the center of the cell
+            DrawCell(new Vector2(cellSize - inset * 2f, cellSize - inset * 2f),
+                new Vector3(x2, -y2, 0),
+                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+
+
+            //Draws 2 imgs to fill the outer regions of the cell
+            if (cell.IsLinked(cell.North))
+            {
+                DrawCell(new Vector2(cellSize - inset * 2f, inset),
+                new Vector3(x2, -y1, 0),
+                //Color.red);
+                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+            }
+            if (cell.IsLinked(cell.West))
+            {
+                DrawCell(new Vector2(inset, cellSize - inset * 2f),
+                new Vector3(x1, -y2, 0),
+                //Color.blue);
+                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+            }
+            if (cell.IsLinked(cell.East))
+            {
+                DrawCell(new Vector2(inset, cellSize - inset * 2f),
+                new Vector3(x3, -y2, 0),
+                //Color.yellow);
+                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+            }
+            if (cell.IsLinked(cell.South))
+            {
+                DrawCell(new Vector2(cellSize - inset * 2f, inset),
+                new Vector3(x2, -y3, 0),
+                //Color.green);
+                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+            }
         }
 
 
         private static void DisplayLineImgWithInset(Cell cell, float cellSize, float x, float y, float inset)
         {
-
-            //Scale shortest dimension to not overlap too much with cell img
-            float lineX = .5f;
-            float lineY = .5f;
-
             //width and height of the UI Image in pixels
             //TODO : Scale these sizes for smaller cells
-            float lineThickness = 5f;
+            float lineThickness = Mathf.Lerp(5f, 1f, inset / cellSize / 0.5f);
 
 
             Vector2 anchorH = new(0f, 1f);
@@ -298,7 +325,6 @@ namespace Project.Procedural.MazeGeneration
         
         private static void DisplayLineImgWithoutInset(Cell cell, float cellSize)
         {
-
             //width and height of the UI Image in pixels
             float lineThickness = 5f;
 
