@@ -216,7 +216,7 @@ namespace Project.Procedural.MazeGeneration
             else
             {
                 pos = new(x2, -y2);
-                size = new(cellSize - inset, lineHeight);
+                size = new(cellSize - inset * 2f, lineHeight);
 
                 //Line H
                 DrawLine(anchorH, pivotH, size, pos);
@@ -239,7 +239,7 @@ namespace Project.Procedural.MazeGeneration
             {
 
                 pos = new(x2, -y3);
-                size = new(cellSize - inset, lineHeight);
+                size = new(cellSize - inset * 2f, lineHeight);
 
                 //Line H
                 DrawLine(anchorH, pivotH, size, pos);
@@ -262,7 +262,7 @@ namespace Project.Procedural.MazeGeneration
             {
 
                 pos = new(x2, -y2);
-                size = new(lineWidth, cellSize - inset);
+                size = new(lineWidth, cellSize - inset * 2f);
 
                 //Line V
                 DrawLine(anchorV, pivotV, size, pos);
@@ -285,7 +285,7 @@ namespace Project.Procedural.MazeGeneration
             {
 
                 pos = new(x3, -y2);
-                size = new(lineWidth, cellSize - inset);
+                size = new(lineWidth, cellSize - inset * 2f);
 
                 //Line V
                 DrawLine(anchorV, pivotV, size, pos);
