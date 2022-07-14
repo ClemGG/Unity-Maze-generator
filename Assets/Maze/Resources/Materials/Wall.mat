@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wall
-  m_Shader: {fileID: 4800000, guid: 53f39412f6bae4c4e8878215bf8b25b1, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0720729c71bd8ee4482074d4003af0d3, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _GLOSSYREFLECTIONS_OFF
