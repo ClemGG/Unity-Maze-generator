@@ -8,6 +8,8 @@ namespace Project.Procedural.MazeGeneration
     //Used for 2D & 3D.
     public static class OrthogonalMaze
     {
+
+        #region UI Fields
         private static Canvas _canvas;
         private static RectTransform _bg;
         private static Transform _tiles;
@@ -55,6 +57,21 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
+        #endregion
+
+        #region Mesh Fields
+
+        private static GameObject _mazeObj;
+        private static GameObject MazeObj
+        {
+            get
+            {
+                if (!_mazeObj) _mazeObj = GameObject.Find("Maze");
+                return _mazeObj;
+            }
+        }
+
+        #endregion
 
 
 
@@ -63,14 +80,93 @@ namespace Project.Procedural.MazeGeneration
 
         public static void DisplayOnMesh(Grid grid, float inset = 0f)
         {
-            Debug.Log("3D");
+            float cellWidth = 3.5f;
+            float cellHeight = 3.5f;
+            float halfH = cellHeight / 2f;
+            inset = cellWidth * inset;
+
+            Mesh mesh = new Mesh
+            {
+                subMeshCount = 2
+            };
+
+            List<Vector3> newVertices = new List<Vector3>();
+            List<Vector2> newUVs = new List<Vector2>();
+
+            List<int> floorTriangles = new List<int>();
+            List<int> wallTriangles = new List<int>();
+
+
+            for (int i = 0; i < grid.Rows; i++)
+            {
+                for (int j = 0; j < grid.Columns; j++)
+                {
+                    Cell cell = grid[i, j];
+
+                    if (cell is null) continue;
+
+
+                    if (!Mathf.Approximately(inset, 0f) && !Mathf.Approximately(inset, .5f * cellWidth))
+                    {
+                        float x = cell.Column * cellWidth;
+                        float y = cell.Row * cellWidth;
+
+                        //The triangles of the floor & ceiling will be in the same mesh
+                        AddFloorAndCeilingWithInset(grid, cell, cellWidth, i, j, x, y, inset, ref newVertices, ref newUVs, ref floorTriangles);
+                        AddWallsWithInset(grid, cell, cellWidth, cellHeight, i, j, x, y, inset, ref newVertices, ref newUVs, ref wallTriangles);
+                    }
+                    else
+                    {
+
+                        //The triangles of the floor & ceiling will be in the same mesh
+                        AddFloorAndCeilingWithoutInset(grid, cell, cellWidth, i, j, ref newVertices, ref newUVs, ref floorTriangles);
+                        AddWallsWithoutInset(grid, cell, cellWidth, cellHeight, i, j, ref newVertices, ref newUVs, ref wallTriangles);
+
+                    }
+                }
+            }
+
+
+            mesh.vertices = newVertices.ToArray();
+            mesh.uv = newUVs.ToArray();
+
+            mesh.SetTriangles(wallTriangles.ToArray(), 0);
+            mesh.SetTriangles(wallTriangles.ToArray(), 1);
+
+            mesh.RecalculateNormals();
+
+            MeshFilter mf = MazeObj.GetComponent<MeshFilter>();
+            MeshCollider mc = MazeObj.GetComponent<MeshCollider>();
+            mf.mesh = mc.sharedMesh = mesh;
+
         }
 
 
-        public static void CleanupMesh()
+        private static void AddFloorAndCeilingWithInset(Grid grid, Cell cell, float cellWidth, int i, int j, float x, float y, float inset, 
+            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> floorTriangles)
         {
 
         }
+
+        private static void AddWallsWithInset(Grid grid, Cell cell, float cellWidth, float cellHeight, int i, int j, float x, float y, float inset,
+            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> wallTriangles)
+        {
+
+        }
+
+
+        private static void AddFloorAndCeilingWithoutInset(Grid grid, Cell cell, float cellWidth, int i, int j, 
+            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> floorTriangles)
+        {
+
+        }
+
+        private static void AddWallsWithoutInset(Grid grid, Cell cell, float cellWidth, float cellHeight, int i, int j, 
+            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> wallTriangles)
+        {
+
+        }
+
         #endregion
 
 
@@ -101,8 +197,8 @@ namespace Project.Procedural.MazeGeneration
 
 
 
-            float maxCellSize = Mathf.Min(Bg.rect.width / grid.Columns, Bg.rect.height / grid.Rows);
-            inset = maxCellSize * inset;
+            float cellSize = Mathf.Min(Bg.rect.width / grid.Columns, Bg.rect.height / grid.Rows);
+            inset = cellSize * inset;
 
 
             for (int i = 0; i < grid.Rows; i++)
@@ -113,18 +209,18 @@ namespace Project.Procedural.MazeGeneration
 
                     if (cell is null) continue;
 
-                    float x = cell.Column * maxCellSize;
-                    float y = cell.Row * maxCellSize;
-
-                    if (!Mathf.Approximately(inset, 0f) && !Mathf.Approximately(inset, .5f * maxCellSize))
+                    if (!Mathf.Approximately(inset, 0f) && !Mathf.Approximately(inset, .5f * cellSize))
                     {
-                        DisplayCellImgWithInset(grid, cell, maxCellSize, i, j, x, y, inset);
-                        DisplayLineImgWithInset(cell, maxCellSize, x, y, inset);
+                        float x = cell.Column * cellSize;
+                        float y = cell.Row * cellSize;
+
+                        DisplayCellImgWithInset(grid, cell, cellSize, i, j, x, y, inset);
+                        DisplayLineImgWithInset(cell, cellSize, x, y, inset);
                     }
                     else
                     {
-                        DisplayCellImgWithoutInset(grid, cell, maxCellSize, i, j);
-                        DisplayLineImgWithoutInset(cell, maxCellSize);
+                        DisplayCellImgWithoutInset(grid, cell, cellSize, i, j);
+                        DisplayLineImgWithoutInset(cell, cellSize);
                     }
                 }
             }
