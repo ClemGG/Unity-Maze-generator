@@ -71,6 +71,18 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
+        //Quick hack to set the size directly from the Inspector.
+        //TODO : Refactor to remove this
+        public static Vector2 MeshCellSize = new(3.5f, 3.5f);
+
+
+        private static List<Vector3> _newVertices = new();
+        private static List<Vector2> _newUVs = new();
+
+        private static List<int> _floorTriangles = new();
+        private static List<int> _wallTriangles = new();
+        private static List<int> _backwallTriangles = new();
+
         #endregion
 
 
@@ -78,25 +90,42 @@ namespace Project.Procedural.MazeGeneration
 
         #region 3D Mesh
 
+        public static void CleanupMesh()
+        {
+            MeshFilter mf = MazeObj.GetComponent<MeshFilter>();
+            MeshCollider mc = MazeObj.GetComponent<MeshCollider>();
+
+            if(mf.sharedMesh is not null)
+                Object.DestroyImmediate(mf.sharedMesh);
+
+            if(mc.sharedMesh is not null)
+                Object.DestroyImmediate(mc.sharedMesh);
+        }
+
+
         public static void DisplayOnMesh(Grid grid, float inset = 0f)
         {
-            float cellWidth = 3.5f;
-            float cellHeight = 3.5f;
-            float halfH = cellHeight / 2f;
+            #region Init
+            float cellWidth = MeshCellSize.x;
+            float cellHeight = MeshCellSize.y;
             inset = cellWidth * inset;
 
             Mesh mesh = new Mesh
             {
-                subMeshCount = 2
+                name = "Generated maze mesh",
+                subMeshCount = 3
             };
 
-            List<Vector3> newVertices = new List<Vector3>();
-            List<Vector2> newUVs = new List<Vector2>();
+            _newVertices.Clear();
+            _newUVs.Clear();
 
-            List<int> floorTriangles = new List<int>();
-            List<int> wallTriangles = new List<int>();
+            _floorTriangles.Clear();
+            _wallTriangles.Clear();
+            _backwallTriangles.Clear();
 
+            #endregion
 
+            #region Generation
             for (int i = 0; i < grid.Rows; i++)
             {
                 for (int j = 0; j < grid.Columns; j++)
@@ -112,59 +141,194 @@ namespace Project.Procedural.MazeGeneration
                         float y = cell.Row * cellWidth;
 
                         //The triangles of the floor & ceiling will be in the same mesh
-                        AddFloorAndCeilingWithInset(grid, cell, cellWidth, i, j, x, y, inset, ref newVertices, ref newUVs, ref floorTriangles);
-                        AddWallsWithInset(grid, cell, cellWidth, cellHeight, i, j, x, y, inset, ref newVertices, ref newUVs, ref wallTriangles);
+                        AddFloorAndCeilingWithInset(grid, cell, cellWidth, x, y, inset, ref _newVertices, ref _newUVs, ref _floorTriangles);
+                        AddWallsWithInset(grid, cell, cellWidth, cellHeight, x, y, inset, ref _newVertices, ref _newUVs, ref _wallTriangles);
                     }
                     else
                     {
 
                         //The triangles of the floor & ceiling will be in the same mesh
-                        AddFloorAndCeilingWithoutInset(grid, cell, cellWidth, i, j, ref newVertices, ref newUVs, ref floorTriangles);
-                        AddWallsWithoutInset(grid, cell, cellWidth, cellHeight, i, j, ref newVertices, ref newUVs, ref wallTriangles);
+                        AddFloorAndCeilingWithoutInset(grid, cell, cellWidth, cellHeight, i, j, ref _newVertices, ref _newUVs, ref _floorTriangles);
+                        AddWallsWithoutInset(grid, cell, cellWidth, cellHeight, i, j, ref _newVertices, ref _newUVs, ref _wallTriangles, ref _backwallTriangles);
 
                     }
                 }
             }
+            #endregion
 
+            #region Instance
+            mesh.vertices = _newVertices.ToArray();
+            mesh.uv = _newUVs.ToArray();
 
-            mesh.vertices = newVertices.ToArray();
-            mesh.uv = newUVs.ToArray();
-
-            mesh.SetTriangles(wallTriangles.ToArray(), 0);
-            mesh.SetTriangles(wallTriangles.ToArray(), 1);
+            mesh.SetTriangles(_floorTriangles.ToArray(), 0);
+            mesh.SetTriangles(_wallTriangles.ToArray(), 1);
+            mesh.SetTriangles(_backwallTriangles.ToArray(), 2);
 
             mesh.RecalculateNormals();
 
             MeshFilter mf = MazeObj.GetComponent<MeshFilter>();
             MeshCollider mc = MazeObj.GetComponent<MeshCollider>();
-            mf.mesh = mc.sharedMesh = mesh;
-
+            mf.mesh = mesh;
+            mc.sharedMesh = mesh;
+            #endregion
         }
 
 
-        private static void AddFloorAndCeilingWithInset(Grid grid, Cell cell, float cellWidth, int i, int j, float x, float y, float inset, 
+        private static void AddFloorAndCeilingWithInset(Grid grid, Cell cell, float cellWidth, 
+            float x, float y, float inset, 
             ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> floorTriangles)
         {
 
         }
 
-        private static void AddWallsWithInset(Grid grid, Cell cell, float cellWidth, float cellHeight, int i, int j, float x, float y, float inset,
+        private static void AddWallsWithInset(Grid grid, Cell cell, float cellWidth, float cellHeight,
+            float x, float y, float inset,
             ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> wallTriangles)
         {
 
         }
 
 
-        private static void AddFloorAndCeilingWithoutInset(Grid grid, Cell cell, float cellWidth, int i, int j, 
+
+
+
+
+
+
+        private static void AddFloorAndCeilingWithoutInset(Grid grid, Cell cell, float cellWidth, float cellHeight, int i, int j, 
             ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> floorTriangles)
         {
+            // floor
+            AddQuadWithoutInset(
+                Matrix4x4.TRS(new Vector3(j * cellWidth, 0, i * cellWidth),
+                              Quaternion.LookRotation(Vector3.up),
+                              new Vector3(cellWidth, cellWidth, 1)), 
+                ref newVertices, ref newUVs, ref floorTriangles);
 
+            // ceiling
+            AddQuadWithoutInset(
+                Matrix4x4.TRS(new Vector3(j * cellWidth, cellHeight, i * cellWidth),
+                              Quaternion.LookRotation(Vector3.down),
+                              new Vector3(cellWidth, cellWidth, 1)),
+                ref newVertices, ref newUVs, ref floorTriangles);
         }
+
+
 
         private static void AddWallsWithoutInset(Grid grid, Cell cell, float cellWidth, float cellHeight, int i, int j, 
-            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> wallTriangles)
+            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> wallTriangles, ref List<int> backwallTriangles)
         {
+            float halfH = cellHeight / 2f;
 
+            //We need to create the walls twice to create backfaces for the collider to work bothways.
+            //The backfaces have a cutout material, the normal wall has a double-sided one.
+
+            if (cell.North is null)
+            {
+                //Wall North
+                AddQuadWithoutInset(Matrix4x4.TRS(
+                        new Vector3(j * cellWidth, halfH, (i - .5f) * cellWidth),
+                        Quaternion.LookRotation(Vector3.forward),
+                        new Vector3(cellWidth, cellHeight, 1)
+                    ), ref newVertices, ref newUVs, ref wallTriangles);
+
+                //backface
+                AddQuadWithoutInset(Matrix4x4.TRS(
+                        new Vector3(j * cellWidth, halfH, (i - .5f) * cellWidth),
+                        Quaternion.LookRotation(Vector3.back),
+                        new Vector3(cellWidth, cellHeight, 1)
+                    ), ref newVertices, ref newUVs, ref backwallTriangles);
+
+            }
+
+            if (cell.West is null)
+            {
+                //Wall West
+                AddQuadWithoutInset(Matrix4x4.TRS(
+                        new Vector3((j + .5f) * cellWidth, halfH, i * cellWidth),
+                        Quaternion.LookRotation(Vector3.left),
+                        new Vector3(cellWidth, cellHeight, 1)
+                    ), ref newVertices, ref newUVs, ref wallTriangles);
+
+                //backface
+                AddQuadWithoutInset(Matrix4x4.TRS(
+                        new Vector3((j + .5f) * cellWidth, halfH, i * cellWidth),
+                        Quaternion.LookRotation(Vector3.right),
+                        new Vector3(cellWidth, cellHeight, 1)
+                    ), ref newVertices, ref newUVs, ref backwallTriangles);
+            }
+
+            if (!cell.IsLinked(cell.East))
+            {
+                //Wall East
+                AddQuadWithoutInset(Matrix4x4.TRS(
+                        new Vector3((j - .5f) * cellWidth, halfH, i * cellWidth),
+                        Quaternion.LookRotation(Vector3.right),
+                        new Vector3(cellWidth, cellHeight, 1)
+                    ), ref newVertices, ref newUVs, ref wallTriangles);
+
+                //backface
+                AddQuadWithoutInset(Matrix4x4.TRS(
+                        new Vector3((j - .5f) * cellWidth, halfH, i * cellWidth),
+                        Quaternion.LookRotation(Vector3.left),
+                        new Vector3(cellWidth, cellHeight, 1)
+                    ), ref newVertices, ref newUVs, ref backwallTriangles);
+            }
+
+            if (!cell.IsLinked(cell.South))
+            {
+                //Wall South
+                AddQuadWithoutInset(Matrix4x4.TRS(
+                        new Vector3(j * cellWidth, halfH, (i + .5f) * cellWidth),
+                        Quaternion.LookRotation(Vector3.back),
+                        new Vector3(cellWidth, cellHeight, 1)
+                    ), ref newVertices, ref newUVs, ref wallTriangles);
+
+                //backface
+                AddQuadWithoutInset(Matrix4x4.TRS(
+                        new Vector3(j * cellWidth, halfH, (i + .5f) * cellWidth),
+                        Quaternion.LookRotation(Vector3.forward),
+                        new Vector3(cellWidth, cellHeight, 1)
+                    ), ref newVertices, ref newUVs, ref backwallTriangles);
+            }
+        }
+
+
+
+
+
+
+
+        private static void AddQuadWithoutInset(Matrix4x4 matrix, 
+            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> newTriangles)
+        {
+            int index = newVertices.Count;
+
+            // corners before transforming
+            Vector3 vert1 = new(-.5f, -.5f, 0);
+            Vector3 vert2 = new(-.5f, .5f, 0);
+            Vector3 vert3 = new(.5f, .5f, 0);
+            Vector3 vert4 = new(.5f, -.5f, 0);
+
+
+            //The matrix allows us to rotate the quads to fit walls or ceiling
+            newVertices.Add(matrix.MultiplyPoint3x4(vert1));
+            newVertices.Add(matrix.MultiplyPoint3x4(vert2));
+            newVertices.Add(matrix.MultiplyPoint3x4(vert3));
+            newVertices.Add(matrix.MultiplyPoint3x4(vert4));
+
+            newUVs.Add(new(1, 0));
+            newUVs.Add(new(1, 1));
+            newUVs.Add(new(0, 1));
+            newUVs.Add(new(0, 0));
+
+            newTriangles.Add(index + 2);
+            newTriangles.Add(index + 1);
+            newTriangles.Add(index);
+
+            newTriangles.Add(index + 3);
+            newTriangles.Add(index + 2);
+            newTriangles.Add(index);
         }
 
         #endregion
@@ -214,12 +378,14 @@ namespace Project.Procedural.MazeGeneration
                         float x = cell.Column * cellSize;
                         float y = cell.Row * cellSize;
 
-                        DisplayCellImgWithInset(grid, cell, cellSize, i, j, x, y, inset);
+                        Color color = grid.BackgroundColorFor(cell);
+                        DisplayCellImgWithInset(cell, cellSize, x, y, inset, color);
                         DisplayLineImgWithInset(cell, cellSize, x, y, inset);
                     }
                     else
                     {
-                        DisplayCellImgWithoutInset(grid, cell, cellSize, i, j);
+                        Color color = grid.BackgroundColorFor(cell);
+                        DisplayCellImgWithoutInset(i, j, cellSize, color);
                         DisplayLineImgWithoutInset(cell, cellSize);
                     }
                 }
@@ -248,7 +414,7 @@ namespace Project.Procedural.MazeGeneration
 
 
 
-        private static void DisplayCellImgWithInset(Grid grid, Cell cell, float cellSize, int i, int j, float x, float y, float inset)
+        private static void DisplayCellImgWithInset(Cell cell, float cellSize, float x, float y, float inset, Color color)
         {
             (Vector4 xc, Vector4 yc) = CellCoordsWithInset(x, y, cellSize, inset);
             float x1 = xc.x;
@@ -265,7 +431,7 @@ namespace Project.Procedural.MazeGeneration
             DrawCell(new Vector2(cellSize - inset * 2f, cellSize - inset * 2f),
                 new Vector3(x2, -y2, 0),
                 //Color.black);
-                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+                color);
 
 
             //Draws 2 imgs to fill the outer regions of the cell
@@ -274,28 +440,28 @@ namespace Project.Procedural.MazeGeneration
                 DrawCell(new Vector2(cellSize - inset * 2f, inset),
                 new Vector3(x2, -y1, 0),
                 //Color.red);
-                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+                color);
             }
             if (cell.IsLinked(cell.West))
             {
                 DrawCell(new Vector2(inset, cellSize - inset * 2f),
                 new Vector3(x1, -y2, 0),
                 //Color.blue);
-                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+                color);
             }
             if (cell.IsLinked(cell.East))
             {
                 DrawCell(new Vector2(inset, cellSize - inset * 2f),
                 new Vector3(x3, -y2, 0),
                 //Color.yellow);
-                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+                color);
             }
             if (cell.IsLinked(cell.South))
             {
                 DrawCell(new Vector2(cellSize - inset * 2f, inset),
                 new Vector3(x2, -y3, 0),
                 //Color.green);
-                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+                color);
             }
         }
 
@@ -415,11 +581,11 @@ namespace Project.Procedural.MazeGeneration
         }
 
 
-        private static void DisplayCellImgWithoutInset(Grid grid, Cell cell, float cellSize, int i, int j)
+        private static void DisplayCellImgWithoutInset(int i, int j, float cellSize, Color color)
         {
             DrawCell(new Vector2(cellSize, cellSize),
                 new Vector3(cellSize * j, -cellSize * i, 0),
-                (cell is null) ? Color.black : grid.BackgroundColorFor(cell));
+                color);
         }
         
         

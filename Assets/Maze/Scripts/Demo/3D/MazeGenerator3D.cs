@@ -5,6 +5,7 @@ namespace Project.Procedural.MazeGeneration
     public class MazeGenerator3D : MonoBehaviour
     {
         [field: SerializeField] private GenerationType GenerationType { get; set; } = GenerationType.BinaryTree;
+        [field: SerializeField] private Vector2 CellSize { get; set; } = new(3.5f, 3.5f);
         [field: SerializeField] private Vector2Int GridSize { get; set; } = new(4, 4);
         [field: SerializeField, Range(0f, 1f)] private float BraidRate { get; set; } = 1f;
         [field: SerializeField, Range(0f, .5f)] private float Inset { get; set; } = 0f;
@@ -18,8 +19,17 @@ namespace Project.Procedural.MazeGeneration
         private void OnValidate()
         {
             GridSize = new(Mathf.Clamp(GridSize.x, 1, 100), Mathf.Clamp(GridSize.y, 1, 100));
+            OrthogonalMaze.MeshCellSize = CellSize;
         }
 #endif
+
+
+        [ContextMenu("Cleanup Mesh")]
+        void CleanupUI()
+        {
+            OrthogonalMaze.CleanupMesh();
+        }
+
 
 
         [ContextMenu("Execute Generation Algorithm")]
@@ -43,7 +53,6 @@ namespace Project.Procedural.MazeGeneration
 
             Cell start = grid[grid.Rows / 2, grid.Columns / 2];
             (grid as ColoredGrid).SetDistances(start.GetDistances());
-
 
             grid.DisplayGrid(DisplayMode.Mesh, Inset);
         }
