@@ -77,9 +77,9 @@ namespace Project.Procedural.MazeGeneration
         public static Vector2 MeshCellSize = new(5f, 5f);
 
 
-        private static List<Vector3> _newVertices = new();
-        private static List<Vector2> _newUVs = new();
-        private static List<int> _newTriangles = new();
+        private static readonly List<Vector3> _newVertices = new();
+        private static readonly List<Vector2> _newUVs = new();
+        private static readonly List<int> _newTriangles = new();
 
         #endregion
 
@@ -90,6 +90,10 @@ namespace Project.Procedural.MazeGeneration
 
         public static void CleanupMesh()
         {
+            _newVertices.Clear();
+            _newUVs.Clear();
+            _newTriangles.Clear();
+
             for (int i = 0; i < MazeObj.childCount; i++)
             {
                 MeshFilter mf = MazeObj.GetChild(i).GetComponent<MeshFilter>();
@@ -439,6 +443,8 @@ namespace Project.Procedural.MazeGeneration
             float cellSize = Mathf.Min(Bg.rect.width / grid.Columns, Bg.rect.height / grid.Rows);
             inset = cellSize * inset;
 
+            //Used to resize the lineUIs if they get too big for the grid resolution
+            float gridLongestSide = Mathf.Max(grid.Columns, grid.Rows);
 
             for (int i = 0; i < grid.Rows; i++)
             {
@@ -455,13 +461,13 @@ namespace Project.Procedural.MazeGeneration
 
                         Color color = grid.BackgroundColorFor(cell);
                         DisplayCellImgWithInset(cell, cellSize, x, y, inset, color);
-                        DisplayLineImgWithInset(cell, cellSize, x, y, inset);
+                        DisplayLineImgWithInset(cell, cellSize, x, y, inset, gridLongestSide);
                     }
                     else
                     {
                         Color color = grid.BackgroundColorFor(cell);
                         DisplayCellImgWithoutInset(i, j, cellSize, color);
-                        DisplayLineImgWithoutInset(cell, cellSize);
+                        DisplayLineImgWithoutInset(cell, cellSize, gridLongestSide);
                     }
                 }
             }
@@ -541,12 +547,12 @@ namespace Project.Procedural.MazeGeneration
         }
 
 
-        private static void DisplayLineImgWithInset(Cell cell, float cellSize, float x, float y, float inset)
+        private static void DisplayLineImgWithInset(Cell cell, float cellSize, float x, float y, float inset, float gridLongestSize)
         {
             //width and height of the UI Image in pixels
             //TODO : Scale these sizes for smaller cells
             float lineThickness = Mathf.Lerp(5f, 1f, inset / cellSize / 0.5f);
-
+            lineThickness = Mathf.Min(lineThickness, Mathf.Lerp(5f, 1f, gridLongestSize / 100f));
 
             Vector2 anchorH = new(0f, 1f);
             Vector2 pivotH = new(0f, 1f);
@@ -664,11 +670,10 @@ namespace Project.Procedural.MazeGeneration
         }
         
         
-        private static void DisplayLineImgWithoutInset(Cell cell, float cellSize)
+        private static void DisplayLineImgWithoutInset(Cell cell, float cellSize, float gridLongestSize)
         {
             //width and height of the UI Image in pixels
-            float lineThickness = 5f;
-
+            float lineThickness = Mathf.Lerp(5f, 1f, gridLongestSize / 100f);
 
             Vector2 anchorH = new(0f, 1f);
             Vector2 pivotH = new(0f, 0.5f);
