@@ -123,7 +123,7 @@ namespace Project.Procedural.MazeGeneration
                 _newUVs.Clear();
                 _newTriangles.Clear();
 
-                GenerateMesh(i, grid, inset, ref _newVertices, ref _newUVs, ref _newTriangles);
+                GenerateMesh(i, grid, inset);
 
 
 
@@ -143,8 +143,7 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-        private static void GenerateMesh(int meshID, Grid grid, float inset, 
-            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> triangles)
+        private static void GenerateMesh(int meshID, Grid grid, float inset)
         {
             float cellWidth = MeshCellSize.x;
             float cellHeight = MeshCellSize.y;
@@ -167,16 +166,16 @@ namespace Project.Procedural.MazeGeneration
                         switch (meshID)
                         {
                             case 0:
-                                AddFloorWithInset(cell, cellWidth, x, y, inset, ref _newVertices, ref _newUVs, ref triangles);
+                                AddFloorWithInset(cell, cellWidth, x, y, inset);
                                 break;
                             case 1:
-                                AddCeilingWithInset(cell, cellWidth, x, y, inset, ref _newVertices, ref _newUVs, ref triangles);
+                                AddCeilingWithInset(cell, cellWidth, x, y, inset);
                                 break;
                             case 2:
-                                AddWallsWithInset(cell, cellWidth, cellHeight, x, y, inset, ref _newVertices, ref _newUVs, ref triangles);
+                                AddWallsWithInset(cell, cellWidth, cellHeight, x, y, inset);
                                 break;
                             case 3:
-                                AddBackWallsWithInset(cell, cellWidth, cellHeight, x, y, inset, ref _newVertices, ref _newUVs, ref triangles);
+                                AddBackWallsWithInset(cell, cellWidth, cellHeight, x, y, inset);
                                 break;
                         }
                     }
@@ -185,16 +184,16 @@ namespace Project.Procedural.MazeGeneration
                         switch (meshID)
                         {
                             case 0:
-                                AddFloorWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j, ref _newVertices, ref _newUVs, ref triangles);
+                                AddFloorWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
                                 break;
                             case 1:
-                                AddCeilingWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j, ref _newVertices, ref _newUVs, ref triangles);
+                                AddCeilingWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
                                 break;
                             case 2:
-                                AddWallsWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j, ref _newVertices, ref _newUVs, ref triangles);
+                                AddWallsWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
                                 break;
                             case 3:
-                                AddBackWallsWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j, ref _newVertices, ref _newUVs, ref triangles);
+                                AddBackWallsWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
                                 break;
                         }
                     }
@@ -208,30 +207,22 @@ namespace Project.Procedural.MazeGeneration
 
         #region With Inset
 
-        private static void AddFloorWithInset(Cell cell, float cellWidth,
-            float x, float y, float inset,
-            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> newTriangles)
+        private static void AddFloorWithInset(Cell cell, float cellWidth, float x, float y, float inset)
         {
 
         }
 
-        private static void AddCeilingWithInset(Cell cell, float cellWidth,
-            float x, float y, float inset,
-            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> newTriangles)
+        private static void AddCeilingWithInset(Cell cell, float cellWidth, float x, float y, float inset)
         {
 
         }
 
-        private static void AddWallsWithInset(Cell cell, float cellWidth, float cellHeight,
-            float x, float y, float inset,
-            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> newTriangles)
+        private static void AddWallsWithInset(Cell cell, float cellWidth, float cellHeight, float x, float y, float inset)
         {
 
         }
 
-        private static void AddBackWallsWithInset(Cell cell, float cellWidth, float cellHeight,
-            float x, float y, float inset,
-            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> newTriangles)
+        private static void AddBackWallsWithInset(Cell cell, float cellWidth, float cellHeight, float x, float y, float inset)
         {
 
         }
@@ -243,31 +234,26 @@ namespace Project.Procedural.MazeGeneration
 
         #region Without Inset
 
-        private static void AddFloorWithoutInset(Cell cell, float cellWidth, float cellHeight, int i, int j,
-            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> newTriangles)
+        private static void AddFloorWithoutInset(Cell cell, float cellWidth, float cellHeight, int i, int j)
         {
             // floor
             AddQuad(
                 Matrix4x4.TRS(new Vector3(j * cellWidth, 0, -i * cellWidth),
                               Quaternion.LookRotation(Vector3.up),
-                              new Vector3(cellWidth, cellWidth, 1)),
-                ref newVertices, ref newUVs, ref newTriangles);
+                              new Vector3(cellWidth, cellWidth, 1)));
         }
 
-        private static void AddCeilingWithoutInset(Cell cell, float cellWidth, float cellHeight, int i, int j,
-            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> newTriangles)
+        private static void AddCeilingWithoutInset(Cell cell, float cellWidth, float cellHeight, int i, int j)
         {
             // ceiling
             AddQuad(
                 Matrix4x4.TRS(new Vector3(j * cellWidth, cellHeight, -i * cellWidth),
                               Quaternion.LookRotation(Vector3.down),
-                              new Vector3(cellWidth, cellWidth, 1)),
-                ref newVertices, ref newUVs, ref newTriangles);
+                              new Vector3(cellWidth, cellWidth, 1)));
         }
 
 
-        private static void AddWallsWithoutInset(Cell cell, float cellWidth, float cellHeight, int i, int j,
-            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> newTriangles)
+        private static void AddWallsWithoutInset(Cell cell, float cellWidth, float cellHeight, int i, int j)
         {
             float halfH = cellHeight / 2f;
 
@@ -277,8 +263,7 @@ namespace Project.Procedural.MazeGeneration
                 AddQuad(Matrix4x4.TRS(
                         new Vector3(j * cellWidth, halfH, (-i + 1 - .5f) * cellWidth),
                         Quaternion.LookRotation(Vector3.forward),
-                        new Vector3(cellWidth, cellHeight, 1)
-                    ), ref newVertices, ref newUVs, ref newTriangles);
+                        new Vector3(cellWidth, cellHeight, 1)));
 
             }
 
@@ -288,8 +273,7 @@ namespace Project.Procedural.MazeGeneration
                 AddQuad(Matrix4x4.TRS(
                         new Vector3((j - 1 + .5f) * cellWidth, halfH, -i * cellWidth),
                         Quaternion.LookRotation(Vector3.left),
-                        new Vector3(cellWidth, cellHeight, 1)
-                    ), ref newVertices, ref newUVs, ref newTriangles);
+                        new Vector3(cellWidth, cellHeight, 1)));
             }
 
             if (!cell.IsLinked(cell.East))
@@ -298,8 +282,7 @@ namespace Project.Procedural.MazeGeneration
                 AddQuad(Matrix4x4.TRS(
                         new Vector3((j + 1 - .5f) * cellWidth, halfH, -i * cellWidth),
                         Quaternion.LookRotation(Vector3.right),
-                        new Vector3(cellWidth, cellHeight, 1)
-                    ), ref newVertices, ref newUVs, ref newTriangles);
+                        new Vector3(cellWidth, cellHeight, 1)));
             }
 
             if (!cell.IsLinked(cell.South))
@@ -308,13 +291,11 @@ namespace Project.Procedural.MazeGeneration
                 AddQuad(Matrix4x4.TRS(
                         new Vector3(j * cellWidth, halfH, (-i - 1 + .5f) * cellWidth),
                         Quaternion.LookRotation(Vector3.back),
-                        new Vector3(cellWidth, cellHeight, 1)
-                    ), ref newVertices, ref newUVs, ref newTriangles);
+                        new Vector3(cellWidth, cellHeight, 1)));
             }
         }
 
-        private static void AddBackWallsWithoutInset(Cell cell, float cellWidth, float cellHeight, int i, int j,
-                    ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> newTriangles)
+        private static void AddBackWallsWithoutInset(Cell cell, float cellWidth, float cellHeight, int i, int j)
         {
             float halfH = cellHeight / 2f;
 
@@ -327,8 +308,7 @@ namespace Project.Procedural.MazeGeneration
                 AddQuad(Matrix4x4.TRS(
                         new Vector3(j * cellWidth, halfH, (-i + 1 - .5f) * cellWidth),
                         Quaternion.LookRotation(Vector3.back),
-                        new Vector3(cellWidth, cellHeight, 1)
-                    ), ref newVertices, ref newUVs, ref newTriangles);
+                        new Vector3(cellWidth, cellHeight, 1)));
 
             }
 
@@ -338,8 +318,7 @@ namespace Project.Procedural.MazeGeneration
                 AddQuad(Matrix4x4.TRS(
                         new Vector3((j - 1 + .5f) * cellWidth, halfH, -i * cellWidth),
                         Quaternion.LookRotation(Vector3.right),
-                        new Vector3(cellWidth, cellHeight, 1)
-                    ), ref newVertices, ref newUVs, ref newTriangles);
+                        new Vector3(cellWidth, cellHeight, 1)));
             }
 
             if (!cell.IsLinked(cell.East))
@@ -348,8 +327,7 @@ namespace Project.Procedural.MazeGeneration
                 AddQuad(Matrix4x4.TRS(
                         new Vector3((j + 1 - .5f) * cellWidth, halfH, -i * cellWidth),
                         Quaternion.LookRotation(Vector3.left),
-                        new Vector3(cellWidth, cellHeight, 1)
-                    ), ref newVertices, ref newUVs, ref newTriangles);
+                        new Vector3(cellWidth, cellHeight, 1)));
             }
 
             if (!cell.IsLinked(cell.South))
@@ -358,8 +336,7 @@ namespace Project.Procedural.MazeGeneration
                 AddQuad(Matrix4x4.TRS(
                         new Vector3(j * cellWidth, halfH, (-i - 1 + .5f) * cellWidth),
                         Quaternion.LookRotation(Vector3.forward),
-                        new Vector3(cellWidth, cellHeight, 1)
-                    ), ref newVertices, ref newUVs, ref newTriangles);
+                        new Vector3(cellWidth, cellHeight, 1)));
             }
         }
 
@@ -369,10 +346,9 @@ namespace Project.Procedural.MazeGeneration
 
 
 
-        private static void AddQuad(Matrix4x4 matrix, 
-            ref List<Vector3> newVertices, ref List<Vector2> newUVs, ref List<int> newTriangles)
+        private static void AddQuad(Matrix4x4 matrix)
         {
-            int index = newVertices.Count;
+            int index = _newVertices.Count;
 
             // corners before transforming
             Vector3 vert1 = new(-.5f, -.5f, 0);
@@ -382,23 +358,23 @@ namespace Project.Procedural.MazeGeneration
 
 
             //The matrix allows us to rotate the quads to fit walls or ceiling
-            newVertices.Add(matrix.MultiplyPoint3x4(vert1));
-            newVertices.Add(matrix.MultiplyPoint3x4(vert2));
-            newVertices.Add(matrix.MultiplyPoint3x4(vert3));
-            newVertices.Add(matrix.MultiplyPoint3x4(vert4));
+            _newVertices.Add(matrix.MultiplyPoint3x4(vert1));
+            _newVertices.Add(matrix.MultiplyPoint3x4(vert2));
+            _newVertices.Add(matrix.MultiplyPoint3x4(vert3));
+            _newVertices.Add(matrix.MultiplyPoint3x4(vert4));
 
-            newUVs.Add(new(1, 0));
-            newUVs.Add(new(1, 1));
-            newUVs.Add(new(0, 1));
-            newUVs.Add(new(0, 0));
+            _newUVs.Add(new(1, 0));
+            _newUVs.Add(new(1, 1));
+            _newUVs.Add(new(0, 1));
+            _newUVs.Add(new(0, 0));
 
-            newTriangles.Add(index + 2);
-            newTriangles.Add(index + 1);
-            newTriangles.Add(index);
-
-            newTriangles.Add(index + 3);
-            newTriangles.Add(index + 2);
-            newTriangles.Add(index);
+            _newTriangles.Add(index + 2);
+            _newTriangles.Add(index + 1);
+            _newTriangles.Add(index);
+            
+            _newTriangles.Add(index + 3);
+            _newTriangles.Add(index + 2);
+            _newTriangles.Add(index);
         }
 
         #endregion
