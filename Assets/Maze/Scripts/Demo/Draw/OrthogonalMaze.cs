@@ -194,7 +194,7 @@ namespace Project.Procedural.MazeGeneration
                                 AddFloorWithInset(cell, cellWidth, x, z, inset);
                                 break;
                             case 1:
-                                AddCeilingWithInset(cell, cellWidth, x, z, inset);
+                                AddCeilingWithInset(cell, cellWidth, cellHeight, x, z, inset);
                                 break;
                             case 2:
                                 AddWallsWithInset(cell, cellWidth, cellHeight, x, z, inset);
@@ -259,44 +259,65 @@ namespace Project.Procedural.MazeGeneration
             if (cell.IsLinked(cell.North))
             {
                 AddQuad(
-                Matrix4x4.TRS(new Vector3(x2, 0, -z1 + halfCs - halfI),
+                Matrix4x4.TRS(new Vector3(x2, 0, -z1 + halfCs),
                               Quaternion.LookRotation(Vector3.up),
-                              new Vector3(cellSize, inset, 1)));
-            }
-            if (cell.IsLinked(cell.West))
-            {
-                AddQuad(
-                Matrix4x4.TRS(new Vector3(x1 - halfCs + halfI, 0, -z2),
-                              Quaternion.LookRotation(Vector3.up),
-                              new Vector3(inset, cellSize, 1)));
+                              new Vector3(cellSize, inset * 2f, 1)));
             }
             if (cell.IsLinked(cell.East))
             {
                 AddQuad(
-                Matrix4x4.TRS(new Vector3(x3 - halfCs + halfI, 0, -z2),
+                Matrix4x4.TRS(new Vector3(x3 - halfCs + inset, 0, -z2),
                               Quaternion.LookRotation(Vector3.up),
-                              new Vector3(inset, cellSize, 1)));
+                              new Vector3(inset * 2f, cellSize, 1)));
             }
-            if (cell.IsLinked(cell.South))
+        }
+
+        private static void AddCeilingWithInset(Cell cell, float cellSize, float cellHeight, float x, float z, float inset)
+        {
+            (Vector4 xc, Vector4 zc) = CellCoordsWithInset(x, z, cellSize, inset);
+            float x1 = xc.x;
+            float x2 = xc.y;
+            float x3 = xc.z;
+            float x4 = xc.w;
+
+            float z1 = zc.x;
+            float z2 = zc.y;
+            float z3 = zc.z;
+            float z4 = zc.w;
+
+            cellSize -= inset * 2f;
+            float halfCs = cellSize / 2f;
+            float halfI = inset / 2f;
+
+            // center
+            AddQuad(
+                Matrix4x4.TRS(new Vector3(x2, cellHeight, -z2),
+                              Quaternion.LookRotation(Vector3.down),
+                              new Vector3(cellSize, cellSize, 1)));
+
+            //Draws 4 imgs to fill the outer regions of the cell
+            if (cell.IsLinked(cell.North))
             {
                 AddQuad(
-                Matrix4x4.TRS(new Vector3(x2, 0, -z3 + halfCs - halfI),
-                              Quaternion.LookRotation(Vector3.up),
-                              new Vector3(cellSize, inset, 1)));
+                Matrix4x4.TRS(new Vector3(x2, cellHeight, -z1 + halfCs),
+                              Quaternion.LookRotation(Vector3.down),
+                              new Vector3(cellSize, inset * 2f, 1)));
+            }
+            if (cell.IsLinked(cell.East))
+            {
+                AddQuad(
+                Matrix4x4.TRS(new Vector3(x3 - halfCs + inset, cellHeight, -z2),
+                              Quaternion.LookRotation(Vector3.down),
+                              new Vector3(inset * 2f, cellSize, 1)));
             }
         }
 
-        private static void AddCeilingWithInset(Cell cell, float cellSize, float x, float y, float inset)
+        private static void AddWallsWithInset(Cell cell, float cellWidth, float cellHeight, float x, float z, float inset)
         {
 
         }
 
-        private static void AddWallsWithInset(Cell cell, float cellWidth, float cellHeight, float x, float y, float inset)
-        {
-
-        }
-
-        private static void AddBackWallsWithInset(Cell cell, float cellWidth, float cellHeight, float x, float y, float inset)
+        private static void AddBackWallsWithInset(Cell cell, float cellWidth, float cellHeight, float x, float z, float inset)
         {
 
         }
