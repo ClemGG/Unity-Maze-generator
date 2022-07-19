@@ -199,9 +199,8 @@ namespace Project.Procedural.MazeGeneration
                             case 2:
                                 AddWallsWithInset(cell, cellWidth, cellHeight, x, z, inset);
                                 break;
-                            case 3:
-                                AddBackWallsWithInset(cell, cellWidth, cellHeight, x, z, inset);
-                                break;
+
+                            //No need for back walls when using inset, the collisions work properly
                         }
                     }
                     else
@@ -248,11 +247,12 @@ namespace Project.Procedural.MazeGeneration
             cellSize -= inset * 2f;
             float halfCs = cellSize / 2f;
             float halfI = inset / 2f;
+            Quaternion rot = Quaternion.LookRotation(Vector3.up);
 
             // center
             AddQuad(
                 Matrix4x4.TRS(new Vector3(x2, 0, -z2),
-                              Quaternion.LookRotation(Vector3.up),
+                              rot,
                               new Vector3(cellSize, cellSize, 1)));
 
             //Draws 4 imgs to fill the outer regions of the cell
@@ -260,14 +260,14 @@ namespace Project.Procedural.MazeGeneration
             {
                 AddQuad(
                 Matrix4x4.TRS(new Vector3(x2, 0, -z1 + halfCs),
-                              Quaternion.LookRotation(Vector3.up),
+                              rot,
                               new Vector3(cellSize, inset * 2f, 1)));
             }
             if (cell.IsLinked(cell.East))
             {
                 AddQuad(
                 Matrix4x4.TRS(new Vector3(x3 - halfCs + inset, 0, -z2),
-                              Quaternion.LookRotation(Vector3.up),
+                              rot,
                               new Vector3(inset * 2f, cellSize, 1)));
             }
         }
@@ -288,11 +288,13 @@ namespace Project.Procedural.MazeGeneration
             cellSize -= inset * 2f;
             float halfCs = cellSize / 2f;
             float halfI = inset / 2f;
+            Quaternion rot = Quaternion.LookRotation(Vector3.down);
+
 
             // center
             AddQuad(
                 Matrix4x4.TRS(new Vector3(x2, cellHeight, -z2),
-                              Quaternion.LookRotation(Vector3.down),
+                              rot,
                               new Vector3(cellSize, cellSize, 1)));
 
             //Draws 4 imgs to fill the outer regions of the cell
@@ -300,26 +302,123 @@ namespace Project.Procedural.MazeGeneration
             {
                 AddQuad(
                 Matrix4x4.TRS(new Vector3(x2, cellHeight, -z1 + halfCs),
-                              Quaternion.LookRotation(Vector3.down),
+                              rot,
                               new Vector3(cellSize, inset * 2f, 1)));
             }
             if (cell.IsLinked(cell.East))
             {
                 AddQuad(
                 Matrix4x4.TRS(new Vector3(x3 - halfCs + inset, cellHeight, -z2),
-                              Quaternion.LookRotation(Vector3.down),
+                              rot,
                               new Vector3(inset * 2f, cellSize, 1)));
             }
         }
 
         private static void AddWallsWithInset(Cell cell, float cellWidth, float cellHeight, float x, float z, float inset)
         {
+            (Vector4 xc, Vector4 zc) = CellCoordsWithInset(x, z, cellWidth, inset);
+            float x1 = xc.x;
+            float x2 = xc.y;
+            float x3 = xc.z;
+            float x4 = xc.w;
 
-        }
+            float z1 = zc.x;
+            float z2 = zc.y;
+            float z3 = zc.z;
+            float z4 = zc.w;
 
-        private static void AddBackWallsWithInset(Cell cell, float cellWidth, float cellHeight, float x, float z, float inset)
-        {
+            float doubleI = inset * 2f;
+            float cellSize = cellWidth - doubleI;
+            float halfH = cellHeight / 2f;
+            float halfCs = cellSize / 2f;
 
+            Vector3 pos, size;
+
+            if (cell.IsLinked(cell.North))
+            {
+                size = new(doubleI, cellHeight, 1f);
+                pos = new(x2 - halfCs, halfH, -z1 + halfCs);
+
+                //Line V
+                AddQuad(Matrix4x4.TRS(
+                        pos,
+                        Quaternion.LookRotation(Vector3.right),
+                        size));
+
+                pos = new(x3 - halfCs, halfH, -z1 + halfCs);
+
+                //Line V
+                AddQuad(Matrix4x4.TRS(
+                        pos,
+                        Quaternion.LookRotation(Vector3.left),
+                        size));
+            }
+            else
+            {
+                size = new(cellSize, cellHeight, 1f);
+                pos = new(x2, halfH, -z2 + halfCs);
+
+                //Line H
+                AddQuad(Matrix4x4.TRS(
+                        pos,
+                        Quaternion.LookRotation(Vector3.back),
+                        size));
+            }
+            
+            if (cell.IsLinked(cell.East))
+            {
+                size = new(doubleI, cellHeight, 1f);
+                pos = new(x3 - halfCs + inset, halfH, -z2 + halfCs);
+
+                //Line H
+                AddQuad(Matrix4x4.TRS(
+                        pos,
+                        Quaternion.LookRotation(Vector3.back),
+                        size));
+
+                pos = new(x3 - halfCs + inset, halfH, -z3 + halfCs);
+
+                //Line H
+                AddQuad(Matrix4x4.TRS(
+                        pos,
+                        Quaternion.LookRotation(Vector3.forward),
+                        size));
+            }
+            else
+            {
+                size = new(cellSize, cellHeight, 1f);
+                pos = new(x3 - halfCs, halfH, -z2);
+
+                //Line V
+                AddQuad(Matrix4x4.TRS(
+                        pos,
+                        Quaternion.LookRotation(Vector3.left),
+                        size));
+            }
+
+            if (!cell.IsLinked(cell.South))
+            {
+                size = new(cellSize, cellHeight, 1f);
+                pos = new(x2, halfH, -z3 + halfCs);
+
+                //Line H
+                AddQuad(Matrix4x4.TRS(
+                        pos,
+                        Quaternion.LookRotation(Vector3.forward),
+                        size));
+            }
+
+            if (!cell.IsLinked(cell.West))
+            {
+                size = new(cellSize, cellHeight, 1f);
+                pos = new(x2 - halfCs, halfH, -z2);
+
+                //Line V
+                AddQuad(Matrix4x4.TRS(
+                        pos,
+                        Quaternion.LookRotation(Vector3.right),
+                        size));
+            }
         }
 
         #endregion
@@ -352,12 +451,13 @@ namespace Project.Procedural.MazeGeneration
         {
             float halfH = cellHeight / 2f;
 
+
             if (cell.North is null)
             {
                 //Wall North
                 AddQuad(Matrix4x4.TRS(
-                        new Vector3(j * cellWidth, halfH, (-i + 1 - .5f) * cellWidth),
-                        Quaternion.LookRotation(Vector3.forward),
+                        new Vector3(j * cellWidth, halfH, (-i + .5f) * cellWidth),
+                        Quaternion.LookRotation(Vector3.back),
                         new Vector3(cellWidth, cellHeight, 1)));
 
             }
@@ -366,8 +466,8 @@ namespace Project.Procedural.MazeGeneration
             {
                 //Wall West
                 AddQuad(Matrix4x4.TRS(
-                        new Vector3((j - 1 + .5f) * cellWidth, halfH, -i * cellWidth),
-                        Quaternion.LookRotation(Vector3.left),
+                        new Vector3((j - .5f) * cellWidth, halfH, -i * cellWidth),
+                        Quaternion.LookRotation(Vector3.right),
                         new Vector3(cellWidth, cellHeight, 1)));
             }
 
@@ -375,8 +475,8 @@ namespace Project.Procedural.MazeGeneration
             {
                 //Wall East
                 AddQuad(Matrix4x4.TRS(
-                        new Vector3((j + 1 - .5f) * cellWidth, halfH, -i * cellWidth),
-                        Quaternion.LookRotation(Vector3.right),
+                        new Vector3((j + .5f) * cellWidth, halfH, -i * cellWidth),
+                        Quaternion.LookRotation(Vector3.left),
                         new Vector3(cellWidth, cellHeight, 1)));
             }
 
@@ -384,8 +484,8 @@ namespace Project.Procedural.MazeGeneration
             {
                 //Wall South
                 AddQuad(Matrix4x4.TRS(
-                        new Vector3(j * cellWidth, halfH, (-i - 1 + .5f) * cellWidth),
-                        Quaternion.LookRotation(Vector3.back),
+                        new Vector3(j * cellWidth, halfH, (-i - .5f) * cellWidth),
+                        Quaternion.LookRotation(Vector3.forward),
                         new Vector3(cellWidth, cellHeight, 1)));
             }
         }
@@ -402,7 +502,7 @@ namespace Project.Procedural.MazeGeneration
                 //backface North
                 AddQuad(Matrix4x4.TRS(
                         new Vector3(j * cellWidth, halfH, (-i + 1 - .5f) * cellWidth),
-                        Quaternion.LookRotation(Vector3.back),
+                        Quaternion.LookRotation(Vector3.forward),
                         new Vector3(cellWidth, cellHeight, 1)));
 
             }
@@ -412,7 +512,7 @@ namespace Project.Procedural.MazeGeneration
                 //backface West
                 AddQuad(Matrix4x4.TRS(
                         new Vector3((j - 1 + .5f) * cellWidth, halfH, -i * cellWidth),
-                        Quaternion.LookRotation(Vector3.right),
+                        Quaternion.LookRotation(Vector3.left),
                         new Vector3(cellWidth, cellHeight, 1)));
             }
 
@@ -421,7 +521,7 @@ namespace Project.Procedural.MazeGeneration
                 //backface East
                 AddQuad(Matrix4x4.TRS(
                         new Vector3((j + 1 - .5f) * cellWidth, halfH, -i * cellWidth),
-                        Quaternion.LookRotation(Vector3.left),
+                        Quaternion.LookRotation(Vector3.right),
                         new Vector3(cellWidth, cellHeight, 1)));
             }
 
@@ -430,7 +530,7 @@ namespace Project.Procedural.MazeGeneration
                 //backface South
                 AddQuad(Matrix4x4.TRS(
                         new Vector3(j * cellWidth, halfH, (-i - 1 + .5f) * cellWidth),
-                        Quaternion.LookRotation(Vector3.forward),
+                        Quaternion.LookRotation(Vector3.back),
                         new Vector3(cellWidth, cellHeight, 1)));
             }
         }
