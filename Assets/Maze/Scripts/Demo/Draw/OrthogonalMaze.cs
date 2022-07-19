@@ -581,7 +581,8 @@ namespace Project.Procedural.MazeGeneration
             float y3 = yc.z;
             float y4 = yc.w;
 
-            cellSize -= inset * 2f;
+            float doubleI = inset * 2f;
+            cellSize -= doubleI;
 
             //Draws the img for the center of the cell
             DrawCell(new Vector2(cellSize, cellSize),
@@ -593,30 +594,16 @@ namespace Project.Procedural.MazeGeneration
             //Draws 4 imgs to fill the outer regions of the cell
             if (cell.IsLinked(cell.North))
             {
-                DrawCell(new Vector2(cellSize, inset),
-                new Vector3(x2, -y1, 0),
+                DrawCell(new Vector2(cellSize, doubleI),
+                new Vector3(x2, -y1 + inset, 0),
                 //Color.red);
-                color);
-            }
-            if (cell.IsLinked(cell.West))
-            {
-                DrawCell(new Vector2(inset, cellSize),
-                new Vector3(x1, -y2, 0),
-                //Color.blue);
                 color);
             }
             if (cell.IsLinked(cell.East))
             {
-                DrawCell(new Vector2(inset, cellSize),
+                DrawCell(new Vector2(doubleI, cellSize),
                 new Vector3(x3, -y2, 0),
                 //Color.yellow);
-                color);
-            }
-            if (cell.IsLinked(cell.South))
-            {
-                DrawCell(new Vector2(cellSize, inset),
-                new Vector3(x2, -y3, 0),
-                //Color.green);
                 color);
             }
         }
