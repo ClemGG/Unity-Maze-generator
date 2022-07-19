@@ -10,6 +10,7 @@ namespace Project.Procedural.MazeGeneration
         Wilson,
         HuntAndKill,
         RecursiveBacktracker,
+        RandomizedKruskal,
     }
 
 

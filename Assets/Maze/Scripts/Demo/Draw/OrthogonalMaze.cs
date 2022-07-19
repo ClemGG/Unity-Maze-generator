@@ -732,19 +732,20 @@ namespace Project.Procedural.MazeGeneration
             float y3 = yc.z;
             float y4 = yc.w;
 
-            cellSize -= inset * 2f;
+            float doubleI = inset * 2f;
+            cellSize -= doubleI;
 
             Vector3 pos, size;
 
             if (cell.IsLinked(cell.North))
             {
-                size = new(lineThickness, inset + lineThickness);
-                pos = new(x2, -y1);
+                size = new(lineThickness, doubleI + lineThickness);
+                pos = new(x2, -y1 + inset);
 
                 //Line V
                 DrawLine(anchorV, pivotV, size, pos);
 
-                pos = new(x3, -y1);
+                pos = new(x3, -y1 + inset);
 
                 //Line V
                 DrawLine(anchorV, pivotV, size, pos);
@@ -757,53 +758,13 @@ namespace Project.Procedural.MazeGeneration
                 //Line H
                 DrawLine(anchorH, pivotH, size, pos);
             }
-            if (cell.IsLinked(cell.South))
-            {
-                size = new(lineThickness, inset + lineThickness);
-                pos = new(x2, -y3);
 
-                //Line V
-                DrawLine(anchorV, pivotV, size, pos);
 
-                pos = new(x3, -y3);
 
-                //Line V
-                DrawLine(anchorV, pivotV, size, pos);
-            }
-            else
-            {
 
-                size = new(cellSize, lineThickness);
-                pos = new(x2, -y3);
-
-                //Line H
-                DrawLine(anchorH, pivotH, size, pos);
-            }
-            if (cell.IsLinked(cell.West))
-            {
-                size = new(inset, lineThickness);
-                pos = new(x1, -y2);
-
-                //Line H
-                DrawLine(anchorH, pivotH, size, pos);
-
-                pos = new(x1, -y3);
-
-                //Line H
-                DrawLine(anchorH, pivotH, size, pos);
-            }
-            else
-            {
-
-                size = new(lineThickness, cellSize + lineThickness);
-                pos = new(x2, -y2);
-
-                //Line V
-                DrawLine(anchorV, pivotV, size, pos);
-            }
             if (cell.IsLinked(cell.East))
             {
-                size = new(inset, lineThickness);
+                size = new(doubleI, lineThickness);
                 pos = new(x3, -y2);
 
                 //Line H
@@ -819,6 +780,28 @@ namespace Project.Procedural.MazeGeneration
 
                 size = new(lineThickness, cellSize + lineThickness);
                 pos = new(x3, -y2);
+
+                //Line V
+                DrawLine(anchorV, pivotV, size, pos);
+            }
+
+
+
+            if (!cell.IsLinked(cell.South))
+            {
+                size = new(cellSize, lineThickness);
+                pos = new(x2, -y3);
+
+                //Line H
+                DrawLine(anchorH, pivotH, size, pos);
+            }
+
+
+
+            if (!cell.IsLinked(cell.West))
+            {
+                size = new(lineThickness, cellSize + lineThickness);
+                pos = new(x2, -y2);
 
                 //Line V
                 DrawLine(anchorV, pivotV, size, pos);

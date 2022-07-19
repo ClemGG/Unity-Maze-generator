@@ -4,6 +4,7 @@ namespace Project.Procedural.MazeGeneration
 {
     public class InsetMazeDemo : MonoBehaviour
     {
+        [field: SerializeField] private GenerationType GenerationType { get; set; } = GenerationType.BinaryTree;
         [field: SerializeField] private Vector2Int GridSize { get; set; } = new(4, 4);
         [field: SerializeField, Range(0f, .5f)] private float Inset { get; set; } = 0f;
         [field: SerializeField, Range(0f, 1f)] private float BraidRate { get; set; } = 1f;
@@ -45,7 +46,7 @@ namespace Project.Procedural.MazeGeneration
                 (grid as MaskedGrid).SetMask(m);
             }
 
-            grid.Execute(GenerationType.RecursiveBacktracker);
+            grid.Execute(GenerationType);
             grid.Braid(BraidRate);
 
             Cell start = grid[grid.Rows / 2, grid.Columns / 2];

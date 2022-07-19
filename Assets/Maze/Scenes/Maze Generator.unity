@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1146565887}
   - component: {fileID: 1146565888}
+  - component: {fileID: 1146565902}
   - component: {fileID: 1146565889}
   - component: {fileID: 1146565891}
   - component: {fileID: 1146565890}
@@ -147,7 +148,7 @@ GameObject:
   - component: {fileID: 1146565900}
   - component: {fileID: 1146565901}
   - component: {fileID: 1146565903}
-  - component: {fileID: 1146565902}
+  - component: {fileID: 1146565904}
   m_Layer: 0
   m_Name: Maze Generator
   m_TagString: Untagged
@@ -393,8 +394,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7acaec6a0d054fc49ae239ad5bc07410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <GenerationType>k__BackingField: 5
   <GridSize>k__BackingField: {x: 10, y: 10}
   <Inset>k__BackingField: 0.1
   <BraidRate>k__BackingField: 1
   <ImageAsset>k__BackingField: {fileID: 0}
   <Extension>k__BackingField: .png
+--- !u!114 &1146565904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146565886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c9b4885c89cc0246ab1b20a11382fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <GridSize>k__BackingField: {x: 10, y: 10}

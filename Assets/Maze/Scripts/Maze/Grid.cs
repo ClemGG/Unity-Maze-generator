@@ -91,7 +91,8 @@ namespace Project.Procedural.MazeGeneration
             {
                 for (int i = 0; i < row.Length; i++)
                 {
-                    yield return row[i];
+                    if(row[i] is not null)
+                        yield return row[i];
                 }
             }
         }
@@ -152,8 +153,6 @@ namespace Project.Procedural.MazeGeneration
             List<Cell> deadends = new();
             foreach (Cell cell in EachCell())
             {
-                if (cell is null) continue; //In case we have a mask
-
                 if(cell.Links.Count == 1)
                 {
                     deadends.Add(cell);
