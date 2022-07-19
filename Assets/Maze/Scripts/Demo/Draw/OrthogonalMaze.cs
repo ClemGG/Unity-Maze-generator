@@ -135,9 +135,9 @@ namespace Project.Procedural.MazeGeneration
             {
                 meshes[i] = new Mesh
                 {
-                    name = "Generated maze mesh"
+                    name = "Generated maze mesh",
+                    indexFormat = UnityEngine.Rendering.IndexFormat.UInt32  //Allows us to get more triangles
                 };
-
 
                 _newVertices.Clear();
                 _newUVs.Clear();

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -378,7 +378,7 @@ MonoBehaviour:
   <CellSize>k__BackingField: {x: 5, y: 5}
   <GridSize>k__BackingField: {x: 10, y: 10}
   <BraidRate>k__BackingField: 1
-  <Inset>k__BackingField: 0.35
+  <Inset>k__BackingField: 0.1
   <ImageAsset>k__BackingField: {fileID: 0}
   <Extension>k__BackingField: .png
 --- !u!114 &1146565903

@@ -183,10 +183,8 @@ namespace Project.Procedural.MazeGeneration
                 float braidRand = 1f.Sample();
 
                 //Checks links.count to avoid repeating a cell
-                if(cell.Links.Count != 1 || braidRand > braidRate)
-                {
-                    break;
-                }
+                if (cell.Links.Count != 1 || braidRand >= braidRate)
+                    continue;
 
                 //get unlinked neighbors
                 List<Cell> neighbors = new(cell.Neighbors.Count);
