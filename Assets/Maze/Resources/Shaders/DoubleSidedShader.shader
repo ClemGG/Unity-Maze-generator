@@ -1,4 +1,4 @@
-Shader "Custom/DoubleSidedShader"
+Shader "Custom/Double Sided"
 {
     Properties
     {

@@ -86,14 +86,30 @@ namespace Project.Procedural.MazeGeneration
 
 
 
+
+        private static (Vector4, Vector4) CellCoordsWithInset(float x, float y, float cellSize, float inset)
+        {
+            float x1 = x;
+            float x4 = x + cellSize;
+            float x2 = x1 + inset;
+            float x3 = x4 - inset;
+
+            float y1 = y;
+            float y4 = y + cellSize;
+            float y2 = y1 + inset;
+            float y3 = y4 - inset;
+
+            return (new(x1, x2, x3, x4), new(y1, y2, y3, y4));
+        }
+
+
+
+
+
         #region 3D Mesh
 
         public static void CleanupMesh()
         {
-            _newVertices.Clear();
-            _newUVs.Clear();
-            _newTriangles.Clear();
-
             for (int i = 0; i < MazeObj.childCount; i++)
             {
                 MeshFilter mf = MazeObj.GetChild(i).GetComponent<MeshFilter>();
@@ -145,6 +161,11 @@ namespace Project.Procedural.MazeGeneration
                 if(mc != null)
                     mc.sharedMesh = meshes[i];
             }
+
+            //cleanup memory
+            _newVertices.Clear();
+            _newUVs.Clear();
+            _newTriangles.Clear();
         }
 
         private static void GenerateMesh(int meshID, Grid grid, float inset)
@@ -165,21 +186,21 @@ namespace Project.Procedural.MazeGeneration
                     if (!Mathf.Approximately(inset, 0f) && !Mathf.Approximately(inset, .5f * cellWidth))
                     {
                         float x = cell.Column * cellWidth;
-                        float y = cell.Row * cellWidth;
+                        float z = (cell.Row - grid.Rows + 1) * cellWidth;
 
                         switch (meshID)
                         {
                             case 0:
-                                AddFloorWithInset(cell, cellWidth, x, y, inset);
+                                AddFloorWithInset(cell, cellWidth, x, z, inset);
                                 break;
                             case 1:
-                                AddCeilingWithInset(cell, cellWidth, x, y, inset);
+                                AddCeilingWithInset(cell, cellWidth, x, z, inset);
                                 break;
                             case 2:
-                                AddWallsWithInset(cell, cellWidth, cellHeight, x, y, inset);
+                                AddWallsWithInset(cell, cellWidth, cellHeight, x, z, inset);
                                 break;
                             case 3:
-                                AddBackWallsWithInset(cell, cellWidth, cellHeight, x, y, inset);
+                                AddBackWallsWithInset(cell, cellWidth, cellHeight, x, z, inset);
                                 break;
                         }
                     }
@@ -211,12 +232,61 @@ namespace Project.Procedural.MazeGeneration
 
         #region With Inset
 
-        private static void AddFloorWithInset(Cell cell, float cellWidth, float x, float y, float inset)
+        private static void AddFloorWithInset(Cell cell, float cellSize, float x, float z, float inset)
         {
+            (Vector4 xc, Vector4 zc) = CellCoordsWithInset(x, z, cellSize, inset);
+            float x1 = xc.x;
+            float x2 = xc.y;
+            float x3 = xc.z;
+            float x4 = xc.w;
 
+            float z1 = zc.x;
+            float z2 = zc.y;
+            float z3 = zc.z;
+            float z4 = zc.w;
+
+            cellSize -= inset * 2f;
+            float halfCs = cellSize / 2f;
+            float halfI = inset / 2f;
+
+            // center
+            AddQuad(
+                Matrix4x4.TRS(new Vector3(x2, 0, -z2),
+                              Quaternion.LookRotation(Vector3.up),
+                              new Vector3(cellSize, cellSize, 1)));
+
+            //Draws 4 imgs to fill the outer regions of the cell
+            if (cell.IsLinked(cell.North))
+            {
+                AddQuad(
+                Matrix4x4.TRS(new Vector3(x2, 0, -z1 + halfCs - halfI),
+                              Quaternion.LookRotation(Vector3.up),
+                              new Vector3(cellSize, inset, 1)));
+            }
+            if (cell.IsLinked(cell.West))
+            {
+                AddQuad(
+                Matrix4x4.TRS(new Vector3(x1 - halfCs + halfI, 0, -z2),
+                              Quaternion.LookRotation(Vector3.up),
+                              new Vector3(inset, cellSize, 1)));
+            }
+            if (cell.IsLinked(cell.East))
+            {
+                AddQuad(
+                Matrix4x4.TRS(new Vector3(x3 - halfCs + halfI, 0, -z2),
+                              Quaternion.LookRotation(Vector3.up),
+                              new Vector3(inset, cellSize, 1)));
+            }
+            if (cell.IsLinked(cell.South))
+            {
+                AddQuad(
+                Matrix4x4.TRS(new Vector3(x2, 0, -z3 + halfCs - halfI),
+                              Quaternion.LookRotation(Vector3.up),
+                              new Vector3(cellSize, inset, 1)));
+            }
         }
 
-        private static void AddCeilingWithInset(Cell cell, float cellWidth, float x, float y, float inset)
+        private static void AddCeilingWithInset(Cell cell, float cellSize, float x, float y, float inset)
         {
 
         }
@@ -477,24 +547,6 @@ namespace Project.Procedural.MazeGeneration
 
 
 
-
-        private static (Vector4, Vector4) CellCoordsWithInset(float x, float y, float cellSize, float inset)
-        {
-            float x1 = x;
-            float x4 = x + cellSize;
-            float x2 = x1 + inset;
-            float x3 = x4 - inset;
-
-            float y1 = y;
-            float y4 = y + cellSize;
-            float y2 = y1 + inset;
-            float y3 = y4 - inset;
-
-            return (new(x1, x2, x3, x4), new( y1, y2, y3, y4));
-        }
-
-
-
         private static void DisplayCellImgWithInset(Cell cell, float cellSize, float x, float y, float inset, Color color)
         {
             (Vector4 xc, Vector4 yc) = CellCoordsWithInset(x, y, cellSize, inset);
@@ -508,38 +560,40 @@ namespace Project.Procedural.MazeGeneration
             float y3 = yc.z;
             float y4 = yc.w;
 
+            cellSize -= inset * 2f;
+
             //Draws the img for the center of the cell
-            DrawCell(new Vector2(cellSize - inset * 2f, cellSize - inset * 2f),
+            DrawCell(new Vector2(cellSize, cellSize),
                 new Vector3(x2, -y2, 0),
                 //Color.black);
                 color);
 
 
-            //Draws 2 imgs to fill the outer regions of the cell
+            //Draws 4 imgs to fill the outer regions of the cell
             if (cell.IsLinked(cell.North))
             {
-                DrawCell(new Vector2(cellSize - inset * 2f, inset),
+                DrawCell(new Vector2(cellSize, inset),
                 new Vector3(x2, -y1, 0),
                 //Color.red);
                 color);
             }
             if (cell.IsLinked(cell.West))
             {
-                DrawCell(new Vector2(inset, cellSize - inset * 2f),
+                DrawCell(new Vector2(inset, cellSize),
                 new Vector3(x1, -y2, 0),
                 //Color.blue);
                 color);
             }
             if (cell.IsLinked(cell.East))
             {
-                DrawCell(new Vector2(inset, cellSize - inset * 2f),
+                DrawCell(new Vector2(inset, cellSize),
                 new Vector3(x3, -y2, 0),
                 //Color.yellow);
                 color);
             }
             if (cell.IsLinked(cell.South))
             {
-                DrawCell(new Vector2(cellSize - inset * 2f, inset),
+                DrawCell(new Vector2(cellSize, inset),
                 new Vector3(x2, -y3, 0),
                 //Color.green);
                 color);
@@ -570,6 +624,8 @@ namespace Project.Procedural.MazeGeneration
             float y3 = yc.z;
             float y4 = yc.w;
 
+            cellSize -= inset * 2f;
+
             Vector3 pos, size;
 
             if (cell.IsLinked(cell.North))
@@ -587,7 +643,7 @@ namespace Project.Procedural.MazeGeneration
             }
             else
             {
-                size = new(cellSize - inset * 2f, lineThickness);
+                size = new(cellSize, lineThickness);
                 pos = new(x2, -y2);
 
                 //Line H
@@ -609,7 +665,7 @@ namespace Project.Procedural.MazeGeneration
             else
             {
 
-                size = new(cellSize - inset * 2f, lineThickness);
+                size = new(cellSize, lineThickness);
                 pos = new(x2, -y3);
 
                 //Line H
@@ -631,7 +687,7 @@ namespace Project.Procedural.MazeGeneration
             else
             {
 
-                size = new(lineThickness, cellSize - inset * 2f + lineThickness);
+                size = new(lineThickness, cellSize + lineThickness);
                 pos = new(x2, -y2);
 
                 //Line V
@@ -653,7 +709,7 @@ namespace Project.Procedural.MazeGeneration
             else
             {
 
-                size = new(lineThickness, cellSize - inset * 2f + lineThickness);
+                size = new(lineThickness, cellSize + lineThickness);
                 pos = new(x3, -y2);
 
                 //Line V
