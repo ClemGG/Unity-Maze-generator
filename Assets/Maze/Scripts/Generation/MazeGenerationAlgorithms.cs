@@ -36,6 +36,9 @@ namespace Project.Procedural.MazeGeneration
                 case GenerationType.GrowingTree:
                     GrowingTree.Execute(grid, start);
                     break;
+                case GenerationType.Eller:
+                    Eller.Execute(grid);
+                    break;
             }
         }
     }

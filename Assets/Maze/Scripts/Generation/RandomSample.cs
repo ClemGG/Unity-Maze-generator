@@ -44,5 +44,23 @@ namespace Project.Procedural.MazeGeneration
             }
             return Random.Range(start, length);
         }
+
+
+        public static List<T> Shuffle<T>(this List<T> list)
+        {
+            List<T> cur = new();
+            cur.AddRange(list);
+            List<T> shuffled = new(list.Count);
+
+            while (cur.Count > 0)
+            {
+                int rand = cur.Count.Sample();
+                T item = cur[rand];
+                cur.Remove(item);
+                shuffled.Add(item);
+            }
+
+            return shuffled;
+        }
     }
 }
