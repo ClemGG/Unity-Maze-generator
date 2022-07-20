@@ -25,7 +25,16 @@ namespace Project.Procedural.MazeGeneration
                     RecursiveBacktracker.Execute(grid, start);
                     break;
                 case GenerationType.RandomizedKruskal:
-                    RandomizedKruskal.Execute(grid, start);
+                    RandomizedKruskal.Execute(grid);
+                    break;
+                case GenerationType.SimplifiedPrim:
+                    SimplifiedPrim.Execute(grid, start);
+                    break;
+                case GenerationType.TruePrim:
+                    TruePrim.Execute(grid, start);
+                    break;
+                case GenerationType.GrowingTree:
+                    GrowingTree.Execute(grid, start);
                     break;
             }
         }

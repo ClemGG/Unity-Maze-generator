@@ -11,6 +11,11 @@ namespace Project.Procedural.MazeGeneration
         HuntAndKill,
         RecursiveBacktracker,
         RandomizedKruskal,
+        SimplifiedPrim,
+        TruePrim,
+        GrowingTree,
+        Eller,
+        RecursiveDivision,
     }
 
 
