@@ -216,5 +216,28 @@ namespace Project.Procedural.MazeGeneration
             }
 
         }
+
+        //Links all cells together to create an empty maze
+        public void LinkAll()
+        {
+            foreach (Cell cell in EachCell())
+            {
+                foreach (Cell n in cell.Neighbors)
+                {
+                    cell.Link(n, false);
+                }
+            }
+        }
+        //Uninks all cells to create walls around every cell
+        public void UnlinkAll()
+        {
+            foreach (Cell cell in EachCell())
+            {
+                foreach (Cell n in cell.Neighbors)
+                {
+                    cell.Unlink(n, false);
+                }
+            }
+        }
     }
 }

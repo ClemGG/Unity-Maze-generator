@@ -39,6 +39,9 @@ namespace Project.Procedural.MazeGeneration
                 case GenerationType.Eller:
                     Eller.Execute(grid);
                     break;
+                case GenerationType.RecursiveDivision:
+                    RecursiveDivision.Execute(grid);
+                    break;
             }
         }
     }

@@ -713,8 +713,8 @@ namespace Project.Procedural.MazeGeneration
         {
             //width and height of the UI Image in pixels
             //TODO : Scale these sizes for smaller cells
-            float lineThickness = Mathf.Lerp(5f, 1f, inset / cellSize / 0.5f);
-            lineThickness = Mathf.Min(lineThickness, Mathf.Lerp(5f, 1f, gridLongestSize / 100f));
+            float lineThickness = Mathf.Lerp(5f, 1f, inset / cellSize / 0.4f);
+            lineThickness = Mathf.Min(lineThickness, Mathf.Lerp(5f, 1f, gridLongestSize / 50f));
 
             Vector2 anchorH = new(0f, 1f);
             Vector2 pivotH = new(0f, 1f);
