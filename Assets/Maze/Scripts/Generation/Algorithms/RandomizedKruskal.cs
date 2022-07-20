@@ -70,18 +70,7 @@ namespace Project.Procedural.MazeGeneration
         {
             State state = new(grid);
 
-            List<Cell[]> curNeighbors = new();
-            curNeighbors.AddRange(state.Neighbors);
-            //Shuffles the list of dead ends
-            List<Cell[]> shuffledNeighbors = new(curNeighbors.Count);
-            while (curNeighbors.Count > 0)
-            {
-                int rand = curNeighbors.Count.Sample();
-                Cell[] pair = curNeighbors[rand];
-                curNeighbors.Remove(pair);
-                shuffledNeighbors.Add(pair);
-            }
-
+            List<Cell[]> shuffledNeighbors = state.Neighbors.Shuffle();
             while (shuffledNeighbors.Count > 0)
             {
                 Cell[] pair = shuffledNeighbors[shuffledNeighbors.Count - 1];
