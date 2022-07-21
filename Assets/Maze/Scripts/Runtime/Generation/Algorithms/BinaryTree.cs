@@ -8,11 +8,11 @@ namespace Project.Procedural.MazeGeneration
      * This creates a Bias in the Maze where its northern and eastrn sides will be giant passages
      * with no walls.
      */
-    public static class BinaryTree
+    public class BinaryTree : IGeneration
     {
-        private static List<Cell> Neighbors { get; } = new();
+        private List<Cell> Neighbors { get; } = new();
 
-        public static void Execute(Grid grid)
+        public void Execute(Grid grid)
         {
             foreach (Cell cell in grid.EachCell())
             {

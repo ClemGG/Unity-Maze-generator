@@ -6,48 +6,48 @@ namespace Project.Procedural.MazeGeneration
         {
             switch (algorithm)
             {
-                case GenerationType.OneRoom:
-                    OneRoom.Execute(grid);
-                    break;
-                case GenerationType.BinaryTree:
-                    BinaryTree.Execute(grid);
-                    break;
-                case GenerationType.Sidewinder:
-                    Sidewinder.Execute(grid);
-                    break;
-                case GenerationType.AldousBroder:
-                    AldousBroder.Execute(grid);
-                    break;
-                case GenerationType.Wilson:
-                    Wilson.Execute(grid);
-                    break;
-                case GenerationType.Houston:
-                    Houston.Execute(grid);
-                    break;
-                case GenerationType.HuntAndKill:
-                    HuntAndKill.Execute(grid);
-                    break;
-                case GenerationType.RecursiveBacktracker:
-                    RecursiveBacktracker.Execute(grid, start);
-                    break;
-                case GenerationType.RandomizedKruskal:
-                    RandomizedKruskal.Execute(grid);
-                    break;
-                case GenerationType.SimplifiedPrim:
-                    SimplifiedPrim.Execute(grid, start);
-                    break;
-                case GenerationType.TruePrim:
-                    TruePrim.Execute(grid, start);
-                    break;
-                case GenerationType.GrowingTree:
-                    GrowingTree.Execute(grid, start);
-                    break;
-                case GenerationType.Eller:
-                    Eller.Execute(grid);
-                    break;
-                case GenerationType.RecursiveDivision:
-                    RecursiveDivision.Execute(grid);
-                    break;
+                //case GenerationType.OneRoom:
+                //    OneRoom.Execute(grid);
+                //    break;
+                //case GenerationType.BinaryTree:
+                //    BinaryTree.Execute(grid);
+                //    break;
+                //case GenerationType.Sidewinder:
+                //    Sidewinder.Execute(grid);
+                //    break;
+                //case GenerationType.AldousBroder:
+                //    AldousBroder.Execute(grid);
+                //    break;
+                //case GenerationType.Wilson:
+                //    Wilson.Execute(grid);
+                //    break;
+                //case GenerationType.Houston:
+                //    Houston.Execute(grid);
+                //    break;
+                //case GenerationType.HuntAndKill:
+                //    HuntAndKill.Execute(grid);
+                //    break;
+                //case GenerationType.RecursiveBacktracker:
+                //    RecursiveBacktracker.Execute(grid, start);
+                //    break;
+                //case GenerationType.RandomizedKruskal:
+                //    RandomizedKruskal.Execute(grid);
+                //    break;
+                //case GenerationType.SimplifiedPrim:
+                //    SimplifiedPrim.Execute(grid, start);
+                //    break;
+                //case GenerationType.TruePrim:
+                //    TruePrim.Execute(grid, start);
+                //    break;
+                //case GenerationType.GrowingTree:
+                //    GrowingTree.Execute(grid, start);
+                //    break;
+                //case GenerationType.Eller:
+                //    Eller.Execute(grid);
+                //    break;
+                //case GenerationType.RecursiveDivision:
+                //    RecursiveDivision.Execute(grid);
+                //    break;
             }
         }
     }

@@ -1,9 +1,9 @@
 
 namespace Project.Procedural.MazeGeneration
 {
-    public static class OneRoom
+    public class OneRoom : IGeneration
     {
-        public static void Execute(Grid grid)
+        public void Execute(Grid grid)
         {
             grid.LinkAll();
         }

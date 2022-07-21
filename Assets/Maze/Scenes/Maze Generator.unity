@@ -187,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d64d55c2783c7974896f6eb0a565bc4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Settings>k__BackingField: {fileID: 11400000, guid: c7815e5aded70db4caae64aaf45d25c5, type: 2}
+  <GenerationSettings>k__BackingField: {fileID: 11400000, guid: c7815e5aded70db4caae64aaf45d25c5, type: 2}
 --- !u!114 &1146565889
 MonoBehaviour:
   m_ObjectHideFlags: 0

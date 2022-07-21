@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
     public class MazeGenerator : MonoBehaviour
     {
-        [field: SerializeField] private GenerationSettingsSO Settings { get; set; }
+        [field: SerializeField] private GenerationSettingsSO GenerationSettings { get; set; }
 
 
 
@@ -17,15 +18,15 @@ namespace Project.Procedural.MazeGeneration
         [ContextMenu("Execute Generation Algorithm")]
         void Execute()
         {
-            Grid grid = new(Settings.GridSize.x, Settings.GridSize.y);
+            Grid grid = new(GenerationSettings.GridSize.x, GenerationSettings.GridSize.y);
 
             //Dynamically creates the generation algorithm
-            //Type algType = Type.GetType($"Project.Procedural.MazeGeneration.{GenerationType}");
-            //IGeneration genAlg = (IGeneration)Activator.CreateInstance(algType);
-            //genAlg.Execute(grid);
+            Type algType = Type.GetType($"Project.Procedural.MazeGeneration.{GenerationSettings.GenerationType}");
+            IGeneration genAlg = (IGeneration)Activator.CreateInstance(algType, GenerationSettings);
+            genAlg.Execute(grid);
 
-            grid.Execute(Settings.GenerationType);
-            grid.DisplayGrid(Settings.DisplayMode);
+            //grid.Execute(Settings.GenerationType);
+            grid.DisplayGrid(GenerationSettings.DisplayMode);
         }
     }
 }
