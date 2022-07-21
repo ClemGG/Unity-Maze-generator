@@ -5,7 +5,7 @@ namespace Project.Procedural.MazeGeneration
 
     //Combines the Sidewinder algorithm (using 1 row at a time) and the Kruskal algorithm
     //(which separates cells into sets with costs)
-    public static class Eller
+    public class Eller : IGeneration
     {
         private class RowState
         {
@@ -69,7 +69,7 @@ namespace Project.Procedural.MazeGeneration
 
 
 
-        public static void Execute(Grid grid)
+        public void Execute(Grid grid, Cell start = null)
         {
             RowState rowState = new();
 

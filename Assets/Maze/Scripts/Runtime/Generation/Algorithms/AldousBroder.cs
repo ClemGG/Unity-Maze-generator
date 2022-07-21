@@ -6,12 +6,12 @@ namespace Project.Procedural.MazeGeneration
     //Being completely random with no bias, this algorithm
     //can take a really long time to compute,
     //so it's best to use it in a small maze.
-    public static class AldousBroder
+    public class AldousBroder : IGeneration
     {
-        public static void Execute(Grid grid)
+        public void Execute(Grid grid, Cell start = null)
         {
 
-            Cell cell = grid.RandomCell();
+            Cell cell = start ?? grid.RandomCell();
             int unvisited = grid.Size() - 1;
 
             while(unvisited > 0)

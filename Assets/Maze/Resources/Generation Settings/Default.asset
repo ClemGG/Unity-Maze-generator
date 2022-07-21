@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8a80083063e634db52d48d5cd5d272, type: 3}
   m_Name: Default
   m_EditorClassIdentifier: 
-  <DisplayMode>k__BackingField: 0
-  <GenerationType>k__BackingField: 7
+  <DisplayMode>k__BackingField: 1
+  <GenerationType>k__BackingField: 13
   <GridSize>k__BackingField: {x: 10, y: 10}
   <CellSize>k__BackingField: {x: 5, y: 5}
   <RoomSize>k__BackingField: {x: 5, y: 5}
   <BiasTowardsRooms>k__BackingField: 0
-  <LambdaSelection>k__BackingField: 0
+  <LambdaSelection>k__BackingField: 2
   <Inset>k__BackingField: 0
-  <BraidRate>k__BackingField: 1
+  <BraidRate>k__BackingField: 0
   <ImageAsset>k__BackingField: {fileID: 0}
   <AsciiMask>k__BackingField: {fileID: 0}
   <Extension>k__BackingField: .png

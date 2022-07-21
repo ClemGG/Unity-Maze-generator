@@ -10,6 +10,10 @@ namespace Project.Procedural.MazeGeneration
         {
         }
 
+        public DistanceGrid(GenerationSettingsSO generationSettings) : base(generationSettings)
+        {
+        }
+
         //This will display the distance on each cell traversed
         //by Dijkstra’s solving algorithm.
         protected override string ContentsOf(Cell cell)

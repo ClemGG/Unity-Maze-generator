@@ -10,18 +10,16 @@ namespace Project.Procedural.MazeGeneration
      */
     public class BinaryTree : IGeneration
     {
-        private List<Cell> Neighbors { get; } = new();
-
-        public void Execute(Grid grid)
+        public void Execute(Grid grid, Cell start = null)
         {
             foreach (Cell cell in grid.EachCell())
             {
-                Neighbors.Clear();
+                List<Cell> neighbors = new();
 
-                if (cell.North != null) Neighbors.Add(cell.North);
-                if (cell.East != null) Neighbors.Add(cell.East);
+                if (cell.North != null) neighbors.Add(cell.North);
+                if (cell.East != null) neighbors.Add(cell.East);
 
-                Cell neighbor = Neighbors.Sample();
+                Cell neighbor = neighbors.Sample();
 
                 if (neighbor != null) cell.Link(neighbor);
             }

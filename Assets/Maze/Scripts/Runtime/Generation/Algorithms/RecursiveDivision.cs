@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
@@ -6,19 +5,19 @@ namespace Project.Procedural.MazeGeneration
 
     //The Recursive Division adds walls instead of removing them.
     //It cuts the maze in half and divides each created section again until it reaches individual cells.
-    public static class RecursiveDivision
+    public class RecursiveDivision : IGeneration
     {
-        private static Vector2Int RoomSize { get; set; }
-        private static bool BiasTowardsRooms { get; set; }
+        private Vector2Int RoomSize { get; set; } = new(1, 1);
+        private bool BiasTowardsRooms { get; set; } = false;
 
-        public static void Init(Vector2Int roomSize, bool biasTowardsRooms)
+        public RecursiveDivision(GenerationSettingsSO generationSettings)
         {
-            RoomSize = roomSize;
-            BiasTowardsRooms = biasTowardsRooms;
+            RoomSize = generationSettings.RoomSize;
+            BiasTowardsRooms = generationSettings.BiasTowardsRooms;
         }
 
 
-        public static void Execute(Grid grid)
+        public void Execute(Grid grid, Cell start = null)
         {
 
             //Links all cells together to create an empty maze
@@ -30,7 +29,7 @@ namespace Project.Procedural.MazeGeneration
                 Divide(grid, 0, 0, grid.Rows, grid.Columns);
         }
 
-        private static void Divide(Grid grid, int row, int column, int height, int width)
+        private void Divide(Grid grid, int row, int column, int height, int width)
         {
             //Will stop the divide if the zone is smaller than a given threshold or randomly
             //Warning : The room needs to be that exact RoomSize for the divide to stop.
@@ -51,7 +50,7 @@ namespace Project.Procedural.MazeGeneration
         }
 
         //This one has a bias towards creating more rooms than passages
-        private static void DivideWithBias(Grid grid, int row, int column, int height, int width)
+        private void DivideWithBias(Grid grid, int row, int column, int height, int width)
         {
             //Will stop the divide if the zone is smaller than a given threshold or randomly
             //Changing the || in the RoomSize condition with a && will create many more passages than rooms.
@@ -70,7 +69,7 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-        private static void DivideHorizontally(Grid grid, int row, int column, int height, int width)
+        private void DivideHorizontally(Grid grid, int row, int column, int height, int width)
         {
             int divideSouthOf = (height - 1).Sample();
             int passageAt = width.Sample();
@@ -95,7 +94,7 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-        private static void DivideVertically(Grid grid, int row, int column, int height, int width)
+        private void DivideVertically(Grid grid, int row, int column, int height, int width)
         {
             int divideEastOf = (width - 1).Sample();
             int passageAt = height.Sample();

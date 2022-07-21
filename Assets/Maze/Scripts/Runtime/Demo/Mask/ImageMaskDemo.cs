@@ -4,23 +4,25 @@ namespace Project.Procedural.MazeGeneration
 {
     public class ImageMaskDemo : MonoBehaviour
     {
-        [field: SerializeField] private Texture2D ImageAsset { get; set; }
-        [field: SerializeField] private string Extension { get; set; } = ".png";
+
+        [field: SerializeField] private GenerationSettingsSO GenerationSettings { get; set; }
 
 
         [ContextMenu("Execute Generation Algorithm")]
         void Execute()
         {
-            if (ImageAsset is null)
+            if (GenerationSettings.ImageAsset is null)
             {
                 throw new("Error : The text file is missing.");
             }
 
-            Mask m = Mask.FromImgFile(ImageAsset, Extension);
+            Mask m = Mask.FromImgFile(GenerationSettings.ImageAsset, GenerationSettings.Extension);
 
-            var grid = new MaskedGrid(m.Rows, m.Columns);
+            var grid = new MaskedGrid(GenerationSettings);
             grid.SetMask(m);
-            grid.Execute(GenerationType.RecursiveBacktracker);
+            RecursiveBacktracker algorithm = new();
+            algorithm.Execute(grid);
+
             grid.DisplayGrid(DisplayMode.UIImage);
         }
     }

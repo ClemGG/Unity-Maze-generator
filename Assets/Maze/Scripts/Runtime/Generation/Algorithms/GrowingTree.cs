@@ -7,22 +7,38 @@ namespace Project.Procedural.MazeGeneration
     //The Growing Tree selects the active Cell by using a random lambda expression.
     //This allows us to mix different methods to replicate or combine the behaviour of other algorithms,
     //like the Simple Prim or the Recursive Backtracker.
-    public static class GrowingTree
+    public class GrowingTree : IGeneration
     {
+        private Func<List<Cell>, Cell> Lambda { get; }
 
-        private static Func<List<Cell>, Cell> Lambda{ get; set; }
+
+        public GrowingTree(GenerationSettingsSO generationSettings)
+        {
+            Lambda = SetLambda(generationSettings.LambdaSelection);
+        }
+
 
         /// <summary>
         /// This will let us choose how to select the Cells from the active list
         /// </summary>
-        public static void SetLambdaMethod(Func<List<Cell>, Cell> lambdaToUse)
+        private Func<List<Cell>, Cell> SetLambda(int lambdaIndex) => lambdaIndex switch
         {
-            Lambda = lambdaToUse;
-        }
+            //Selects a cell at random (executes Simple Prim)
+            0 => (active) => active.Sample(),
+            //Selects the last cell (executes Recursive Backtracker)
+            1 => (active) => active.Last(),
+            //Selects the first cell (creates elongated corridors)
+            2 => (active) => active.First(),
+            //Mixes between the Recursive Backtracker and the Simple Prim
+            3 => (active) => (2.Sample() == 0) ? active.Sample() : active.Last(),
+            _ => null,
+        };
 
-        public static void Execute(Grid grid, Cell start = null)
+
+
+        public void Execute(Grid grid, Cell start = null)
         {
-            if (start is null) start = grid.RandomCell();
+            start ??= grid.RandomCell();
 
             List<Cell> active = new() { start };
 

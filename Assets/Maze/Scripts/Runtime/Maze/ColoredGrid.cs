@@ -14,6 +14,10 @@ namespace Project.Procedural.MazeGeneration
         {
         }
 
+        public ColoredGrid(GenerationSettingsSO generationSettings) : base(generationSettings)
+        {
+        }
+
         public void SetDistances(Distances distances)
         {
             Distances = distances;

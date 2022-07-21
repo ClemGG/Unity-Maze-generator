@@ -25,11 +25,21 @@ namespace Project.Procedural.MazeGeneration
 
         protected Cell[][] _grid;
 
-        
+
         public Grid(int rows, int columns)
         {
             Rows = rows;
             Columns = columns;
+
+            PrepareGrid();
+            ConfigureCells();
+        }
+
+
+        public Grid(GenerationSettingsSO generationSettings)
+        {
+            Rows = generationSettings.GridSize.x;
+            Columns = generationSettings.GridSize.y;
 
             PrepareGrid();
             ConfigureCells();

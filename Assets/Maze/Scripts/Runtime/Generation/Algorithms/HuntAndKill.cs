@@ -10,11 +10,11 @@ namespace Project.Procedural.MazeGeneration
     //find the first unvisited cell next to a visited one
     //and restart the process from that point after linking it
     //to a previously visited neighboring cell.
-    public static class HuntAndKill
+    public class HuntAndKill : IGeneration
     {
-        public static void Execute(Grid grid)
+        public void Execute(Grid grid, Cell start = null)
         {
-            Cell current = grid.RandomCell();
+            Cell current = start ?? grid.RandomCell();
 
             while(current is not null)
             {

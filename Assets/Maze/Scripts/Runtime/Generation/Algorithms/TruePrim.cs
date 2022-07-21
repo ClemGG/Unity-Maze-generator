@@ -5,11 +5,11 @@ namespace Project.Procedural.MazeGeneration
 {
     //The Simplified Prim gives a different cost to each passage between passages,
     //then selects the cells with the lowest cost.
-    public static class TruePrim
+    public class TruePrim : IGeneration
     {
-        public static void Execute(Grid grid, Cell start = null)
+        public void Execute(Grid grid, Cell start = null)
         {
-            if(start is null) start = grid.RandomCell();
+            start ??= grid.RandomCell();
 
             List<Cell> active = new() { start };
             Dictionary<Cell, int> costs = new();

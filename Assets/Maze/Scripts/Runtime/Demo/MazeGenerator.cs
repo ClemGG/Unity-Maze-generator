@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
@@ -18,14 +17,13 @@ namespace Project.Procedural.MazeGeneration
         [ContextMenu("Execute Generation Algorithm")]
         void Execute()
         {
-            Grid grid = new(GenerationSettings.GridSize.x, GenerationSettings.GridSize.y);
+            Grid grid = new(GenerationSettings);
 
-            //Dynamically creates the generation algorithm
-            Type algType = Type.GetType($"Project.Procedural.MazeGeneration.{GenerationSettings.GenerationType}");
-            IGeneration genAlg = (IGeneration)Activator.CreateInstance(algType, GenerationSettings);
+            IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(GenerationSettings);
             genAlg.Execute(grid);
 
-            //grid.Execute(Settings.GenerationType);
+            grid.Braid(GenerationSettings.BraidRate);
+
             grid.DisplayGrid(GenerationSettings.DisplayMode);
         }
     }

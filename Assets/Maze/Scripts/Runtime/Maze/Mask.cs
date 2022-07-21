@@ -100,7 +100,7 @@ namespace Project.Procedural.MazeGeneration
         }
 
 
-        
+
         public Mask(int rows, int columns)
         {
             Rows = rows;
@@ -114,6 +114,11 @@ namespace Project.Procedural.MazeGeneration
                     Bits[i][j] = true;
                 }
             }
+        }
+
+        public Mask(GenerationSettingsSO generationSettings) : this(generationSettings.GridSize.x, generationSettings.GridSize.y)
+        {
+            
         }
 
 

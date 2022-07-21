@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public static class RecursiveBacktracker
+    public class RecursiveBacktracker : IGeneration
     {
-        public static void Execute(Grid grid, Cell startCell = null)
+
+        public void Execute(Grid grid, Cell startCell = null)
         {
             Stack<Cell> stack = new();
-            Cell start = startCell is null ? grid.RandomCell() : startCell;
+            Cell start = startCell ?? grid.RandomCell();
             stack.Push(start);
 
             while(stack.Count > 0)

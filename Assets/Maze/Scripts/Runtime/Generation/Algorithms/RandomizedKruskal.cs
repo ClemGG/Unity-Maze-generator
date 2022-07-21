@@ -4,7 +4,7 @@ namespace Project.Procedural.MazeGeneration
 {
     //Kruskal generates weights between passages and merge Cells with the lowest weight
     //on the grid in their own set.
-    public static class RandomizedKruskal
+    public class RandomizedKruskal : IGeneration
     {
         private class State
         {
@@ -66,7 +66,7 @@ namespace Project.Procedural.MazeGeneration
         }
 
 
-        public static void Execute(Grid grid)
+        public void Execute(Grid grid, Cell start = null)
         {
             State state = new(grid);
 

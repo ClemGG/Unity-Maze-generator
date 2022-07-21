@@ -5,11 +5,11 @@ namespace Project.Procedural.MazeGeneration
 {
     //The Simplified Prim gives a cost to each passage between passages.
     //Unlike the True Prim, the Simplified gives all cells the same cost and chooses neightbors at random.
-    public static class SimplifiedPrim
+    public class SimplifiedPrim : IGeneration
     {
-        public static void Execute(Grid grid, Cell start = null)
+        public void Execute(Grid grid, Cell start = null)
         {
-            if(start is null) start = grid.RandomCell();
+            start ??= grid.RandomCell();
 
             List<Cell> active = new() { start };
 

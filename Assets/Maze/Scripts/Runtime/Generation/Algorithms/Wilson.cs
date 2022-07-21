@@ -4,10 +4,10 @@ namespace Project.Procedural.MazeGeneration
 {
     //Wilson is the opposite of Aldous-Broder:
     //AB starts fast and ends slow, W starts slow and ends fast.
-    public static class Wilson
+    public class Wilson : IGeneration
     {
 
-        public static void Execute(Grid grid)
+        public void Execute(Grid grid, Cell start = null)
         {
             List<Cell> unvisited = new(grid.Size());
             foreach (Cell cell in grid.EachCell())

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,16 +9,8 @@ namespace Project.Procedural.MazeGeneration
     public class DeadendsCounter : MonoBehaviour
     {
         [field: SerializeField] private int Tries { get; set; } = 100;
-        [field: SerializeField] private Vector2Int GridSize { get; set; } = new(4, 4);
+        [field: SerializeField] private GenerationSettingsSO GenerationSettings { get; set; }
 
-
-#if UNITY_EDITOR
-
-        private void OnValidate()
-        {
-            GridSize = new(Mathf.Clamp(GridSize.x, 1, 100), Mathf.Clamp(GridSize.y, 1, 100));
-        }
-#endif
 
         [ContextMenu("Get Average Dead ends")]
         void Execute()
@@ -29,8 +22,13 @@ namespace Project.Procedural.MazeGeneration
                 var deadendCounts = new int[Tries];
                 for (int i = 0; i < Tries; i++)
                 {
-                    var grid = new Grid(GridSize.x, GridSize.y);
-                    grid.Execute(algorithm);
+                    var grid = new Grid(GenerationSettings);
+
+                    //Dynamically creates the generation algorithm
+                    Type algType = Type.GetType($"Project.Procedural.MazeGeneration.{algorithm}");
+                    IGeneration genAlg = (IGeneration)Activator.CreateInstance(algType, GenerationSettings);
+                    genAlg.Execute(grid);
+
                     deadendCounts[i] = grid.GetDeadends().Count;
                 }
 
@@ -42,8 +40,8 @@ namespace Project.Procedural.MazeGeneration
                 averages.Add(algorithm, totalDeadends / deadendCounts.Length);
             });
 
-            int totalCells = GridSize.x * GridSize.y;
-            print($"Average dead-ends per {GridSize} maze ({totalCells} cells):");
+            int totalCells = GenerationSettings.GridSize.x * GenerationSettings.GridSize.y;
+            print($"Average dead-ends per {GenerationSettings.GridSize} maze ({totalCells} cells):");
 
             var sortedAverages = averages.OrderBy(key => -key.Value);
 

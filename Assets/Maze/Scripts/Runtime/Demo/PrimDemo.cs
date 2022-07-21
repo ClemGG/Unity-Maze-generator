@@ -4,16 +4,8 @@ namespace Project.Procedural.MazeGeneration
 {
     public class PrimDemo : MonoBehaviour
     {
-        [field: SerializeField] private Vector2Int GridSize { get; set; } = new(4, 4);
 
-
-#if UNITY_EDITOR
-
-        private void OnValidate()
-        {
-            GridSize = new(Mathf.Clamp(GridSize.x, 1, 100), Mathf.Clamp(GridSize.y, 1, 100));
-        }
-#endif
+        [field: SerializeField] private GenerationSettingsSO GenerationSettings { get; set; }
 
 
         [ContextMenu("Cleanup UI")]
@@ -25,9 +17,11 @@ namespace Project.Procedural.MazeGeneration
         [ContextMenu("Execute Simplified Prim's Algorithm")]
         void Execute1()
         {
-            var grid = new ColoredGrid(GridSize.x, GridSize.y);
+            var grid = new ColoredGrid(GenerationSettings);
+
+            SimplifiedPrim algorithm = new();
             Cell start = grid[grid.Rows / 2, grid.Columns / 2];
-            grid.Execute(GenerationType.SimplifiedPrim, start);
+            algorithm.Execute(grid, start);
 
             grid.SetDistances(start.GetDistances());
 
@@ -38,9 +32,11 @@ namespace Project.Procedural.MazeGeneration
         [ContextMenu("Execute True Prim's Algorithm")]
         void Execute2()
         {
-            var grid = new ColoredGrid(GridSize.x, GridSize.y);
+            var grid = new ColoredGrid(GenerationSettings);
+
+            TruePrim algorithm = new();
             Cell start = grid[grid.Rows / 2, grid.Columns / 2];
-            grid.Execute(GenerationType.TruePrim, start);
+            algorithm.Execute(grid, start);
 
             grid.SetDistances(start.GetDistances());
 

@@ -1,23 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
     public class GrowingTreeDemo : MonoBehaviour
     {
-        [field: SerializeField, Range(0, 3)] private int LambdaSelection { get; set; } = 0;
-        [field: SerializeField] private Vector2Int GridSize { get; set; } = new(4, 4);
-
-
-#if UNITY_EDITOR
-
-        private void OnValidate()
-        {
-            GridSize = new(Mathf.Clamp(GridSize.x, 1, 100), Mathf.Clamp(GridSize.y, 1, 100));
-        }
-#endif
+        [field: SerializeField] private GenerationSettingsSO GenerationSettings { get; set; }
 
 
         [ContextMenu("Cleanup UI")]
@@ -29,27 +16,15 @@ namespace Project.Procedural.MazeGeneration
         [ContextMenu("Execute Generation Algorithm")]
         void Execute()
         {
-            var grid = new ColoredGrid(GridSize.x, GridSize.y);
-            GrowingTree.SetLambdaMethod(SetLambdaForGrowingTree());
+            var grid = new ColoredGrid(GenerationSettings);
+
+            GrowingTree algorithm = new(GenerationSettings);
 
             Cell start = grid.RandomCell();
-            grid.Execute(GenerationType.GrowingTree, start);
+            algorithm.Execute(grid, start);
             grid.SetDistances(start.GetDistances());
 
             grid.DisplayGrid(DisplayMode.UIImage);
         }
-
-        private Func<List<Cell>, Cell> SetLambdaForGrowingTree() => LambdaSelection switch
-        {
-            //Selects a cell at random (executes Simple Prim)
-            0 => (active) => active.Sample(),
-            //Selects the last cell (executes Recursive Backtracker)
-            1 => (active) => active.Last(),
-            //Selects the first cell (creates elongated corridors)
-            2 => (active) => active.First(),
-            //Mixes between the Recursive Backtracker and the Simple Prim
-            3 => (active) => (2.Sample() == 0) ? active.Sample() : active.Last(),
-            _ => null,
-        };
     }
 }

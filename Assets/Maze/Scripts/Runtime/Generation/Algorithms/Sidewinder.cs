@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
@@ -8,19 +7,17 @@ namespace Project.Procedural.MazeGeneration
      * or north from the current run of cells.
      */
 
-    public static class Sidewinder
+    public class Sidewinder : IGeneration
     {
-        private static List<Cell> _run { get; set; }
-
-        public static void Execute(Grid grid)
+        public void Execute(Grid grid, Cell start = null)
         {
             foreach (Cell[] row in grid.EachRow())
             {
-                _run = new();
+                List<Cell> run = new();
 
                 foreach (Cell cell in row)
                 {
-                    _run.Add(cell);
+                    run.Add(cell);
 
                     bool atEasternBoundary = cell.East is null;
                     bool atNorthernBoundary = cell.North is null;
@@ -28,12 +25,12 @@ namespace Project.Procedural.MazeGeneration
 
                     if (shouldCloseOut)
                     {
-                        Cell member = _run.Sample();
+                        Cell member = run.Sample();
                         if (member.North is not null)
                         {
                             member.Link(member.North);
                         }
-                        _run.Clear();
+                        run.Clear();
                     }
                     else
                     {
