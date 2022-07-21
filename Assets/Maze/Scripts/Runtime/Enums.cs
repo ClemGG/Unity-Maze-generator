@@ -40,6 +40,17 @@ namespace Project.Procedural.MazeGeneration
         {
             return (T[])Enum.GetValues(typeof(T));
         }
+        public static string[] ValuesToString<T>() where T : Enum
+        {
+            T[] values = (T[])Enum.GetValues(typeof(T));
+            string[] toString = new string[values.Length];
+            for (int i = 0; i < values.Length; i++)
+            {
+                toString[i] = values[i].ToString();
+            }
+
+            return toString;
+        }
 
         public static int LengthOf<T>() where T : Enum
         {
