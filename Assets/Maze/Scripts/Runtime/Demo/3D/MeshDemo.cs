@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class MazeGenerator3D : MonoBehaviour
+    public class MeshDemo : MonoBehaviour
     {
         [field: SerializeField] private GenerationType GenerationType { get; set; } = GenerationType.BinaryTree;
         [field: SerializeField] private Vector2 CellSize { get; set; } = new(3.5f, 3.5f);

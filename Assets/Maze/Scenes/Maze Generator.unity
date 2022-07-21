@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -187,9 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d64d55c2783c7974896f6eb0a565bc4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GridSize>k__BackingField: {x: 10, y: 10}
-  <DisplayMode>k__BackingField: 2
-  <GenerationType>k__BackingField: 1
+  <Settings>k__BackingField: {fileID: 11400000, guid: c7815e5aded70db4caae64aaf45d25c5, type: 2}
 --- !u!114 &1146565889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7acaec6a0d054fc49ae239ad5bc07410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GenerationType>k__BackingField: 5
+  <GenerationType>k__BackingField: 2
   <GridSize>k__BackingField: {x: 10, y: 10}
   <Inset>k__BackingField: 0.1
   <BraidRate>k__BackingField: 1

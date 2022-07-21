@@ -6,6 +6,9 @@ namespace Project.Procedural.MazeGeneration
         {
             switch (algorithm)
             {
+                case GenerationType.OneRoom:
+                    OneRoom.Execute(grid);
+                    break;
                 case GenerationType.BinaryTree:
                     BinaryTree.Execute(grid);
                     break;
@@ -17,6 +20,9 @@ namespace Project.Procedural.MazeGeneration
                     break;
                 case GenerationType.Wilson:
                     Wilson.Execute(grid);
+                    break;
+                case GenerationType.Houston:
+                    Houston.Execute(grid);
                     break;
                 case GenerationType.HuntAndKill:
                     HuntAndKill.Execute(grid);

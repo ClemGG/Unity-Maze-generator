@@ -10,18 +10,18 @@ namespace Project.Procedural.MazeGeneration
      */
     public static class BinaryTree
     {
-        private static List<Cell> _neighbors { get; set; }
+        private static List<Cell> Neighbors { get; } = new();
 
         public static void Execute(Grid grid)
         {
             foreach (Cell cell in grid.EachCell())
             {
-                _neighbors = new();
+                Neighbors.Clear();
 
-                if (cell.North != null) _neighbors.Add(cell.North);
-                if (cell.East != null) _neighbors.Add(cell.East);
+                if (cell.North != null) Neighbors.Add(cell.North);
+                if (cell.East != null) Neighbors.Add(cell.East);
 
-                Cell neighbor = _neighbors.Sample();
+                Cell neighbor = Neighbors.Sample();
 
                 if (neighbor != null) cell.Link(neighbor);
             }
