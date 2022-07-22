@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -177,22 +178,19 @@ namespace Project.Procedural.MazeGeneration
         public void Braid(float braidRate = 1f)
         {
             List<Cell> deadends = GetDeadends();
-            //Shuffles the list of dead ends
-            List<Cell> shuffledDeadends = new(deadends.Count);
-            while (deadends.Count > 0)
-            {
-                int rand = deadends.Count.Sample();
-                Cell deadend = deadends[rand];
-                deadends.Remove(deadend);
-                shuffledDeadends.Add(deadend);
-            }
+            List<Cell> shuffledDeadends = deadends.Shuffle();
 
-            foreach (Cell cell in shuffledDeadends)
+            //Because of rounding, this method will not always remove the exact number of deadends requested,
+            //but it's still more accurate than the previous version with a percentage.
+            int nbDeadendsToRemove = Mathf.RoundToInt(Mathf.Lerp(0f, (float)deadends.Count, braidRate));
+
+
+            for (int i = 0; i < nbDeadendsToRemove; i++)
             {
-                float braidRand = 1f.Sample();
+                Cell cell = shuffledDeadends[i];
 
                 //Checks links.count to avoid repeating a cell
-                if (cell.Links.Count != 1 || braidRand >= braidRate)
+                if (cell.Links.Count != 1)
                     continue;
 
                 //get unlinked neighbors
@@ -207,14 +205,18 @@ namespace Project.Procedural.MazeGeneration
 
                 //get the best neighbor
                 //optimizes by prefering to link 2 deadends together
+                //Commented for now, but we'll keep it just in case.
                 List<Cell> best = new(neighbors.Count);
-                foreach (Cell n in neighbors)
-                {
-                    if (n.Links.Count == 1)
-                    {
-                        best.Add(n);
-                    }
-                }
+                //foreach (Cell n in neighbors)
+                //{
+                //    if (n.Links.Count == 1)
+                //    {
+                //        best.Add(n);
+                //    }
+                //}
+
+                //We avoid linking 2 deadends together if possible
+                best = neighbors.Where(cell => cell.Links.Count > 1).ToList();
 
                 if (best.Count == 0)
                 {

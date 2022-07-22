@@ -11,6 +11,7 @@ namespace Project.Procedural.MazeGeneration
         {
             IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
             genAlg.Execute(Grid);
+
             Grid.Braid(Settings.BraidRate);
         }
 
