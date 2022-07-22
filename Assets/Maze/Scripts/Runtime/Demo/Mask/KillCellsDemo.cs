@@ -28,7 +28,7 @@ namespace Project.Procedural.MazeGeneration
 
             grid.SetDistances(start.GetDistances());
 
-            grid.DisplayGrid(DisplayMode.Print);
+            grid.DisplayGrid(DrawMode.Console);
         }
     }
 }

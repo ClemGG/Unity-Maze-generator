@@ -22,17 +22,13 @@ namespace Project.Procedural.MazeGeneration
 
 
 
-    public enum DisplayMode : byte
+    public enum DrawMode : byte
     {
-        Print,
+        Console,
         UIImage,
         Mesh,
     }
 
-    public enum MazeType : byte
-    {
-        Orthogonal, //Gamma
-    }
 
     public static class Enums
     {

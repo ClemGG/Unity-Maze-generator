@@ -24,7 +24,7 @@ namespace Project.Procedural.MazeGeneration
             Cell start = grid[grid.Rows -1, grid.Columns / 2];
             grid.SetDistances(start.GetDistances());
 
-            grid.DisplayGrid(DisplayMode.UIImage);
+            grid.DisplayGrid(DrawMode.UIImage);
         }
     }
 }

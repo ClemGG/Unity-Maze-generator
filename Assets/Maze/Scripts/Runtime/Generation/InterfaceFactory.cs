@@ -18,5 +18,20 @@ namespace Project.Procedural.MazeGeneration
 
             return genAlg;
         }
+
+        //Dynamically creates the class to draw the maze on the screen
+        public static IDraw GetDrawMode(GenerationSettingsSO settings)
+        {
+
+            Type algType = Type.GetType($"Project.Procedural.MazeGeneration.{settings.DrawMode}Draw");
+
+            //If the constructor is the default one (with no parameters),
+            //we don't pass the settings to avoid missing the default constructor
+            bool constructorHasParameters = algType.GetConstructors()[0].GetParameters().Length > 0;
+            object[] parameters = constructorHasParameters ? new[] { settings } : null;
+            IDraw genAlg = (IDraw)Activator.CreateInstance(algType, parameters);
+
+            return genAlg;
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace Project.Procedural.MazeGeneration
             RecursiveBacktracker algorithm = new();
             algorithm.Execute(grid);
 
-            grid.DisplayGrid(DisplayMode.UIImage);
+            grid.DisplayGrid(DrawMode.UIImage);
         }
     }
 }

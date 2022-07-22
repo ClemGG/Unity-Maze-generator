@@ -19,11 +19,11 @@ namespace Project.Procedural.MazeGeneration
 
             Distances distances = start.GetDistances();
             grid.Distances = distances;
-            grid.DisplayGrid(DisplayMode.Print);
+            grid.DisplayGrid(DrawMode.Console);
 
             grid.Distances = distances.PathTo(grid[grid.Rows - 1, 0]);
             print("path from northwest corner to southwest corner:");
-            grid.DisplayGrid(DisplayMode.Print);
+            grid.DisplayGrid(DrawMode.Console);
         }
     }
 }

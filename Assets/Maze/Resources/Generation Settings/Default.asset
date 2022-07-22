@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8a80083063e634db52d48d5cd5d272, type: 3}
   m_Name: Default
   m_EditorClassIdentifier: 
-  <DisplayMode>k__BackingField: 1
-  <GenerationType>k__BackingField: 13
+  <DrawMode>k__BackingField: 2
+  <GenerationType>k__BackingField: 0
   <GridSize>k__BackingField: {x: 10, y: 10}
-  <CellSize>k__BackingField: {x: 5, y: 5}
+  <MeshCellSize>k__BackingField: {x: 5, y: 5}
   <RoomSize>k__BackingField: {x: 5, y: 5}
   <BiasTowardsRooms>k__BackingField: 0
   <LambdaSelection>k__BackingField: 2

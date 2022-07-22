@@ -25,7 +25,7 @@ namespace Project.Procedural.MazeGeneration
 
             grid.SetDistances(start.GetDistances());
 
-            grid.DisplayGrid(DisplayMode.UIImage);
+            grid.DisplayGrid(DrawMode.UIImage);
         }
 
 
@@ -40,7 +40,7 @@ namespace Project.Procedural.MazeGeneration
 
             grid.SetDistances(start.GetDistances());
 
-            grid.DisplayGrid(DisplayMode.UIImage);
+            grid.DisplayGrid(DrawMode.UIImage);
         }
     }
 }

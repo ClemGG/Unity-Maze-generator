@@ -1,30 +1,55 @@
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor.SceneManagement;
+#endif
+
 namespace Project.Procedural.MazeGeneration
 {
     public class MazeGenerator : MonoBehaviour
     {
-        [field: SerializeField] private GenerationSettingsSO GenerationSettings { get; set; }
+        [field: SerializeField] private GenerationSettingsSO Settings { get; set; }
+        private IDraw _drawMethod;
 
 
-
-        [ContextMenu("Cleanup UI")]
+        [ContextMenu("Cleanup")]
         void Cleanup()
         {
-            OrthogonalMaze.CleanupUI();
+            if(_drawMethod is not null)
+            {
+                _drawMethod.Cleanup();
+            }
         }
 
         [ContextMenu("Execute Generation Algorithm")]
         void Execute()
         {
-            Grid grid = new(GenerationSettings);
+            Grid grid = new(Settings);
 
-            IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(GenerationSettings);
+            IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
             genAlg.Execute(grid);
 
-            grid.Braid(GenerationSettings.BraidRate);
+            grid.Braid(Settings.BraidRate);
 
-            grid.DisplayGrid(GenerationSettings.DisplayMode);
+
+#if UNITY_EDITOR
+            //Loads the appropriate scene depending on the DrawMode
+            switch (Settings.DrawMode)
+            {
+                case DrawMode.UIImage:
+                    EditorSceneManager.CloseScene(EditorSceneManager.GetSceneByName("3D Maze"), false);
+                    EditorSceneManager.OpenScene("2D Maze");
+                    break;
+
+                case DrawMode.Mesh:
+                    EditorSceneManager.CloseScene(EditorSceneManager.GetSceneByName("2D Maze"), false);
+                    EditorSceneManager.OpenScene("3D Maze");
+                    break;
+            }
+#endif
+
+            _drawMethod = InterfaceFactory.GetDrawMode(Settings);
+            _drawMethod.Draw(grid);
         }
     }
 }

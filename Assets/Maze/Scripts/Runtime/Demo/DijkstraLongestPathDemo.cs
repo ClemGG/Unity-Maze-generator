@@ -25,7 +25,7 @@ namespace Project.Procedural.MazeGeneration
             (Cell goal, int goalDistance) = newDistances.Max();
             grid.Distances = newDistances.PathTo(goal);
 
-            grid.DisplayGrid(GenerationSettings.DisplayMode);
+            grid.DisplayGrid(GenerationSettings.DrawMode);
         }
     }
 }

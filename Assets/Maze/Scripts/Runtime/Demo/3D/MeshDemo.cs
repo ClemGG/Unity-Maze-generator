@@ -39,7 +39,7 @@ namespace Project.Procedural.MazeGeneration
 
             (grid as ColoredGrid).SetDistances(start.GetDistances());
 
-            grid.DisplayGrid(DisplayMode.Mesh, GenerationSettings.Inset);
+            grid.DisplayGrid(DrawMode.Mesh, GenerationSettings.Inset);
         }
     }
 }

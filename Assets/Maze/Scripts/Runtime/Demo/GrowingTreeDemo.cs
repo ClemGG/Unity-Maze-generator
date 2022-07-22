@@ -24,7 +24,7 @@ namespace Project.Procedural.MazeGeneration
             algorithm.Execute(grid, start);
             grid.SetDistances(start.GetDistances());
 
-            grid.DisplayGrid(DisplayMode.UIImage);
+            grid.DisplayGrid(DrawMode.UIImage);
         }
     }
 }

@@ -6,14 +6,14 @@ namespace Project.Procedural.MazeGeneration
     public class GenerationSettingsSO : ScriptableObject
     {
 
-        [field: SerializeField] public DisplayMode DisplayMode { get; private set; } = DisplayMode.Print;
+        [field: SerializeField] public DrawMode DrawMode { get; private set; } = DrawMode.Console;
 
         [field: SerializeField] public GenerationType GenerationType { get; private set; } = GenerationType.BinaryTree;
 
         [field: SerializeField] public Vector2Int GridSize { get; private set; } = new(10, 10);
 
         [field: Tooltip("Used in 3D for the width and height of a Cell in the Mesh.")]
-        [field: SerializeField] public Vector2Int CellSize { get; private set; } = new(5, 5);
+        [field: SerializeField] public Vector2Int MeshCellSize { get; private set; } = new(5, 5);
 
 
         [field: Tooltip("Used by the Recursive Division Algorithm to stop the process if a room is smaller than this size.")]

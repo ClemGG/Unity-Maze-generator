@@ -19,7 +19,7 @@ namespace Project.Procedural.MazeGeneration
             genAlg.Execute(grid);
             grid.SetDistances(start.GetDistances());
 
-            grid.DisplayGrid(DisplayMode.UIImage);
+            grid.DisplayGrid(DrawMode.UIImage);
         }
     }
 }
