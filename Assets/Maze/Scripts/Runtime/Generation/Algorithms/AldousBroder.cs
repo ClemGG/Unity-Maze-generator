@@ -10,7 +10,6 @@ namespace Project.Procedural.MazeGeneration
     {
         public void Execute(Grid grid, Cell start = null)
         {
-
             Cell cell = start ?? grid.RandomCell();
             int unvisited = grid.Size() - 1;
 

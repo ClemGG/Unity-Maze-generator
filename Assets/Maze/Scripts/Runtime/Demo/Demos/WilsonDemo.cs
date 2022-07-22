@@ -1,35 +1,20 @@
-using UnityEngine;
-
 namespace Project.Procedural.MazeGeneration
 {
-    public class WilsonDemo : MonoBehaviour
+    public class WilsonDemo : MazeGenerator
     {
-        [field: SerializeField] private GenerationSettingsSO Settings { get; set; }
-        private IDraw _drawMethod;
-
-
-        [ContextMenu("Cleanup")]
-        void Cleanup()
+        public override void SetupGrid()
         {
-            if (_drawMethod is not null)
-            {
-                _drawMethod.Cleanup();
-            }
+            Grid = new ColoredGrid(Settings);
         }
 
-        [ContextMenu("Execute Generation Algorithm")]
-        void Execute()
+        public override void Generate()
         {
-            var grid = new ColoredGrid(Settings);
             Wilson algorithm = new();
-            algorithm.Execute(grid);
+            algorithm.Execute(Grid);
 
-            Cell start = grid[grid.Rows / 2, grid.Columns / 2];
-            grid.SetDistances(start.GetDistances());
-
-            SceneLoader.LoadSceneForDrawMode(Settings.DrawMode);
-            _drawMethod = InterfaceFactory.GetDrawMode(Settings);
-            _drawMethod.Draw(grid);
+            Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
+            (Grid as ColoredGrid).SetDistances(start.GetDistances());
         }
+
     }
 }

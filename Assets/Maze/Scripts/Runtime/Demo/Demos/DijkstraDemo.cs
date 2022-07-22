@@ -1,41 +1,31 @@
-using System;
-using UnityEngine;
-
 namespace Project.Procedural.MazeGeneration
 {
-    public class DijkstraDemo : MonoBehaviour
+    public class DijkstraDemo : MazeGenerator
     {
-        [field: SerializeField] private GenerationSettingsSO GenerationSettings { get; set; }
-        private IDraw _drawMethod;
-
-
-        [ContextMenu("Cleanup")]
-        void Cleanup()
+        public override void SetupGrid()
         {
-            if (_drawMethod is not null)
-            {
-                _drawMethod.Cleanup();
-            }
+            Grid = new DistanceGrid(Settings);
         }
 
-        [ContextMenu("Execute Generation Algorithm")]
-        void Execute()
+        public override void Generate()
         {
-            var grid = new DistanceGrid(GenerationSettings);
+            IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
+            Cell start = Grid[0, 0];
+            genAlg.Execute(Grid, start);
 
-            IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(GenerationSettings);
-            Cell start = grid[0, 0];
-            genAlg.Execute(grid, start);
-
-            _drawMethod = new ConsoleDraw();
-
+            DrawMethod = new ConsoleDraw();
             Distances distances = start.GetDistances();
-            grid.Distances = distances;
-            _drawMethod.Draw(grid);
+            (Grid as DistanceGrid).Distances = distances;
+            DrawMethod.Draw(Grid);
 
-            grid.Distances = distances.PathTo(grid[grid.Rows - 1, 0]);
+
+            (Grid as DistanceGrid).Distances = distances.PathTo(Grid[Grid.Rows - 1, 0]);
             print("path from northwest corner to southwest corner:");
-            _drawMethod.Draw(grid);
+            DrawMethod.Draw(Grid);
+        }
+
+        public override void Draw()
+        {
 
         }
     }

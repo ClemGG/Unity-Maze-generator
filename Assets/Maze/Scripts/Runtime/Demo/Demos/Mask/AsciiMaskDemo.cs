@@ -1,25 +1,9 @@
-using UnityEngine;
-
 namespace Project.Procedural.MazeGeneration
 {
     //Warning: Not all generation & solving algos will be able to create & solve mazes with orphan (killed) cells
-    public class AsciiMaskDemo : MonoBehaviour
+    public class AsciiMaskDemo : MazeGenerator
     {
-        [field: SerializeField] private GenerationSettingsSO Settings { get; set; }
-        private IDraw _drawMethod;
-
-
-        [ContextMenu("Cleanup")]
-        void Cleanup()
-        {
-            if (_drawMethod is not null)
-            {
-                _drawMethod.Cleanup();
-            }
-        }
-
-        [ContextMenu("Execute Generation Algorithm")]
-        void Execute()
+        public override void SetupGrid()
         {
             if (Settings.AsciiMask is null)
             {
@@ -28,14 +12,14 @@ namespace Project.Procedural.MazeGeneration
 
             Mask m = Mask.FromText(Settings.AsciiMask.name);
 
-            var grid = new MaskedGrid(m.Rows, m.Columns);
-            grid.SetMask(m);
-            RecursiveBacktracker algorithm = new();
-            algorithm.Execute(grid);
+            Grid = new MaskedGrid(m.Rows, m.Columns);
+            (Grid as MaskedGrid).SetMask(m);
+        }
 
-            SceneLoader.LoadSceneForDrawMode(Settings.DrawMode);
-            _drawMethod = InterfaceFactory.GetDrawMode(Settings);
-            _drawMethod.Draw(grid);
+        public override void Generate()
+        {
+            RecursiveBacktracker algorithm = new();
+            algorithm.Execute(Grid);
         }
     }
 }

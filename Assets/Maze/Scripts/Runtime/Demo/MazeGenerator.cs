@@ -33,6 +33,11 @@ namespace Project.Procedural.MazeGeneration
 
         public abstract void Generate();
 
-        public abstract void Draw();
+        public virtual void Draw()
+        {
+            SceneLoader.LoadSceneForDrawMode(Settings.DrawMode);
+            DrawMethod = InterfaceFactory.GetDrawMode(Settings);
+            DrawMethod.Draw(Grid);
+        }
     }
 }

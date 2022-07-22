@@ -1,51 +1,37 @@
-using UnityEngine;
-
 namespace Project.Procedural.MazeGeneration
 {
-    public class MeshDemo : MonoBehaviour
+    public class MeshDemo : MazeGenerator
     {
-        [field: SerializeField] private GenerationSettingsSO Settings { get; set; }
-        private IDraw _drawMethod;
-
-
-        [ContextMenu("Cleanup")]
-        void Cleanup()
+        public override void SetupGrid()
         {
-            if (_drawMethod is not null)
-            {
-                _drawMethod.Cleanup();
-            }
-        }
-
-
-
-        [ContextMenu("Execute Generation Algorithm")]
-        void Execute()
-        {
-            Grid grid;
-
             if (Settings.ImageAsset == null)
             {
-                grid = new ColoredGrid(Settings);
+                Grid = new ColoredGrid(Settings);
             }
             else
             {
                 Mask m = Mask.FromImgFile(Settings.ImageAsset, Settings.Extension);
-                grid = new MaskedGrid(m.Rows, m.Columns);
-                (grid as MaskedGrid).SetMask(m);
+                Grid = new MaskedGrid(m.Rows, m.Columns);
+                (Grid as MaskedGrid).SetMask(m);
             }
+        }
 
+        public override void Generate()
+        {
             IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
-            Cell start = grid[grid.Rows / 2, grid.Columns / 2];
-            genAlg.Execute(grid);
+            Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
+            genAlg.Execute(Grid);
 
-            grid.Braid(Settings.BraidRate);
+            Grid.Braid(Settings.BraidRate);
 
-            (grid as ColoredGrid).SetDistances(start.GetDistances());
+            (Grid as ColoredGrid).SetDistances(start.GetDistances());
+        }
 
+        public override void Draw()
+        {
             SceneLoader.LoadSceneForDrawMode(Settings.DrawMode);
-            _drawMethod = InterfaceFactory.GetDrawMode(Settings);
-            _drawMethod.Draw(grid);
+            DrawMethod = InterfaceFactory.GetDrawMode(Settings);
+            DrawMethod.Draw(Grid);
         }
     }
 }

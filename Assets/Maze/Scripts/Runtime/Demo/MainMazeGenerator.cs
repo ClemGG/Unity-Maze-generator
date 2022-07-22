@@ -14,13 +14,6 @@ namespace Project.Procedural.MazeGeneration
             Grid.Braid(Settings.BraidRate);
         }
 
-        public override void Draw()
-        {
-            SceneLoader.LoadSceneForDrawMode(Settings.DrawMode);
-            DrawMethod = InterfaceFactory.GetDrawMode(Settings);
-            DrawMethod.Draw(Grid);
-        }
-
 
     }
 }

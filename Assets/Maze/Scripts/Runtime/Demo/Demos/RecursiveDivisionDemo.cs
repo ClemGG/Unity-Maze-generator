@@ -1,36 +1,27 @@
-using UnityEngine;
-
 namespace Project.Procedural.MazeGeneration
 {
-    public class RecursiveDivisionDemo : MonoBehaviour
+    public class RecursiveDivisionDemo : MazeGenerator
     {
-        [field: SerializeField] private GenerationSettingsSO Settings { get; set; }
-        private IDraw _drawMethod;
-
-
-        [ContextMenu("Cleanup")]
-        void Cleanup()
+        public override void SetupGrid()
         {
-            if (_drawMethod is not null)
-            {
-                _drawMethod.Cleanup();
-            }
+            Grid = new ColoredGrid(Settings);
+
+            //We'll create orphan Cells in the northwest and southeast corners of the map,
+            //which means they will have no connections with the rest of the map and will
+            //be removed from the algos' computations.
+            Grid[0, 0].East.West = null;
+            Grid[0, 0].South.North = null;
+            Grid[Settings.GridSize.x - 1, Settings.GridSize.y - 1].West.East = null;
+            Grid[Settings.GridSize.x - 1, Settings.GridSize.y - 1].North.South = null;
         }
 
-
-        [ContextMenu("Execute Generation Algorithm")]
-        void Execute()
+        public override void Generate()
         {
-            var grid = new ColoredGrid(Settings);
             RecursiveDivision genAlg = new(Settings);
-            genAlg.Execute(grid);
+            genAlg.Execute(Grid);
 
-            Cell start = grid[grid.Rows / 2, grid.Columns / 2];
-            grid.SetDistances(start.GetDistances());
-
-            SceneLoader.LoadSceneForDrawMode(Settings.DrawMode);
-            _drawMethod = InterfaceFactory.GetDrawMode(Settings);
-            _drawMethod.Draw(grid);
+            Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
+            (Grid as ColoredGrid).SetDistances(start.GetDistances());
         }
     }
 }

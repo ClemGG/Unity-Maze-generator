@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Default
   m_EditorClassIdentifier: 
   <DrawMode>k__BackingField: 1
-  <GenerationType>k__BackingField: 11
+  <GenerationType>k__BackingField: 5
   <GridSize>k__BackingField: {x: 10, y: 10}
   <MeshCellSize>k__BackingField: {x: 5, y: 5}
   <RoomSize>k__BackingField: {x: 5, y: 5}
@@ -21,6 +21,7 @@ MonoBehaviour:
   <LambdaSelection>k__BackingField: 2
   <Inset>k__BackingField: 0
   <BraidRate>k__BackingField: 0
+  <HoustonSwapPercent>k__BackingField: 0.5
   <ImageAsset>k__BackingField: {fileID: 0}
   <AsciiMask>k__BackingField: {fileID: 0}
   <Extension>k__BackingField: .png

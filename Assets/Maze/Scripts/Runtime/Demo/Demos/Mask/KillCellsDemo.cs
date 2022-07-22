@@ -1,12 +1,8 @@
-using UnityEngine;
-
 namespace Project.Procedural.MazeGeneration
 {
     //Warning: Not all generation & solving algos will be able to create & solve mazes with orphan (killed) cells
     public class KillCellsDemo : MazeGenerator
     {
-
-
         public override void SetupGrid()
         {
             Grid = new ColoredGrid(Settings);

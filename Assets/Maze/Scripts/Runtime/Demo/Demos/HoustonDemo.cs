@@ -1,6 +1,6 @@
 namespace Project.Procedural.MazeGeneration
 {
-    public class EllerDemo : MazeGenerator
+    public class HoustonDemo : MazeGenerator
     {
         public override void SetupGrid()
         {
@@ -9,10 +9,10 @@ namespace Project.Procedural.MazeGeneration
 
         public override void Generate()
         {
-            Eller algorithm = new();
+            IGeneration algorithm = InterfaceFactory.GetGenerationAlgorithm(Settings);
             algorithm.Execute(Grid);
-            
-            Cell start = Grid[Grid.Rows -1, Grid.Columns / 2];
+
+            Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
             (Grid as ColoredGrid).SetDistances(start.GetDistances());
         }
     }

@@ -32,6 +32,11 @@ namespace Project.Procedural.MazeGeneration
         [field: Tooltip("Removes deadens to create loops in the maze. This field is a percentage.")]
         [field: SerializeField, Range(0f, 1f)] public float BraidRate { get; private set; } = 1f;
 
+        [field: Tooltip("Used by the Houston Algorithm." +
+                        "Once the AB alg has visited a number of cells above that percentage, " +
+                        "it will use the Wilson Algorithm. This field is a percentage (0 is Wilson & 1 is Aldous-Broder).")]
+        [field: SerializeField, Range(0f, 1f)] public float HoustonSwapPercent { get; private set; } = .5f;
+
         [field: Tooltip("The Texture to use for masking the grid's cells.")]
         [field: SerializeField] public Texture2D ImageAsset { get; private set; }
 

@@ -2,53 +2,45 @@ using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class PrimDemo : MonoBehaviour
+    public class PrimDemo : MazeGenerator
     {
-
-        [field: SerializeField] private GenerationSettingsSO Settings { get; set; }
-        private IDraw _drawMethod;
-
-
-        [ContextMenu("Cleanup")]
-        void Cleanup()
+        public override void SetupGrid()
         {
-            if (_drawMethod is not null)
-            {
-                _drawMethod.Cleanup();
-            }
+            print("Call the other 2 Execute Context Menus instead.");
+        }
+
+        public override void Generate()
+        {
+
         }
 
         [ContextMenu("Execute Simplified Prim's Algorithm")]
         void Execute1()
         {
-            var grid = new ColoredGrid(Settings);
+            Grid = new ColoredGrid(Settings);
 
             SimplifiedPrim algorithm = new();
-            Cell start = grid[grid.Rows / 2, grid.Columns / 2];
-            algorithm.Execute(grid, start);
+            Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
+            algorithm.Execute(Grid, start);
 
-            grid.SetDistances(start.GetDistances());
+            (Grid as ColoredGrid).SetDistances(start.GetDistances());
 
-            SceneLoader.LoadSceneForDrawMode(Settings.DrawMode);
-            _drawMethod = InterfaceFactory.GetDrawMode(Settings);
-            _drawMethod.Draw(grid);
+            Draw();
         }
 
 
         [ContextMenu("Execute True Prim's Algorithm")]
         void Execute2()
         {
-            var grid = new ColoredGrid(Settings);
+            Grid = new ColoredGrid(Settings);
 
             TruePrim algorithm = new();
-            Cell start = grid[grid.Rows / 2, grid.Columns / 2];
-            algorithm.Execute(grid, start);
+            Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
+            algorithm.Execute(Grid, start);
 
-            grid.SetDistances(start.GetDistances());
+            (Grid as ColoredGrid).SetDistances(start.GetDistances());
 
-            SceneLoader.LoadSceneForDrawMode(Settings.DrawMode);
-            _drawMethod = InterfaceFactory.GetDrawMode(Settings);
-            _drawMethod.Draw(grid);
+            Draw();
         }
     }
 }

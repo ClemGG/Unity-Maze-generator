@@ -1,36 +1,19 @@
-using UnityEngine;
-
 namespace Project.Procedural.MazeGeneration
 {
-    public class GrowingTreeDemo : MonoBehaviour
+    public class GrowingTreeDemo : MazeGenerator
     {
-        [field: SerializeField] private GenerationSettingsSO Settings { get; set; }
-        private IDraw _drawMethod;
-
-
-        [ContextMenu("Cleanup")]
-        void Cleanup()
+        public override void SetupGrid()
         {
-            if (_drawMethod is not null)
-            {
-                _drawMethod.Cleanup();
-            }
+            Grid = new ColoredGrid(Settings);
         }
 
-        [ContextMenu("Execute Generation Algorithm")]
-        void Execute()
+        public override void Generate()
         {
-            var grid = new ColoredGrid(Settings);
-
             GrowingTree algorithm = new(Settings);
 
-            Cell start = grid.RandomCell();
-            algorithm.Execute(grid, start);
-            grid.SetDistances(start.GetDistances());
-
-            SceneLoader.LoadSceneForDrawMode(Settings.DrawMode);
-            _drawMethod = InterfaceFactory.GetDrawMode(Settings);
-            _drawMethod.Draw(grid);
+            Cell start = Grid.RandomCell();
+            algorithm.Execute(Grid, start);
+            (Grid as ColoredGrid).SetDistances(start.GetDistances());
         }
     }
 }
