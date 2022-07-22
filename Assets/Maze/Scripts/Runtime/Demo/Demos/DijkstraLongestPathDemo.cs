@@ -6,15 +6,25 @@ namespace Project.Procedural.MazeGeneration
     public class DijkstraLongestPathDemo : MonoBehaviour
     {
 
-        [field: SerializeField] private GenerationSettingsSO GenerationSettings { get; set; }
+        [field: SerializeField] private GenerationSettingsSO Settings { get; set; }
+        private IDraw _drawMethod;
 
+
+        [ContextMenu("Cleanup")]
+        void Cleanup()
+        {
+            if (_drawMethod is not null)
+            {
+                _drawMethod.Cleanup();
+            }
+        }
 
         [ContextMenu("Execute Generation Algorithm")]
         void Execute()
         {
-            var grid = new DistanceGrid(GenerationSettings);
+            var grid = new DistanceGrid(Settings);
 
-            IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(GenerationSettings);
+            IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
             Cell start = grid[0, 0];
             genAlg.Execute(grid, start);
 
@@ -25,7 +35,9 @@ namespace Project.Procedural.MazeGeneration
             (Cell goal, int goalDistance) = newDistances.Max();
             grid.Distances = newDistances.PathTo(goal);
 
-            grid.DisplayGrid(GenerationSettings.DrawMode);
+            SceneLoader.LoadSceneForDrawMode(Settings.DrawMode);
+            _drawMethod = InterfaceFactory.GetDrawMode(Settings);
+            _drawMethod.Draw(grid);
         }
     }
 }

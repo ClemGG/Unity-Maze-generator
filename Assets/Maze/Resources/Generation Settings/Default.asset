@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8a80083063e634db52d48d5cd5d272, type: 3}
   m_Name: Default
   m_EditorClassIdentifier: 
-  <DrawMode>k__BackingField: 2
-  <GenerationType>k__BackingField: 0
+  <DrawMode>k__BackingField: 1
+  <GenerationType>k__BackingField: 11
   <GridSize>k__BackingField: {x: 10, y: 10}
   <MeshCellSize>k__BackingField: {x: 5, y: 5}
   <RoomSize>k__BackingField: {x: 5, y: 5}

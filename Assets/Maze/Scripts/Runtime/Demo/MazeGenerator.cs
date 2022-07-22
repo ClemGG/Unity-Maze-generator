@@ -1,55 +1,38 @@
 using UnityEngine;
 
-#if UNITY_EDITOR
-using UnityEditor.SceneManagement;
-#endif
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class MazeGenerator : MonoBehaviour
+    public abstract class MazeGenerator : MonoBehaviour, IDemo
     {
-        [field: SerializeField] private GenerationSettingsSO Settings { get; set; }
-        private IDraw _drawMethod;
+        [field: SerializeField] public GenerationSettingsSO Settings { get; set; }
+        public Grid Grid { get; set; }
+        public IDraw DrawMethod { get; set; }
 
 
         [ContextMenu("Cleanup")]
-        void Cleanup()
+        public void Cleanup()
         {
-            if(_drawMethod is not null)
+            if(DrawMethod is not null)
             {
-                _drawMethod.Cleanup();
+                DrawMethod.Cleanup();
             }
         }
+
 
         [ContextMenu("Execute Generation Algorithm")]
-        void Execute()
+        public void Execute()
         {
-            Grid grid = new(Settings);
+            SetupGrid();
+            Generate();
+            Draw();
 
-            IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
-            genAlg.Execute(grid);
-
-            grid.Braid(Settings.BraidRate);
-
-
-#if UNITY_EDITOR
-            //Loads the appropriate scene depending on the DrawMode
-            switch (Settings.DrawMode)
-            {
-                case DrawMode.UIImage:
-                    EditorSceneManager.CloseScene(EditorSceneManager.GetSceneByName("3D Maze"), false);
-                    EditorSceneManager.OpenScene("2D Maze");
-                    break;
-
-                case DrawMode.Mesh:
-                    EditorSceneManager.CloseScene(EditorSceneManager.GetSceneByName("2D Maze"), false);
-                    EditorSceneManager.OpenScene("3D Maze");
-                    break;
-            }
-#endif
-
-            _drawMethod = InterfaceFactory.GetDrawMode(Settings);
-            _drawMethod.Draw(grid);
         }
+
+        public abstract void SetupGrid();
+
+        public abstract void Generate();
+
+        public abstract void Draw();
     }
 }
