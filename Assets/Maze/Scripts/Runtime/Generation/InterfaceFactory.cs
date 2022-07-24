@@ -8,7 +8,25 @@ namespace Project.Procedural.MazeGeneration
         //Dynamically creates the generation algorithm
         public static IGeneration GetGenerationAlgorithm(GenerationSettingsSO settings)
         {
-            Type algType = Type.GetType($"Project.Procedural.MazeGeneration.{settings.GenerationType}");
+            string algName;
+
+            switch (settings.GenerationType)
+            {
+                case GenerationType.Random:
+                    GenerationType[] types = Enums.ValuesOf<GenerationType>();
+                    string[] typesNames = new string[types.Length-1];
+                    for (int i = 1; i < types.Length; i++)  //Index 0 will always be Random, so we skip it
+                    {
+                        typesNames[i-1] = types[i].ToString();
+                    }
+                    algName = typesNames.Sample();
+                    break;
+                default:
+                    algName = settings.GenerationType.ToString();
+                    break;
+            }
+
+            Type algType = Type.GetType($"Project.Procedural.MazeGeneration.{algName}");
 
             //If the constructor is the default one (with no parameters),
             //we don't pass the settings to avoid missing the default constructor

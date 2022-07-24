@@ -4,6 +4,7 @@ namespace Project.Procedural.MazeGeneration
 {
     public enum GenerationType : byte
     {
+        Random,
         OneRoom,
         BinaryTree,
         Sidewinder,
