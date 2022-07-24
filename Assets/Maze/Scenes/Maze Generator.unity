@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2422ae580bfd4964fb548cb8014c0602, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Settings>k__BackingField: {fileID: 0}
+  <Settings>k__BackingField: {fileID: 11400000, guid: c7815e5aded70db4caae64aaf45d25c5, type: 2}
 --- !u!114 &1146565890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f5ffff24201ad14aaa759d5c68c5266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Settings>k__BackingField: {fileID: 0}
+  <Settings>k__BackingField: {fileID: 11400000, guid: c7815e5aded70db4caae64aaf45d25c5, type: 2}
 --- !u!114 &1146565892
 MonoBehaviour:
   m_ObjectHideFlags: 0

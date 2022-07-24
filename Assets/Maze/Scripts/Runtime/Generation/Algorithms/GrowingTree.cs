@@ -36,7 +36,7 @@ namespace Project.Procedural.MazeGeneration
 
 
 
-        public void Execute(Grid grid, Cell start = null)
+        public void Execute(IGrid grid, Cell start = null)
         {
             start ??= grid.RandomCell();
 

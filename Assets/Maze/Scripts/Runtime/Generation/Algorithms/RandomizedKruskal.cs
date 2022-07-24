@@ -11,9 +11,9 @@ namespace Project.Procedural.MazeGeneration
             public List<Cell[]> Neighbors { get; }
             public Dictionary<Cell, int> SetForCell { get; }
             public Dictionary<int, List<Cell>> CellsInSet { get; }
-            public Grid Grid { get; }
+            public IGrid Grid { get; }
 
-            public State(Grid grid)
+            public State(IGrid grid)
             {
                 Grid = grid;
                 Neighbors = new();
@@ -66,7 +66,7 @@ namespace Project.Procedural.MazeGeneration
         }
 
 
-        public void Execute(Grid grid, Cell start = null)
+        public void Execute(IGrid grid, Cell start = null)
         {
             State state = new(grid);
 

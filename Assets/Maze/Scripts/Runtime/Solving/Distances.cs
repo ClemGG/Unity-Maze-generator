@@ -87,5 +87,6 @@ namespace Project.Procedural.MazeGeneration
 
             return (maxCell, maxDst);
         }
+
     }
 }

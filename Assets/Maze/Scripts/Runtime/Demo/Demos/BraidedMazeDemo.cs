@@ -11,7 +11,7 @@ namespace Project.Procedural.MazeGeneration
         {
             RecursiveBacktracker algorithm = new();
             algorithm.Execute(Grid);
-            Grid.Braid(Settings.BraidRate);
+            
 
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
             (Grid as ColoredGrid).SetDistances(start.GetDistances());

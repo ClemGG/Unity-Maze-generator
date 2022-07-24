@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class MeshDraw : IDraw
+    public class MeshDraw : IDrawMethod
     {
 
         #region Mesh Fields

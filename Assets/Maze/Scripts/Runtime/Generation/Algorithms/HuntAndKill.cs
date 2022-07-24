@@ -12,7 +12,7 @@ namespace Project.Procedural.MazeGeneration
     //to a previously visited neighboring cell.
     public class HuntAndKill : IGeneration
     {
-        public void Execute(Grid grid, Cell start = null)
+        public void Execute(IGrid grid, Cell start = null)
         {
             Cell current = start ?? grid.RandomCell();
 

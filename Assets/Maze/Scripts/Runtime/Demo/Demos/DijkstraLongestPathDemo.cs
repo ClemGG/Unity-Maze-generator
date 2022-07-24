@@ -8,6 +8,10 @@ namespace Project.Procedural.MazeGeneration
             Grid = new DistanceGrid(Settings);
         }
 
+        //We run the GetDistances() algorith twice.
+        //This is in cas the start Cell is somewhere in the middle of the maze.
+        //Since we are looking for the longest path, the get first the cell farthest from the start
+        //(likely somewhere on the edges of the maze), then we run it again to get the longest path.
         public override void Generate()
         {
             IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
@@ -17,9 +21,15 @@ namespace Project.Procedural.MazeGeneration
             Distances distances = start.GetDistances();
             (Cell newStart, int distance) = distances.Max();
 
-            var newDistances = newStart.GetDistances();
+            Distances newDistances = newStart.GetDistances();
             (Cell goal, int goalDistance) = newDistances.Max();
             (Grid as DistanceGrid).Distances = newDistances.PathTo(goal);
+        }
+
+        public override void Draw()
+        {
+            DrawMethod = new ConsoleDraw();
+            DrawMethod.Draw(Grid);
         }
     }
 }

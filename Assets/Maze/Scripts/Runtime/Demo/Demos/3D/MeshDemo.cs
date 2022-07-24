@@ -22,7 +22,7 @@ namespace Project.Procedural.MazeGeneration
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
             genAlg.Execute(Grid);
 
-            Grid.Braid(Settings.BraidRate);
+            
 
             (Grid as ColoredGrid).SetDistances(start.GetDistances());
         }

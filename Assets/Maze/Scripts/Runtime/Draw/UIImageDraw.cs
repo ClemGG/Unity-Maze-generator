@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class UIImageDraw : IDraw
+    public class UIImageDraw : IDrawMethod
     {
 
         #region UI Fields

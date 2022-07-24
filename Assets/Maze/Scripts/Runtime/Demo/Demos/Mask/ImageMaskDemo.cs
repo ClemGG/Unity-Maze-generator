@@ -20,7 +20,7 @@ namespace Project.Procedural.MazeGeneration
         {
             RecursiveBacktracker algorithm = new();
             algorithm.Execute(Grid);
-            Grid.Braid(Settings.BraidRate);
+            
         }
 
     }

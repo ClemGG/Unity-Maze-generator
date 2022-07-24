@@ -21,7 +21,7 @@ namespace Project.Procedural.MazeGeneration
             IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
             genAlg.Execute(Grid);
 
-            Grid.Braid(Settings.BraidRate);
+            
 
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
             (Grid as ColoredGrid).SetDistances(start.GetDistances());

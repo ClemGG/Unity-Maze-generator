@@ -4,7 +4,7 @@ namespace Project.Procedural.MazeGeneration
     {
         public override void SetupGrid()
         {
-            Grid = new(Settings);
+            Grid = new ColoredGrid(Settings);
         }
 
         public override void Generate()
@@ -12,7 +12,7 @@ namespace Project.Procedural.MazeGeneration
             IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
             genAlg.Execute(Grid);
 
-            Grid.Braid(Settings.BraidRate);
+            
         }
 
 

@@ -17,7 +17,7 @@ namespace Project.Procedural.MazeGeneration
         }
 
 
-        public void Execute(Grid grid, Cell start = null)
+        public void Execute(IGrid grid, Cell start = null)
         {
 
             //Links all cells together to create an empty maze
@@ -29,7 +29,7 @@ namespace Project.Procedural.MazeGeneration
                 Divide(grid, 0, 0, grid.Rows, grid.Columns);
         }
 
-        private void Divide(Grid grid, int row, int column, int height, int width)
+        private void Divide(IGrid grid, int row, int column, int height, int width)
         {
             //Will stop the divide if the zone is smaller than a given threshold or randomly
             //Warning : The room needs to be that exact RoomSize for the divide to stop.
@@ -50,7 +50,7 @@ namespace Project.Procedural.MazeGeneration
         }
 
         //This one has a bias towards creating more rooms than passages
-        private void DivideWithBias(Grid grid, int row, int column, int height, int width)
+        private void DivideWithBias(IGrid grid, int row, int column, int height, int width)
         {
             //Will stop the divide if the zone is smaller than a given threshold or randomly
             //Changing the || in the RoomSize condition with a && will create many more passages than rooms.
@@ -69,7 +69,7 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-        private void DivideHorizontally(Grid grid, int row, int column, int height, int width)
+        private void DivideHorizontally(IGrid grid, int row, int column, int height, int width)
         {
             int divideSouthOf = (height - 1).Sample();
             int passageAt = width.Sample();
@@ -94,7 +94,7 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-        private void DivideVertically(Grid grid, int row, int column, int height, int width)
+        private void DivideVertically(IGrid grid, int row, int column, int height, int width)
         {
             int divideEastOf = (width - 1).Sample();
             int passageAt = height.Sample();

@@ -7,7 +7,7 @@ namespace Project.Procedural.MazeGeneration
     public class Wilson : IGeneration
     {
 
-        public void Execute(Grid grid, Cell start = null)
+        public void Execute(IGrid grid, Cell start = null)
         {
             List<Cell> unvisited = new(grid.Size());
             foreach (Cell cell in grid.EachCell())

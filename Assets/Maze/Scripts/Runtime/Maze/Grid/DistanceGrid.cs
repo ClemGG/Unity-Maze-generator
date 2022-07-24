@@ -2,7 +2,7 @@ using System;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class DistanceGrid : Grid
+    public class DistanceGrid : Grid, IDistanceGrid
     {
         public Distances Distances { get; set; }
 
@@ -14,15 +14,21 @@ namespace Project.Procedural.MazeGeneration
         {
         }
 
+        public string Draw(Cell cell)
+        {
+            return ContentsOf(cell);
+        }
+
         //This will display the distance on each cell traversed
         //by Dijkstra’s solving algorithm.
-        protected override string ContentsOf(Cell cell)
+        public string ContentsOf(Cell cell)
         {
             if(Distances is not null && Distances[cell] != -1)
-            {
-                return Distances[cell].ToString();
+            {   
+                //Converts to ASCII chars to get letters if the number is too big
+                return Convert.ToString(Distances[cell], 16);
             }
-            return base.ContentsOf(cell);
+            return " ";
         }
     }
 }

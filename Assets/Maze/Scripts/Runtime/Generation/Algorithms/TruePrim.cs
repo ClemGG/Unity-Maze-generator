@@ -7,7 +7,7 @@ namespace Project.Procedural.MazeGeneration
     //then selects the cells with the lowest cost.
     public class TruePrim : IGeneration
     {
-        public void Execute(Grid grid, Cell start = null)
+        public void Execute(IGrid grid, Cell start = null)
         {
             start ??= grid.RandomCell();
 

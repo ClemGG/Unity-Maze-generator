@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <DrawMode>k__BackingField: 1
   <GenerationType>k__BackingField: 0
-  <GridSize>k__BackingField: {x: 10, y: 10}
+  <GridSize>k__BackingField: {x: 4, y: 4}
   <MeshCellSize>k__BackingField: {x: 5, y: 5}
   <RoomSize>k__BackingField: {x: 5, y: 5}
   <BiasTowardsRooms>k__BackingField: 0

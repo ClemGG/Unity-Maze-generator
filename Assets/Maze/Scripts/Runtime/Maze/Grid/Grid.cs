@@ -5,45 +5,36 @@ using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class Grid
+    public abstract class Grid : IGrid
     {
         public int Rows { get; }
         public int Columns { get; }
+        public float BraidRate { get; } = 0f;
 
         public virtual int Size() => Rows * Columns;
         public virtual Cell RandomCell()
         {
-            Cell cell;
-            do
-            {
-                cell = _grid[Rows.Sample()][Columns.Sample()];
-            } 
-            while (cell is null);
-
-            return cell;
+            return _grid[Rows.Sample()][Columns.Sample()];
         }
 
 
         protected Cell[][] _grid;
 
 
-        public Grid(int rows, int columns)
+        public Grid(int rows, int columns, float braidRate = 0f)
         {
             Rows = rows;
             Columns = columns;
+            BraidRate = braidRate;
 
             PrepareGrid();
             ConfigureCells();
         }
 
 
-        public Grid(GenerationSettingsSO generationSettings)
+        public Grid(GenerationSettingsSO generationSettings) : 
+            this(generationSettings.GridSize.x, generationSettings.GridSize.y, generationSettings.BraidRate)
         {
-            Rows = generationSettings.GridSize.x;
-            Columns = generationSettings.GridSize.y;
-
-            PrepareGrid();
-            ConfigureCells();
         }
 
         public Cell this[int row, int column]
@@ -108,12 +99,6 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-        //Describes what to use to represent the Cell in the display classes
-        protected virtual string ContentsOf(Cell cell)
-        {
-            return " ";
-        }
-
         public virtual Color BackgroundColorFor(Cell cell)
         {
             return new(1, 1, 1, 1);
@@ -175,14 +160,14 @@ namespace Project.Procedural.MazeGeneration
 
         //Removes dead ends from the maze to create a braided (imperfect) maze.
         //The higher the braidRate, the more deadends are removed.
-        public void Braid(float braidRate = 1f)
+        public void Braid()
         {
             List<Cell> deadends = GetDeadends();
             List<Cell> shuffledDeadends = deadends.Shuffle();
 
             //Because of rounding, this method will not always remove the exact number of deadends requested,
             //but it's still more accurate than the previous version with a percentage.
-            int nbDeadendsToRemove = Mathf.RoundToInt(Mathf.Lerp(0f, (float)deadends.Count, braidRate));
+            int nbDeadendsToRemove = Mathf.RoundToInt(Mathf.Lerp(0f, (float)deadends.Count, BraidRate));
 
 
             for (int i = 0; i < nbDeadendsToRemove; i++)

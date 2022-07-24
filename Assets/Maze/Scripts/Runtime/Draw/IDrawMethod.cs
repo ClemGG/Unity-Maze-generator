@@ -1,8 +1,8 @@
 namespace Project.Procedural.MazeGeneration
 {
-    public interface IDraw
+    public interface IDrawMethod<in T>
     {
-        void Draw(Grid grid);
+        void Draw(IDrawableGrid<T> grid);
         void Cleanup();
     }
 }

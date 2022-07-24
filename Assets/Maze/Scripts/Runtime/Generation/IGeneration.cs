@@ -7,6 +7,6 @@ namespace Project.Procedural.MazeGeneration
         /// </summary>
         /// <param name="grid"></param>
         /// <param name="start">If the algorithm doesn't need a starting Cell, it will be ignored.</param>
-        public void Execute(Grid grid, Cell start = null);
+        public void Execute(IGrid grid, Cell start = null);
     }
 }

@@ -10,7 +10,7 @@ namespace Project.Procedural.MazeGeneration
      */
     public class BinaryTree : IGeneration
     {
-        public void Execute(Grid grid, Cell start = null)
+        public void Execute(IGrid grid, Cell start = null)
         {
             foreach (Cell cell in grid.EachCell())
             {

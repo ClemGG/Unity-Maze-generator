@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class ConsoleDraw : IDraw
+    public class ConsoleDraw : IDrawMethod
     {
 
         public void Cleanup()
