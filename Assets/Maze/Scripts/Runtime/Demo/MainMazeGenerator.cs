@@ -4,7 +4,7 @@ namespace Project.Procedural.MazeGeneration
     {
         public override void SetupGrid()
         {
-            Grid = new ColoredGrid(Settings);
+            Grid = Settings.DrawMode == DrawMode.Console ? new DistanceGrid(Settings) : new ColoredGrid(Settings);
         }
 
         public override void Generate()
@@ -12,7 +12,10 @@ namespace Project.Procedural.MazeGeneration
             IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
             genAlg.Execute(Grid);
 
-            
+
+            Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
+            Grid.SetDistances(start.GetDistances());
+
         }
 
 

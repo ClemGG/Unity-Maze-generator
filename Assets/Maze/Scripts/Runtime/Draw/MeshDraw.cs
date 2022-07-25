@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class MeshDraw : IDrawMethod
+    public class MeshDraw : IDrawMethod<Color>
     {
 
         #region Mesh Fields
@@ -52,7 +52,7 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-        public void Draw(Grid grid)
+        public void Draw(IDrawableGrid<Color> grid)
         {
             //We create 1 Mesh for each surface
             //so that none reach the limit of triangles allowed by Unity.
@@ -97,7 +97,7 @@ namespace Project.Procedural.MazeGeneration
 
 
 
-        private void GenerateMesh(int meshID, Grid grid)
+        private void GenerateMesh(int meshID, IDrawableGrid<Color> grid)
         {
             float cellWidth = _meshCellSize.x;
             float cellHeight = _meshCellSize.y;

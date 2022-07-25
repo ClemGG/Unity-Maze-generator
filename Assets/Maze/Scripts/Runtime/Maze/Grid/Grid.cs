@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
@@ -10,6 +9,12 @@ namespace Project.Procedural.MazeGeneration
         public int Rows { get; }
         public int Columns { get; }
         public float BraidRate { get; } = 0f;
+
+
+
+        public Distances Distances { get; set; }
+        public Cell Farthest { get; set; }
+        public int Maximum { get; set; }
 
         public virtual int Size() => Rows * Columns;
         public virtual Cell RandomCell()
@@ -97,50 +102,6 @@ namespace Project.Procedural.MazeGeneration
                         yield return row[i];
                 }
             }
-        }
-
-        public virtual Color BackgroundColorFor(Cell cell)
-        {
-            return new(1, 1, 1, 1);
-        }
-
-        public override string ToString()
-        {
-            //6 refers to the numbers of colums per cell
-            //3 refers to the numbers of rows per cell
-            StringBuilder output = new(6*3*Rows*Columns);
-            output.Append("+");
-            output.Insert(1, "---+", Columns);
-            output.Append("\n");
-
-            foreach (Cell[] row in EachRow())
-            {
-                var top = "|";
-                var bottom = "+";
-
-                for (int i = 0; i < row.Length; i++)
-                {
-                    Cell cell = row[i];
-                    if(cell is null)
-                    {
-                        cell = new(-1, -1);
-                    }
-
-                    var body = $" {ContentsOf(cell)} ";   //3 spaces for the Cell's body
-                    var eastBoundary = cell.IsLinked(cell.East) ? " " : "|";
-                    top = string.Concat(top, body, eastBoundary);
-
-                    //3 spaces below, too
-                    var southBoundary = cell.IsLinked(cell.South) ? "   " : "---";
-                    var corner = "+";
-                    bottom = string.Concat(bottom, southBoundary, corner);
-
-                }
-                output.Append($"{top}\n");
-                output.Append($"{bottom}\n");
-            }
-
-            return output.ToString();
         }
 
 

@@ -21,7 +21,7 @@ namespace Project.Procedural.MazeGeneration
             genAlg.Execute(Grid);
 
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
-            (Grid as ColoredGrid).SetDistances(start.GetDistances());
+            Grid.SetDistances(start.GetDistances());
         }
     }
 }

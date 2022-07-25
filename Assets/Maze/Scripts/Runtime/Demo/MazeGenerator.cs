@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public abstract class MazeGenerator : MonoBehaviour, IDemo<object>
+    public abstract class MazeGenerator : MonoBehaviour, IDemo
     {
         [field: SerializeField] public GenerationSettingsSO Settings { get; set; }
-        public IGrid Grid { get; set; }
-        public IDrawMethod<object> DrawMethod { get; set; }
+        public IDrawableGrid Grid { get; set; }
+        public IDrawMethod DrawMethod { get; set; }
 
 
         [ContextMenu("Cleanup")]

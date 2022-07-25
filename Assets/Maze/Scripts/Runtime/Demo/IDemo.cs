@@ -1,11 +1,12 @@
 
 namespace Project.Procedural.MazeGeneration
 {
-    public interface IDemo<T>
+    public interface IDemo
     {
         GenerationSettingsSO Settings { get; set; }
-        IGrid Grid { get; set; }
-        IDrawMethod<T> DrawMethod { get; set; }
+        IDrawableGrid Grid { get; set; }
+        IDrawMethod DrawMethod { get; set; }
+
 
         void Cleanup();
         void Execute();
@@ -13,4 +14,5 @@ namespace Project.Procedural.MazeGeneration
         void Generate();
         void Draw();
     }
+
 }

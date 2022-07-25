@@ -13,7 +13,7 @@ namespace Project.Procedural.MazeGeneration
 
             Cell start = Grid.RandomCell();
             algorithm.Execute(Grid, start);
-            (Grid as ColoredGrid).SetDistances(start.GetDistances());
+            Grid.SetDistances(start.GetDistances());
         }
     }
 }

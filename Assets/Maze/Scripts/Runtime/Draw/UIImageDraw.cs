@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class UIImageDraw : IDrawMethod
+    public class UIImageDraw : IDrawMethod<Color>
     {
 
         #region UI Fields
@@ -101,7 +101,7 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-        public void Draw(Grid grid)
+        public void Draw(IDrawableGrid<Color> grid)
         {
             Cleanup();
 
@@ -118,19 +118,18 @@ namespace Project.Procedural.MazeGeneration
                     Cell cell = grid[i, j];
 
                     if (cell is null) continue;
+                    Color color = grid.Draw(cell);
 
                     if (!Mathf.Approximately(_inset, 0f) && !Mathf.Approximately(_inset, .5f * cellSize))
                     {
                         float x = cell.Column * cellSize;
                         float y = cell.Row * cellSize;
 
-                        Color color = grid.BackgroundColorFor(cell);
                         DisplayCellImgWithInset(cell, cellSize, x, y, _inset, color);
                         DisplayLineImgWithInset(cell, cellSize, x, y, _inset, gridLongestSide);
                     }
                     else
                     {
-                        Color color = grid.BackgroundColorFor(cell);
                         DisplayCellImgWithoutInset(i, j, cellSize, color);
                         DisplayLineImgWithoutInset(cell, cellSize, gridLongestSide);
                     }

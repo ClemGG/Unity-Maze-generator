@@ -23,7 +23,7 @@ namespace Project.Procedural.MazeGeneration
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
             algorithm.Execute(Grid, start);
 
-            (Grid as ColoredGrid).SetDistances(start.GetDistances());
+            Grid.SetDistances(start.GetDistances());
 
             Draw();
         }
@@ -38,7 +38,7 @@ namespace Project.Procedural.MazeGeneration
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
             algorithm.Execute(Grid, start);
 
-            (Grid as ColoredGrid).SetDistances(start.GetDistances());
+            Grid.SetDistances(start.GetDistances());
 
             Draw();
         }

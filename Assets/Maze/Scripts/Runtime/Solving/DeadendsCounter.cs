@@ -22,7 +22,7 @@ namespace Project.Procedural.MazeGeneration
                 var deadendCounts = new int[Tries];
                 for (int i = 0; i < Tries; i++)
                 {
-                    var grid = new Grid(GenerationSettings);
+                    var grid = new DistanceGrid(GenerationSettings);
 
                     //Dynamically creates the generation algorithm
                     Type algType = Type.GetType($"Project.Procedural.MazeGeneration.{algorithm}");

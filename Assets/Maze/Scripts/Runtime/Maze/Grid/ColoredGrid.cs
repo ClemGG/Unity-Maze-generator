@@ -2,12 +2,8 @@ using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class ColoredGrid : Grid
+    public class ColoredGrid : Grid, IDrawableGrid, IDrawableGrid<Color>
     {
-        public Distances Distances { get; set; }
-        public Cell Farthest { get; set; }
-        public int Maximum { get; set; }
-
         public ColoredGrid(int rows, int columns) : base(rows, columns)
         {
         }
@@ -16,15 +12,7 @@ namespace Project.Procedural.MazeGeneration
         {
         }
 
-        public void SetDistances(Distances distances)
-        {
-            Distances = distances;
-            (Cell, int) tuple = Distances.Max();
-            Farthest = tuple.Item1;
-            Maximum = tuple.Item2;
-        }
-
-        public override Color BackgroundColorFor(Cell cell)
+        public Color Draw(Cell cell)
         {
             int distance = Distances[cell];
             float intensity = (float)(Maximum - distance) / Maximum;

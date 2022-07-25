@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class ConsoleDraw : IDrawMethod
+    public class ConsoleDraw : IDrawMethod, IDrawMethod<string>
     {
 
         public void Cleanup()
@@ -15,7 +15,7 @@ namespace Project.Procedural.MazeGeneration
         }
 
 
-        public void Draw(Grid grid)
+        public void Draw(IDrawableGrid<string> grid)
         {
             Debug.Log(grid.ToString());
         }

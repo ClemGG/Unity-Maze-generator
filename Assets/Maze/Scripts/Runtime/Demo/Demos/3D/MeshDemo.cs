@@ -24,7 +24,7 @@ namespace Project.Procedural.MazeGeneration
 
             
 
-            (Grid as ColoredGrid).SetDistances(start.GetDistances());
+            Grid.SetDistances(start.GetDistances());
         }
 
         public override void Draw()

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace Project.Procedural.MazeGeneration
 {
+
     public interface IGrid
     {
         int Rows { get; }
@@ -21,23 +22,31 @@ namespace Project.Procedural.MazeGeneration
         void UnlinkAll();
     }
 
-    //Used to show the contents of the Cell to avoid type mismatchs (string, Color, etc.)
-    public interface IDrawableGrid<out T>
-    {
-        //Implemented in derived classes in case each Grid wants to display
-        //the info differently (like colored strings or normal ones)
-        public T Draw(Cell cell);
-    }
-
-
-    public interface IDistanceGrid : IDrawableGrid<string>
+    public interface IDistanceGrid
     {
         Distances Distances { get; set; }
+        Cell Farthest { get; set; }
+        int Maximum { get; set; }
+    }
 
-        //Describes what to use to represent the Cell in the display classes
-        string ContentsOf(Cell cell)
+    public interface IDrawableGrid : IGrid, IDistanceGrid
+    {
+        object Draw(Cell cell);
+        void SetDistances(Distances distances)
         {
-            return " ";
+            Distances = distances;
+            (Cell, int) tuple = Distances.Max();
+            Farthest = tuple.Item1;
+            Maximum = tuple.Item2;
         }
+    }
+
+    //Used to show the contents of the Cell to avoid type mismatchs (string, Color, etc.)
+    public interface IDrawableGrid<out T> : IDrawableGrid
+    {
+        //Describes what to use to represent the Cell in the display classes
+        //(like colored Tiles or chars)
+        object IDrawableGrid.Draw(Cell cell) => Draw(cell);
+        T Draw(Cell cell);
     }
 }

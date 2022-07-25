@@ -71,7 +71,7 @@ namespace Project.Procedural.MazeGeneration
         }
 
         //returns cell furthest to the root cell
-        public (Cell, int) Max()
+        public (Cell cell, int dst) Max()
         {
             int maxDst = 0;
             Cell maxCell = Root;

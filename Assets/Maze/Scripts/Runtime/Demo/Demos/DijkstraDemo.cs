@@ -1,3 +1,4 @@
+
 namespace Project.Procedural.MazeGeneration
 {
     public class DijkstraDemo : MazeGenerator

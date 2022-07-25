@@ -22,7 +22,7 @@ namespace Project.Procedural.MazeGeneration
             RecursiveBacktracker algorithm = new();
             algorithm.Execute(Grid, start);
 
-            (Grid as ColoredGrid).SetDistances(start.GetDistances());
+            Grid.SetDistances(start.GetDistances());
         }
 
         public override void Draw()
