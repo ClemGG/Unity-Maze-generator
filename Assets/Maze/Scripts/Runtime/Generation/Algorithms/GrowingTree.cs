@@ -21,16 +21,16 @@ namespace Project.Procedural.MazeGeneration
         /// <summary>
         /// This will let us choose how to select the Cells from the active list
         /// </summary>
-        private Func<List<Cell>, Cell> SetLambda(int lambdaIndex) => lambdaIndex switch
+        private Func<List<Cell>, Cell> SetLambda(GrowingTreeLambda lambdaType) => lambdaType switch
         {
             //Selects a cell at random (executes Simple Prim)
-            0 => (active) => active.Sample(),
+            GrowingTreeLambda.Random => (active) => active.Sample(),
             //Selects the last cell (executes Recursive Backtracker)
-            1 => (active) => active.Last(),
+            GrowingTreeLambda.LastCell => (active) => active.Last(),
             //Selects the first cell (creates elongated corridors)
-            2 => (active) => active.First(),
+            GrowingTreeLambda.FirstCell => (active) => active.First(),
             //Mixes between the Recursive Backtracker and the Simple Prim
-            3 => (active) => (2.Sample() == 0) ? active.Sample() : active.Last(),
+            GrowingTreeLambda.FirstAndLastMix => (active) => (2.Sample() == 0) ? active.First() : active.Last(),
             _ => null,
         };
 

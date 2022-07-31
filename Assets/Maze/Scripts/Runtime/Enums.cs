@@ -30,36 +30,46 @@ namespace Project.Procedural.MazeGeneration
         Mesh,
     }
 
-
-    public static class Enums
+    public enum GrowingTreeLambda : byte
     {
-        public static T[] ValuesOf<T>() where T : Enum
-        {
-            return (T[])Enum.GetValues(typeof(T));
-        }
-        public static string[] ValuesToString<T>() where T : Enum
-        {
-            T[] values = (T[])Enum.GetValues(typeof(T));
-            string[] toString = new string[values.Length];
-            for (int i = 0; i < values.Length; i++)
-            {
-                toString[i] = values[i].ToString();
-            }
+        Random,
+        LastCell,
+        FirstCell,
+        FirstAndLastMix,
+    }
 
-            return toString;
+}
+
+
+
+public static class Enums
+{
+    public static T[] ValuesOf<T>() where T : Enum
+    {
+        return (T[])Enum.GetValues(typeof(T));
+    }
+    public static string[] ValuesToString<T>() where T : Enum
+    {
+        T[] values = (T[])Enum.GetValues(typeof(T));
+        string[] toString = new string[values.Length];
+        for (int i = 0; i < values.Length; i++)
+        {
+            toString[i] = values[i].ToString();
         }
 
-        public static int LengthOf<T>() where T : Enum
-        {
-            return ValuesOf<T>().Length;
-        }
+        return toString;
+    }
 
-        public static void ForEach<T>(Action<T> action) where T : Enum
+    public static int LengthOf<T>() where T : Enum
+    {
+        return ValuesOf<T>().Length;
+    }
+
+    public static void ForEach<T>(Action<T> action) where T : Enum
+    {
+        foreach (T value in ValuesOf<T>())
         {
-            foreach (T value in ValuesOf<T>())
-            {
-                action.Invoke(value);
-            }
+            action.Invoke(value);
         }
     }
 }

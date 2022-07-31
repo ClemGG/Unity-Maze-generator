@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static Project.Procedural.MazeGeneration.Enums;
+using static Enums;
 
 namespace Project.Procedural.MazeGeneration
 {

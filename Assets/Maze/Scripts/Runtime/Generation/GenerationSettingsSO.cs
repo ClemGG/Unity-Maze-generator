@@ -23,7 +23,7 @@ namespace Project.Procedural.MazeGeneration
         [field: SerializeField] public bool BiasTowardsRooms { get; private set; } = false;
 
         [field: Tooltip("Used by the Growing Tree Algorithm to select different ways to process the unvisited Cells.")]
-        [field: SerializeField, Range(0, 3)] public int LambdaSelection { get; private set; } = 0;
+        [field: SerializeField] public GrowingTreeLambda LambdaSelection { get; private set; } = GrowingTreeLambda.Random;
 
 
         [field: Tooltip("Generate space between walls. This field is a percentage.")]
