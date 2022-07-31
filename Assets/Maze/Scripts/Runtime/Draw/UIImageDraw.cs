@@ -65,6 +65,7 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
+
         private float _inset = 0f;
 
 
@@ -103,13 +104,40 @@ namespace Project.Procedural.MazeGeneration
         }
 
 
-        public void DisplayProgress(GenerationProgressReport progress)
-        {
-            //Debug.Log($"Task completion: {progress.ProgressPercentage}%.");
-        }
-
         public async Task DrawAsync(IDrawableGrid<Color> grid, System.IProgress<GenerationProgressReport> progress)
         {
+            Cleanup();
+
+            float cellSize = Mathf.Min(Bg.rect.width / grid.Columns, Bg.rect.height / grid.Rows);
+            _inset = cellSize * _inset;
+
+            //Used to resize the lineUIs if they get too big for the grid resolution
+            float gridLongestSide = Mathf.Max(grid.Columns, grid.Rows);
+
+            for (int i = 0; i < grid.Rows; i++)
+            {
+                for (int j = 0; j < grid.Columns; j++)
+                {
+                    Cell cell = grid[i, j];
+
+                    if (cell is null) continue;
+                    Color color = grid.Draw(cell);
+
+                    if (!Mathf.Approximately(_inset, 0f) && !Mathf.Approximately(_inset, .5f * cellSize))
+                    {
+                        float x = cell.Column * cellSize;
+                        float y = cell.Row * cellSize;
+
+                        DisplayCellImgWithInset(cell, cellSize, x, y, _inset, color);
+                        DisplayLineImgWithInset(cell, cellSize, x, y, _inset, gridLongestSide);
+                    }
+                    else
+                    {
+                        DisplayCellImgWithoutInset(i, j, cellSize, color);
+                        DisplayLineImgWithoutInset(cell, cellSize, gridLongestSide);
+                    }
+                }
+            }
 
         }
 

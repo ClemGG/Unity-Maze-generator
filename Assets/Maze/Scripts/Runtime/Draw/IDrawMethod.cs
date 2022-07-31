@@ -7,7 +7,6 @@ namespace Project.Procedural.MazeGeneration
     {
         void DrawSync(IDrawableGrid grid);
         Task DrawAsync(IDrawableGrid grid, IProgress<GenerationProgressReport> progress);
-        void DisplayProgress(GenerationProgressReport progresss);
         void Cleanup();
     }
 

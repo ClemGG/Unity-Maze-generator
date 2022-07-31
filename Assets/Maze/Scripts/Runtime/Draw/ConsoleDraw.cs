@@ -32,14 +32,9 @@ namespace Project.Procedural.MazeGeneration
             {
                 DrawSync(grid);
 
-                report.ProgressPercentage = 100f;
+                report.ProgressPercentage = 1f;
                 progress.Report(report);
             });
-        }
-
-        public void DisplayProgress(GenerationProgressReport progress)
-        {
-            Debug.Log($"Task completion: {progress.ProgressPercentage}%.");
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
@@ -8,7 +9,14 @@ namespace Project.Procedural.MazeGeneration
         //As the maze gets bigger, the game might freeze for a long time.
         //This allows us to mitigate this issue and display the progress on screen.
         private Progress<GenerationProgressReport> Progress { get; set; }
+        private ProgressVisualizer ProgressVisualizer { get; set; } = new();
 
+        [ContextMenu("Cleanup (also progress)")]
+        public new void Cleanup()
+        {
+            base.Cleanup();
+            ProgressVisualizer.Cleanup();
+        }
 
         public override void SetupGrid()
         {
@@ -39,7 +47,7 @@ namespace Project.Procedural.MazeGeneration
 
         private void DisplayProgress(object sender, GenerationProgressReport e)
         {
-            DrawMethod.DisplayProgress(e);
+            ProgressVisualizer.DisplayProgress(e);
         }
     }
 }
