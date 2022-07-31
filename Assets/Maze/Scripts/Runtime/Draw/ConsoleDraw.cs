@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -21,13 +22,24 @@ namespace Project.Procedural.MazeGeneration
             Debug.Log(grid.ToString());
         }
 
-        public async Task DrawAsync(IDrawableGrid<string> grid) 
+        //Honestly, the progress report is not necessary here.
+        //But we still do it to showcase how it works and to have at least something to show to the user.
+        public async Task DrawAsync(IDrawableGrid<string> grid, IProgress<GenerationProgressReport> progress) 
         {
+            GenerationProgressReport report = new();
+
             await Task.Run(() =>
             {
-                Debug.Log("async");
                 DrawSync(grid);
+
+                report.ProgressPercentage = 100f;
+                progress.Report(report);
             });
+        }
+
+        public void DisplayProgress(GenerationProgressReport progress)
+        {
+            Debug.Log($"Task completion: {progress.ProgressPercentage}%.");
         }
     }
 }

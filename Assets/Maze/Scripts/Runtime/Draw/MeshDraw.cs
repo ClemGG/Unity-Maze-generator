@@ -53,7 +53,13 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-        public async Task DrawAsync(IDrawableGrid<Color> grid)
+
+        public void DisplayProgress(GenerationProgressReport progress)
+        {
+            //Debug.Log($"Task completion: {progress.ProgressPercentage}%.");
+        }
+
+        public async Task DrawAsync(IDrawableGrid<Color> grid, System.IProgress<GenerationProgressReport> progress)
         {
 
         }
