@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class MeshDraw : IDrawMethod<Color>
+    public class MeshDraw : IDrawMethod<Color>, IDrawMethodAsync<Color>
     {
 
         #region Mesh Fields
@@ -52,7 +53,13 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-        public void Draw(IDrawableGrid<Color> grid)
+        public async Task DrawAsync(IDrawableGrid<Color> grid)
+        {
+
+        }
+
+
+        public void DrawSync(IDrawableGrid<Color> grid)
         {
             //We create 1 Mesh for each surface
             //so that none reach the limit of triangles allowed by Unity.

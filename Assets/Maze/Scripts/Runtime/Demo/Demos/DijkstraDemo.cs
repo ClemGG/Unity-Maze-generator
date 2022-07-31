@@ -18,12 +18,12 @@ namespace Project.Procedural.MazeGeneration
             DrawMethod = new ConsoleDraw();
             Distances distances = start.GetDistances();
             (Grid as DistanceGrid).Distances = distances;
-            DrawMethod.Draw(Grid);
+            DrawMethod.DrawSync(Grid);
 
             //Only from the start to the designated Cell
             (Grid as DistanceGrid).Distances = distances.PathTo(Grid[Grid.Rows - 1, 0]);
             print("path from northwest corner to southwest corner:");
-            DrawMethod.Draw(Grid);
+            DrawMethod.DrawSync(Grid);
         }
 
         public override void Draw()

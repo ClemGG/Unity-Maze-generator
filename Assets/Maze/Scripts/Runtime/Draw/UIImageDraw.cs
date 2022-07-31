@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Project.Pool;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class UIImageDraw : IDrawMethod<Color>
+    public class UIImageDraw : IDrawMethod<Color>, IDrawMethodAsync<Color>
     {
 
         #region UI Fields
@@ -101,7 +102,13 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-        public void Draw(IDrawableGrid<Color> grid)
+        public async Task DrawAsync(IDrawableGrid<Color> grid)
+        {
+
+        }
+
+
+        public void DrawSync(IDrawableGrid<Color> grid)
         {
             Cleanup();
 

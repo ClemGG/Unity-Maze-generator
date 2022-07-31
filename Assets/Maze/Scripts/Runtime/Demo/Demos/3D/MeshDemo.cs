@@ -31,7 +31,7 @@ namespace Project.Procedural.MazeGeneration
         {
             SceneLoader.LoadSceneForDrawMode(Settings.DrawMode);
             DrawMethod = InterfaceFactory.GetDrawMode(Settings);
-            DrawMethod.Draw(Grid);
+            DrawMethod.DrawSync(Grid);
         }
     }
 }

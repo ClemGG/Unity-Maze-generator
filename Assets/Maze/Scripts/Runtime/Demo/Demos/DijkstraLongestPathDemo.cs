@@ -29,7 +29,7 @@ namespace Project.Procedural.MazeGeneration
         public override void Draw()
         {
             DrawMethod = new ConsoleDraw();
-            DrawMethod.Draw(Grid);
+            DrawMethod.DrawSync(Grid);
         }
     }
 }

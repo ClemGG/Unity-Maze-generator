@@ -1,9 +1,10 @@
 #if UNITY_EDITOR
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
-    public class ConsoleDraw : IDrawMethod, IDrawMethod<string>
+    public class ConsoleDraw : IDrawMethod<string>, IDrawMethodAsync<string>
     {
 
         public void Cleanup()
@@ -15,9 +16,18 @@ namespace Project.Procedural.MazeGeneration
         }
 
 
-        public void Draw(IDrawableGrid<string> grid)
+        public void DrawSync(IDrawableGrid<string> grid)
         {
             Debug.Log(grid.ToString());
+        }
+
+        public async Task DrawAsync(IDrawableGrid<string> grid) 
+        {
+            await Task.Run(() =>
+            {
+                Debug.Log("async");
+                DrawSync(grid);
+            });
         }
     }
 }
