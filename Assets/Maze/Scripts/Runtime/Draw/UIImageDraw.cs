@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Project.Pool;
 using UnityEngine;
 using UnityEngine.UI;
@@ -104,7 +104,7 @@ namespace Project.Procedural.MazeGeneration
         }
 
 
-        public async Task DrawAsync(IDrawableGrid<Color> grid, System.IProgress<GenerationProgressReport> progress)
+        public IEnumerator DrawAsync(IDrawableGrid<Color> grid, System.IProgress<GenerationProgressReport> progress)
         {
             Cleanup();
 
@@ -114,30 +114,45 @@ namespace Project.Procedural.MazeGeneration
             //Used to resize the lineUIs if they get too big for the grid resolution
             float gridLongestSide = Mathf.Max(grid.Columns, grid.Rows);
 
+
+            GenerationProgressReport report = new();
+            List<Cell> completedCells = new();
+
+
             for (int i = 0; i < grid.Rows; i++)
             {
                 for (int j = 0; j < grid.Columns; j++)
                 {
                     Cell cell = grid[i, j];
 
-                    if (cell is null) continue;
-                    Color color = grid.Draw(cell);
-
-                    if (!Mathf.Approximately(_inset, 0f) && !Mathf.Approximately(_inset, .5f * cellSize))
+                    if (cell is not null)
                     {
-                        float x = cell.Column * cellSize;
-                        float y = cell.Row * cellSize;
+                        completedCells.Add(cell);
+                        Color color = grid.Draw(cell);
 
-                        DisplayCellImgWithInset(cell, cellSize, x, y, _inset, color);
-                        DisplayLineImgWithInset(cell, cellSize, x, y, _inset, gridLongestSide);
-                    }
-                    else
-                    {
-                        DisplayCellImgWithoutInset(i, j, cellSize, color);
-                        DisplayLineImgWithoutInset(cell, cellSize, gridLongestSide);
+                        if (!Mathf.Approximately(_inset, 0f) && !Mathf.Approximately(_inset, .5f * cellSize))
+                        {
+                            float x = cell.Column * cellSize;
+                            float y = cell.Row * cellSize;
+
+                            DisplayCellImgWithInset(cell, cellSize, x, y, _inset, color);
+                            DisplayLineImgWithInset(cell, cellSize, x, y, _inset, gridLongestSide);
+
+                        }
+                        else
+                        {
+                            DisplayCellImgWithoutInset(i, j, cellSize, color);
+                            DisplayLineImgWithoutInset(cell, cellSize, gridLongestSide);
+                        }
+
+                        report.ProgressPercentage = (float)(completedCells.Count * 100 / grid.Size());
+                        progress.Report(report);
+
+                        yield return null;
                     }
                 }
             }
+           
 
         }
 

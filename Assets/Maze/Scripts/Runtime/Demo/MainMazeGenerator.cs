@@ -39,10 +39,12 @@ namespace Project.Procedural.MazeGeneration
         {
             SceneLoader.LoadSceneForDrawMode(Settings.DrawMode);
             DrawMethod = InterfaceFactory.GetDrawMode(Settings);
+            //DrawMethod.DrawSync(Grid);
+
 
             Progress = new();
             Progress.ProgressChanged += DisplayProgress;
-            DrawMethod.DrawAsync(Grid, Progress);
+            StartCoroutine(DrawMethod.DrawAsync(Grid, Progress));
         }
 
         private void DisplayProgress(object sender, GenerationProgressReport e)
