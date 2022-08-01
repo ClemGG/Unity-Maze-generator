@@ -1,4 +1,7 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
@@ -115,6 +118,74 @@ namespace Project.Procedural.MazeGeneration
             }
 
 
+        }
+
+
+
+        public IEnumerator ExecuteAsync(IGrid grid, IProgress<GenerationProgressReport> progress, Cell start = null)
+        {
+            GenerationProgressReport report = new();
+            List<Cell> linkedCells = new();
+
+            RowState rowState = new();
+            foreach (Cell[] row in grid.EachRow())
+            {
+                foreach (Cell cell in row)
+                {
+                    if (cell.West is null) continue;
+
+                    int set = rowState.SetFor(cell);
+                    int priorSet = rowState.SetFor(cell.West);
+
+                    bool shouldLink = set != priorSet && (cell.South is null || 2.Sample() == 0);
+
+                    if (shouldLink)
+                    {
+                        cell.Link(cell.West);
+                        rowState.Merge(set, priorSet);
+
+                        linkedCells.Add(cell);
+                        report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
+                        report.UpdateTrackTime(Time.deltaTime);
+                        progress.Report(report);
+                        yield return null;
+                    }
+                }
+
+
+                if (row[0].South is not null)
+                {
+                    RowState nextRow = rowState.Next();
+
+                    foreach (var pair in rowState.EachSet())
+                    {
+                        var list = pair.Value.Shuffle();
+                        foreach (var cell in list)
+                        {
+                            int index = list.IndexOf(cell);
+                            if (index == 0 || 3.Sample() == 0)
+                            {
+                                cell.Link(cell.South);
+                                nextRow.Record(rowState.SetFor(cell), cell.South);
+
+                                linkedCells.Add(cell);
+                                report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
+                                report.UpdateTrackTime(Time.deltaTime);
+                                progress.Report(report);
+                                yield return null;
+                            }
+                        }
+                    }
+
+                    rowState = nextRow;
+                }
+            }
+
+
+            report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
+            report.UpdateTrackTime(Time.deltaTime);
+            progress.Report(report);
+            yield return null;
         }
     }
 }
