@@ -115,22 +115,18 @@ namespace Project.Procedural.MazeGeneration
                     active.Add(neighbor);
 
                     linkedCells.Add(cell);
-                    report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
-                    report.UpdateTrackTime(Time.deltaTime);
-                    progress.Report(report);
-                    yield return null;
                 }
                 else
                 {
                     active.Remove(cell);
                 }
+
+
+                report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
+                report.UpdateTrackTime(Time.deltaTime);
+                progress.Report(report);
+                yield return null;
             }
-
-
-            report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
-            report.UpdateTrackTime(Time.deltaTime);
-            progress.Report(report);
-            yield return null;
         }
     }
 }
