@@ -115,9 +115,8 @@ namespace Project.Procedural.MazeGeneration
             float gridLongestSide = Mathf.Max(grid.Columns, grid.Rows);
 
 
+            List<Cell> completedCells = new(grid.Size());
             GenerationProgressReport report = new();
-            List<Cell> completedCells = new();
-
 
             for (int i = 0; i < grid.Rows; i++)
             {
@@ -145,14 +144,14 @@ namespace Project.Procedural.MazeGeneration
                             DisplayLineImgWithoutInset(cell, cellSize, gridLongestSide);
                         }
 
-                        report.ProgressPercentage = (float)(completedCells.Count * 100 / grid.Size());
+                        report.ProgressPercentage = (float)(completedCells.Count * 100 / grid.Size()) / 100f;
+                        report.UpdateTrackTime(Time.deltaTime);
                         progress.Report(report);
-
                         yield return null;
                     }
                 }
             }
-           
+
 
         }
 

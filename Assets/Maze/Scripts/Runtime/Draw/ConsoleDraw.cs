@@ -27,8 +27,11 @@ namespace Project.Procedural.MazeGeneration
         public IEnumerator DrawAsync(IDrawableGrid<string> grid, IProgress<GenerationProgressReport> progress)
         {
             GenerationProgressReport report = new();
+            report.StartTrackTime();
+
             DrawSync(grid);
             report.ProgressPercentage = 1f;
+            report.StopTrackTime();
             progress.Report(report);
 
             yield return null;
