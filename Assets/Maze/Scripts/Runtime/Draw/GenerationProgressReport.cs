@@ -2,6 +2,7 @@
 /* This class holds the progress status for the current async task.
  * Used to report the progress rate for the drawing of the maze.
  */
+using System;
 using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
@@ -28,6 +29,11 @@ namespace Project.Procedural.MazeGeneration
         public void StopTrackTime()
         {
             TimeElapsed = Time.time - TimeElapsed;
+        }
+
+        internal void UpdateTrackTime(object deltaTime)
+        {
+            throw new NotImplementedException();
         }
     }
 }
