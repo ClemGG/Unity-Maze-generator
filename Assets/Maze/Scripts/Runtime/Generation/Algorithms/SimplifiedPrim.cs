@@ -7,7 +7,7 @@ namespace Project.Procedural.MazeGeneration
     //Unlike the True Prim, the Simplified gives all cells the same cost and chooses neightbors at random.
     public class SimplifiedPrim : IGeneration
     {
-        public void Execute(IGrid grid, Cell start = null)
+        public void ExecuteSync(IGrid grid, Cell start = null)
         {
             start ??= grid.RandomCell();
 

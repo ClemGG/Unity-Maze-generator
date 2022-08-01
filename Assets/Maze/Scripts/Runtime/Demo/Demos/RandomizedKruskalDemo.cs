@@ -10,7 +10,7 @@ namespace Project.Procedural.MazeGeneration
         public override void Generate()
         {
             RandomizedKruskal algorithm = new();
-            algorithm.Execute(Grid);
+            algorithm.ExecuteSync(Grid);
 
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
             Grid.SetDistances(start.GetDistances());

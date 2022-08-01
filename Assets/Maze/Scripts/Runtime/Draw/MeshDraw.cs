@@ -56,6 +56,8 @@ namespace Project.Procedural.MazeGeneration
 
         public IEnumerator DrawAsync(IDrawableGrid<Color> grid, System.IProgress<GenerationProgressReport> progress)
         {
+            GenerationProgressReport report = new();
+
             //We create 1 Mesh for each surface
             //so that none reach the limit of triangles allowed by Unity.
             Mesh[] meshes = new Mesh[4];
@@ -88,6 +90,11 @@ namespace Project.Procedural.MazeGeneration
                 //The Floor & Ceiling meshes do not have a MeshCollider for better performances
                 if (mc != null)
                     mc.sharedMesh = meshes[i];
+
+
+                report.ProgressPercentage = (float)((i+1) * 100 / meshes.Length) / 100f;
+                report.UpdateTrackTime(Time.deltaTime);
+                progress.Report(report);
 
                 yield return null;
             }

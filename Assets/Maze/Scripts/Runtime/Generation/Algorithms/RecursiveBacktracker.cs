@@ -6,7 +6,7 @@ namespace Project.Procedural.MazeGeneration
     public class RecursiveBacktracker : IGeneration
     {
 
-        public void Execute(IGrid grid, Cell startCell = null)
+        public void ExecuteSync(IGrid grid, Cell startCell = null)
         {
             Stack<Cell> stack = new();
             Cell start = startCell ?? grid.RandomCell();

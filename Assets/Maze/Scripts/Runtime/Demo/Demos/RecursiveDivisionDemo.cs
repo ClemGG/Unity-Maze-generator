@@ -18,7 +18,7 @@ namespace Project.Procedural.MazeGeneration
         public override void Generate()
         {
             RecursiveDivision genAlg = new(Settings);
-            genAlg.Execute(Grid);
+            genAlg.ExecuteSync(Grid);
 
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
             Grid.SetDistances(start.GetDistances());

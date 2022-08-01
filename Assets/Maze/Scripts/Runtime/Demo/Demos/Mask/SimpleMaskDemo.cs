@@ -15,7 +15,7 @@ namespace Project.Procedural.MazeGeneration
         public override void Generate()
         {
             RecursiveBacktracker algorithm = new();
-            algorithm.Execute(Grid);
+            algorithm.ExecuteSync(Grid);
         }
     }
 }

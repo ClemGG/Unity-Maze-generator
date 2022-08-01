@@ -19,7 +19,7 @@ namespace Project.Procedural.MazeGeneration
         public override void Generate()
         {
             IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
-            genAlg.Execute(Grid);
+            genAlg.ExecuteSync(Grid);
 
             
 

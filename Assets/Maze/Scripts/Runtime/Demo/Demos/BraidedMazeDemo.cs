@@ -10,7 +10,7 @@ namespace Project.Procedural.MazeGeneration
         public override void Generate()
         {
             RecursiveBacktracker algorithm = new();
-            algorithm.Execute(Grid);
+            algorithm.ExecuteSync(Grid);
             
 
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];

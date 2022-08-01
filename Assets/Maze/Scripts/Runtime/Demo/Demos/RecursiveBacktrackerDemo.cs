@@ -11,7 +11,7 @@ namespace Project.Procedural.MazeGeneration
         {
             RecursiveBacktracker algorithm = new();
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
-            algorithm.Execute(Grid, start);
+            algorithm.ExecuteSync(Grid, start);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Project.Procedural.MazeGeneration
                     //Dynamically creates the generation algorithm
                     Type algType = Type.GetType($"Project.Procedural.MazeGeneration.{algorithm}");
                     IGeneration genAlg = (IGeneration)Activator.CreateInstance(algType, GenerationSettings);
-                    genAlg.Execute(grid);
+                    genAlg.ExecuteSync(grid);
 
                     deadendCounts[i] = grid.GetDeadends().Count;
                 }

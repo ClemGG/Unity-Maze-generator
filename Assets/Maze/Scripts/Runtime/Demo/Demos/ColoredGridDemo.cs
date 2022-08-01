@@ -12,7 +12,7 @@ namespace Project.Procedural.MazeGeneration
         {
             IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
-            genAlg.Execute(Grid);
+            genAlg.ExecuteSync(Grid);
             Grid.SetDistances(start.GetDistances());
         }
 

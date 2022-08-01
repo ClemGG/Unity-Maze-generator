@@ -1,3 +1,4 @@
+using System;
 using Project.Procedural.MazeGeneration;
 using TMPro;
 using UnityEngine;
@@ -32,6 +33,12 @@ public class ProgressVisualizer
 
 
     public void DisplayDrawProgress(GenerationProgressReport progress)
+    {
+        ProgressFill.value = progress.ProgressPercentage;
+        ProgressText.text = $"Rendering completion: {progress.ProgressPercentage * 100f}% ; Time elapsed: {progress.TimeElapsed}s";
+    }
+
+    public void DisplayGenerationProgress(GenerationProgressReport progress)
     {
         ProgressFill.value = progress.ProgressPercentage;
         ProgressText.text = $"Generation completion: {progress.ProgressPercentage * 100f}% ; Time elapsed: {progress.TimeElapsed}s";

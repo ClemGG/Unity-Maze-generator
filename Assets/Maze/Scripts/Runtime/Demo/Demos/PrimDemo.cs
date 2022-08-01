@@ -21,7 +21,7 @@ namespace Project.Procedural.MazeGeneration
 
             SimplifiedPrim algorithm = new();
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
-            algorithm.Execute(Grid, start);
+            algorithm.ExecuteSync(Grid, start);
 
             Grid.SetDistances(start.GetDistances());
 
@@ -36,7 +36,7 @@ namespace Project.Procedural.MazeGeneration
 
             TruePrim algorithm = new();
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
-            algorithm.Execute(Grid, start);
+            algorithm.ExecuteSync(Grid, start);
 
             Grid.SetDistances(start.GetDistances());
 

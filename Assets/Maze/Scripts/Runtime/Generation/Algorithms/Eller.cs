@@ -69,7 +69,7 @@ namespace Project.Procedural.MazeGeneration
 
 
 
-        public void Execute(IGrid grid, Cell start = null)
+        public void ExecuteSync(IGrid grid, Cell start = null)
         {
             RowState rowState = new();
 

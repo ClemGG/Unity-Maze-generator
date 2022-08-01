@@ -16,7 +16,7 @@ namespace Project.Procedural.MazeGeneration
             _houstonSwapPercent = settings.HoustonSwapPercent;
         }
 
-        public void Execute(IGrid grid, Cell start = null)
+        public void ExecuteSync(IGrid grid, Cell start = null)
         {
             List<Cell> unvisited = new(grid.Size());
             foreach (Cell c in grid.EachCell())

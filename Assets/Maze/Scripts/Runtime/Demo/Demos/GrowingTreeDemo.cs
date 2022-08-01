@@ -12,7 +12,7 @@ namespace Project.Procedural.MazeGeneration
             GrowingTree algorithm = new(Settings);
 
             Cell start = Grid.RandomCell();
-            algorithm.Execute(Grid, start);
+            algorithm.ExecuteSync(Grid, start);
             Grid.SetDistances(start.GetDistances());
         }
     }

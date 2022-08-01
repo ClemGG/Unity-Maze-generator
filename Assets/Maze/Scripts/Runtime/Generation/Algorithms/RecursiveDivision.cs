@@ -17,7 +17,7 @@ namespace Project.Procedural.MazeGeneration
         }
 
 
-        public void Execute(IGrid grid, Cell start = null)
+        public void ExecuteSync(IGrid grid, Cell start = null)
         {
 
             //Links all cells together to create an empty maze

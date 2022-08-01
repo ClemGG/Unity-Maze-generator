@@ -12,7 +12,7 @@ namespace Project.Procedural.MazeGeneration
         {
             IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
             Cell start = Grid[0, 0];
-            genAlg.Execute(Grid, start);
+            genAlg.ExecuteSync(Grid, start);
 
             //This wil draw all the possible paths from this cell
             DrawMethod = new ConsoleDraw();

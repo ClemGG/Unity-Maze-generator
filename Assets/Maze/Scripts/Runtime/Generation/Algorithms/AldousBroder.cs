@@ -8,7 +8,7 @@ namespace Project.Procedural.MazeGeneration
     //so it's best to use it in a small maze.
     public class AldousBroder : IGeneration
     {
-        public void Execute(IGrid grid, Cell start = null)
+        public void ExecuteSync(IGrid grid, Cell start = null)
         {
             Cell cell = start ?? grid.RandomCell();
             int unvisited = grid.Size() - 1;

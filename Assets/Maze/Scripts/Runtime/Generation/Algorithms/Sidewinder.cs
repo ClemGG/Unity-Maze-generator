@@ -9,7 +9,7 @@ namespace Project.Procedural.MazeGeneration
 
     public class Sidewinder : IGeneration
     {
-        public void Execute(IGrid grid, Cell start = null)
+        public void ExecuteSync(IGrid grid, Cell start = null)
         {
             foreach (Cell[] row in grid.EachRow())
             {

@@ -20,7 +20,7 @@ namespace Project.Procedural.MazeGeneration
         {
             Cell start = Grid[1, 1];
             RecursiveBacktracker algorithm = new();
-            algorithm.Execute(Grid, start);
+            algorithm.ExecuteSync(Grid, start);
 
             Grid.SetDistances(start.GetDistances());
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
@@ -27,14 +28,20 @@ namespace Project.Procedural.MazeGeneration
             if (Application.isPlaying)
             {
                 StopAllCoroutines();
-                SetupGrid();
-                Generate();
-                DrawAsync();
+                StartCoroutine(ExecuteAsyncCo());
             }
             else
             {
                 Debug.LogError("Error : Execute Async can only be used in Play mode or in a build.");
             }
+            
+        }
+
+        private IEnumerator ExecuteAsyncCo()
+        {
+            SetupGrid();
+            yield return GenerateAsync();
+            DrawAsync();
         }
 
 
@@ -46,8 +53,23 @@ namespace Project.Procedural.MazeGeneration
         public override void Generate()
         {
             IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
-            genAlg.Execute(Grid);
+            genAlg.ExecuteSync(Grid);
+            Grid.Braid();
 
+            Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
+            Grid.SetDistances(start.GetDistances());
+
+        }
+        
+        
+        public IEnumerator GenerateAsync()
+        {
+            IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
+
+            Progress = new();
+            Progress.ProgressChanged += OnGenerationProgressChanged;
+            yield return StartCoroutine(genAlg.ExecuteAsync(Grid, Progress));
+            Grid.Braid();
 
             Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
             Grid.SetDistances(start.GetDistances());
@@ -68,7 +90,16 @@ namespace Project.Procedural.MazeGeneration
         private void OnDrawProgressChanged(object sender, GenerationProgressReport e)
         {
             ProgressVisualizer.DisplayDrawProgress(e);
-            if(Mathf.Approximately(e.ProgressPercentage, 1f))
+            if (Mathf.Approximately(e.ProgressPercentage, 1f))
+            {
+                OnProgressDone();
+            }
+        }
+
+        private void OnGenerationProgressChanged(object sender, GenerationProgressReport e)
+        {
+            ProgressVisualizer.DisplayGenerationProgress(e);
+            if (Mathf.Approximately(e.ProgressPercentage, 1f))
             {
                 OnProgressDone();
             }
@@ -76,6 +107,7 @@ namespace Project.Procedural.MazeGeneration
 
         private void OnProgressDone()
         {
+            Progress.ProgressChanged -= OnGenerationProgressChanged;
             Progress.ProgressChanged -= OnDrawProgressChanged;
         }
     }
