@@ -1,4 +1,7 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
@@ -80,6 +83,33 @@ namespace Project.Procedural.MazeGeneration
                 {
                     state.Merge(pair[0], pair[1]);
                 }
+            }
+        }
+
+
+
+        public IEnumerator ExecuteAsync(IGrid grid, IProgress<GenerationProgressReport> progress, Cell start = null)
+        {
+            GenerationProgressReport report = new();
+            List<Cell> linkedCells = new();
+
+            State state = new(grid);
+
+            List<Cell[]> shuffledNeighbors = state.Neighbors.Shuffle();
+            int count = shuffledNeighbors.Count;
+            while (shuffledNeighbors.Count > 0)
+            {
+                Cell[] pair = shuffledNeighbors[shuffledNeighbors.Count - 1];
+                shuffledNeighbors.Remove(pair);
+
+                if (state.CanMerge(pair[0], pair[1]))
+                {
+                    state.Merge(pair[0], pair[1]);
+                }
+                report.ProgressPercentage = (float)((count - shuffledNeighbors.Count) * 100 / grid.Size()) / 100f;
+                report.UpdateTrackTime(Time.deltaTime);
+                progress.Report(report);
+                yield return null;
             }
         }
     }
