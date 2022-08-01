@@ -50,8 +50,9 @@ namespace Project.Procedural.MazeGeneration
 
         private void OnValidate()
         {
-            GridSize = new(Mathf.Clamp(GridSize.x, 1, 100), Mathf.Clamp(GridSize.y, 1, 100));
-            RoomSize = new(Mathf.Clamp(RoomSize.x, 1, 100), Mathf.Clamp(RoomSize.y, 1, 100));
+            //Above 30, we start to see slowdows because of the UI instantiation
+            GridSize = new(Mathf.Clamp(GridSize.x, 1, 30), Mathf.Clamp(GridSize.y, 1, 30));
+            RoomSize = new(Mathf.Clamp(RoomSize.x, 1, 30), Mathf.Clamp(RoomSize.y, 1, 30));
         }
 
 #endif

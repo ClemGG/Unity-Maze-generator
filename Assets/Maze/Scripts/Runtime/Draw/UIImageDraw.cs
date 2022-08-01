@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Project.Pool;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,13 +9,6 @@ namespace Project.Procedural.MazeGeneration
     {
 
         #region UI Fields
-
-        //No need to clean the pooler, we recreate it before each generation
-        private readonly ClassPooler<GameObject> UIImagePooler = new
-            (
-                new Pool<GameObject>("cell ui img", 10000, () => Object.Instantiate(Resources.Load<GameObject>("Maze Prefabs/cell ui img"))),
-                new Pool<GameObject>("line ui img", 40000, () => Object.Instantiate(Resources.Load<GameObject>("Maze Prefabs/line ui img")))
-            );
 
         private static Canvas _canvas;
         private static RectTransform _bg;
@@ -67,7 +59,7 @@ namespace Project.Procedural.MazeGeneration
 
 
         private float _inset = 0f;
-
+        private bool _async = false;
 
         #endregion
 
@@ -101,12 +93,15 @@ namespace Project.Procedural.MazeGeneration
             {
                 Object.DestroyImmediate(children[i].gameObject);
             }
+
         }
 
 
         public IEnumerator DrawAsync(IDrawableGrid<Color> grid, System.IProgress<GenerationProgressReport> progress)
         {
+            _async = true;
             Cleanup();
+
 
             float cellSize = Mathf.Min(Bg.rect.width / grid.Columns, Bg.rect.height / grid.Rows);
             _inset = cellSize * _inset;
@@ -153,12 +148,26 @@ namespace Project.Procedural.MazeGeneration
                 }
             }
 
+            //Displays the objects on screen
+            int nbCells = Tiles.childCount;
+            int nbLines = Lines.childCount;
+            for (int i = 0; i < nbCells; i++)
+            {
+                Tiles.GetChild(i).gameObject.SetActive(true);
+            }
+            for (int i = 0; i < nbLines; i++)
+            {
+                Lines.GetChild(i).gameObject.SetActive(true);
+
+            }
 
         }
 
 
         public void DrawSync(IDrawableGrid<Color> grid)
         {
+            _async = false;
+
             Cleanup();
 
             float cellSize = Mathf.Min(Bg.rect.width / grid.Columns, Bg.rect.height / grid.Rows);
@@ -413,9 +422,8 @@ namespace Project.Procedural.MazeGeneration
 
         private void DrawCell(Vector2 size, Vector3 anchoredPos, Color col)
         {
-            RectTransform cellImg = UIImagePooler.GetFromPool<GameObject>("cell ui img").GetComponent<RectTransform>();
+            RectTransform cellImg = MazePrefabs.UIImagePooler.GetFromPool<GameObject>("cell ui img").GetComponent<RectTransform>();
             cellImg.SetParent(Tiles);
-            cellImg.gameObject.SetActive(true);
 
             cellImg.pivot = cellImg.anchorMin = cellImg.anchorMax = new Vector2(0f, 1f);
             cellImg.anchoredPosition = anchoredPos;
@@ -425,13 +433,13 @@ namespace Project.Procedural.MazeGeneration
             cellImg.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
 
             cellImg.GetComponent<Image>().color = col;
+            cellImg.gameObject.SetActive(!_async);
         }
 
         private void DrawLine(Vector2 anchor, Vector2 pivot, Vector2 size, Vector3 anchoredPos)
         {
-            RectTransform line = UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
+            RectTransform line = MazePrefabs.UIImagePooler.GetFromPool<GameObject>("line ui img").GetComponent<RectTransform>();
             line.SetParent(Lines);
-            line.gameObject.SetActive(true);
 
             line.anchorMin = line.anchorMax = anchor;
             line.pivot = pivot;
@@ -440,6 +448,7 @@ namespace Project.Procedural.MazeGeneration
 
             line.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
             line.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+            line.gameObject.SetActive(!_async);
         }
     }
 }

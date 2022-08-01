@@ -9,7 +9,7 @@ namespace Project.Procedural.MazeGeneration
         public IDrawableGrid Grid { get; set; }
         public IDrawMethod DrawMethod { get; set; }
 
-        [ContextMenu("Cleanup")]
+        [ContextMenu("Cleanup Sync")]
         public void Cleanup()
         {
             if(DrawMethod is not null)
@@ -19,7 +19,7 @@ namespace Project.Procedural.MazeGeneration
         }
 
 
-        [ContextMenu("Execute Generation Algorithm")]
+        [ContextMenu("Execute Sync")]
         public void Execute()
         {
             SetupGrid();
