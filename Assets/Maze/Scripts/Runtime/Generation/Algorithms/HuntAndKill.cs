@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -63,6 +64,72 @@ namespace Project.Procedural.MazeGeneration
                 }
 
                
+            }
+        }
+
+
+        public IEnumerator ExecuteAsync(IGrid grid, IProgress<GenerationProgressReport> progress, Cell start = null)
+        {
+            GenerationProgressReport report = new();
+            List<Cell> linkedCells = new();
+
+            Cell current = start ?? grid.RandomCell();
+
+            while (current is not null)
+            {
+                List<Cell> unvisitedCells = new();
+                for (int i = 0; i < current.Neighbors.Count; i++)
+                {
+                    Cell unvNeighbor = current.Neighbors[i];
+                    if (unvNeighbor.Links.Count == 0)
+                    {
+                        unvisitedCells.Add(unvNeighbor);
+                    }
+                }
+
+                if (unvisitedCells.Count > 0)
+                {
+                    Cell neighbor = unvisitedCells.Sample();
+                    current.Link(neighbor);
+                    current = neighbor;
+
+                    linkedCells.Add(current);
+                }
+                else
+                {
+                    current = null;
+
+                    foreach (Cell cell in grid.EachCell())
+                    {
+                        if (cell is null) continue;
+
+                        List<Cell> visitedCells = new();
+                        for (int i = 0; i < cell.Neighbors.Count; i++)
+                        {
+                            Cell vNeighbor = cell.Neighbors[i];
+                            if (vNeighbor.Links.Count > 0)
+                            {
+                                visitedCells.Add(vNeighbor);
+                            }
+                        }
+
+                        if (cell.Links.Count == 0 && visitedCells.Count > 0)
+                        {
+                            current = cell;
+                            Cell neighbor = visitedCells.Sample();
+                            current.Link(neighbor);
+                            linkedCells.Add(current);
+                            break;
+                        }
+                    }
+                }
+
+
+
+                report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
+                report.UpdateTrackTime(Time.deltaTime);
+                progress.Report(report);
+                yield return null;
             }
         }
     }
