@@ -1,46 +1,45 @@
+using Project.Procedural.MazeGeneration;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Project.Procedural.MazeGeneration
+
+public class ProgressVisualizer
 {
-    public class ProgressVisualizer
+    #region UI Fields
+    private static Slider _progressFill;
+    private static TextMeshProUGUI _progressText;
+
+    private static Slider ProgressFill
     {
-        #region UI Fields
-        private static Slider _progressFill;
-        private static TextMeshProUGUI _progressText;
-
-        private static Slider ProgressFill
+        get
         {
-            get
-            {
-                if (!_progressFill) _progressFill = GameObject.Find("progress bar").GetComponent<Slider>();
-                return _progressFill;
-            }
+            if (!_progressFill) _progressFill = GameObject.Find("progress bar").GetComponent<Slider>();
+            return _progressFill;
         }
-        private static TextMeshProUGUI ProgressText
+    }
+    private static TextMeshProUGUI ProgressText
+    {
+        get
         {
-            get
-            {
-                if (!_progressText) _progressText = GameObject.Find("progress text").GetComponent<TextMeshProUGUI>();
-                return _progressText;
-            }
+            if (!_progressText) _progressText = GameObject.Find("progress text").GetComponent<TextMeshProUGUI>();
+            return _progressText;
         }
+    }
 
-        #endregion
+    #endregion
 
 
 
-        public void DisplayProgress(GenerationProgressReport progress)
-        {
-            ProgressFill.value = progress.ProgressPercentage;
-            ProgressText.text = $"Generation completion: {progress.ProgressPercentage * 100f}% ; Time elapsed: {progress.TimeElapsed}s";
-        }
+    public void DisplayDrawProgress(GenerationProgressReport progress)
+    {
+        ProgressFill.value = progress.ProgressPercentage;
+        ProgressText.text = $"Generation completion: {progress.ProgressPercentage * 100f}% ; Time elapsed: {progress.TimeElapsed}s";
+    }
 
-        public void Cleanup()
-        {
-            ProgressFill.value = 0f;
-            ProgressText.text = "";
-        }
+    public void Cleanup()
+    {
+        ProgressFill.value = 0f;
+        ProgressText.text = "";
     }
 }

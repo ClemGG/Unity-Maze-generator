@@ -118,6 +118,7 @@ namespace Project.Procedural.MazeGeneration
             List<Cell> completedCells = new(grid.Size());
             GenerationProgressReport report = new();
 
+
             for (int i = 0; i < grid.Rows; i++)
             {
                 for (int j = 0; j < grid.Columns; j++)
