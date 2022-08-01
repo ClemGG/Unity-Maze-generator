@@ -92,7 +92,7 @@ namespace Project.Procedural.MazeGeneration
             ProgressVisualizer.DisplayDrawProgress(e);
             if (Mathf.Approximately(e.ProgressPercentage, 1f))
             {
-                OnProgressDone();
+                OnDrawProgressDone();
             }
         }
 
@@ -101,14 +101,22 @@ namespace Project.Procedural.MazeGeneration
             ProgressVisualizer.DisplayGenerationProgress(e);
             if (Mathf.Approximately(e.ProgressPercentage, 1f))
             {
-                OnProgressDone();
+                OnGenerationProgressDone();
             }
         }
 
         private void OnProgressDone()
         {
-            Progress.ProgressChanged -= OnGenerationProgressChanged;
+            OnDrawProgressDone();
+            OnGenerationProgressDone();
+        }
+        private void OnDrawProgressDone()
+        {
             Progress.ProgressChanged -= OnDrawProgressChanged;
+        }
+        private void OnGenerationProgressDone()
+        {
+            Progress.ProgressChanged -= OnGenerationProgressChanged;
         }
     }
 }

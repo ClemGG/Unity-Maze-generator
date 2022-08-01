@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Project.Procedural.MazeGeneration
 {
@@ -58,6 +60,44 @@ namespace Project.Procedural.MazeGeneration
                 {
                     active.Remove(cell);
                 }
+            }
+        }
+
+
+
+
+
+        public IEnumerator ExecuteAsync(IGrid grid, IProgress<GenerationProgressReport> progress, Cell start = null)
+        {
+            GenerationProgressReport report = new();
+            List<Cell> linkedCells = new();
+
+            start ??= grid.RandomCell();
+            List<Cell> active = new() { start };
+
+            while (active.Any())
+            {
+                Cell cell = Lambda.Invoke(active);
+                Cell[] availableNeighbors = cell.Neighbors.Where(n => n.Links.Count == 0).ToArray();
+
+                if (availableNeighbors.Any())
+                {
+                    Cell neighbor = availableNeighbors.Sample();
+
+                    cell.Link(neighbor);
+                    active.Add(neighbor);
+
+                    linkedCells.Add(cell);
+                }
+                else
+                {
+                    active.Remove(cell);
+                }
+
+                report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
+                report.UpdateTrackTime(Time.deltaTime);
+                progress.Report(report);
+                yield return null;
             }
         }
     }
