@@ -22,6 +22,6 @@ MonoBehaviour:
   <Inset>k__BackingField: 0
   <BraidRate>k__BackingField: 0
   <HoustonSwapPercent>k__BackingField: 0.25
-  <ImageMask>k__BackingField: {fileID: 2800000, guid: 91822a5881ac70d40b7c74e8ec29ab3e, type: 3}
+  <ImageMask>k__BackingField: {fileID: 0}
   <AsciiMask>k__BackingField: {fileID: 0}
   <Extension>k__BackingField: .png

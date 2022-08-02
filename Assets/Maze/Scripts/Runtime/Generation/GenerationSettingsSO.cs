@@ -6,7 +6,7 @@ namespace Project.Procedural.MazeGeneration
     public class GenerationSettingsSO : ScriptableObject
     {
 
-        [field: SerializeField] public DrawMode DrawMode { get; private set; } = DrawMode.Console;
+        [field: SerializeField] public DrawMode DrawMode { get; set; } = DrawMode.Console;
 
         [field: SerializeField] public GenerationType GenerationType { get; private set; } = GenerationType.BinaryTree;
 
