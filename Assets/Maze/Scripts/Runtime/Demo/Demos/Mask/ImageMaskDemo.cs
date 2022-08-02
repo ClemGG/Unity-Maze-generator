@@ -5,22 +5,24 @@ namespace Project.Procedural.MazeGeneration
 
         public override void SetupGrid()
         {
-            if (Settings.ImageAsset is null)
+            if (Settings.ImageMask is null)
             {
                 throw new("Error : The text file is missing.");
             }
 
-            Mask m = Mask.FromImgFile(Settings.ImageAsset, Settings.Extension);
+            Mask m = Mask.FromImgFile(Settings.ImageMask, Settings.Extension);
 
-            Grid = new MaskedGrid(Settings);
-            (Grid as MaskedGrid).SetMask(m);
+            Grid = new MaskedGrid(m);
         }
 
         public override void Generate()
         {
             RecursiveBacktracker algorithm = new();
             algorithm.ExecuteSync(Grid);
-            
+
+            Cell start = Grid.RandomCell();
+            Grid.SetDistances(start.GetDistances());
+
         }
 
     }

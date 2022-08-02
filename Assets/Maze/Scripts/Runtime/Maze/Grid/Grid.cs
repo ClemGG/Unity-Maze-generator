@@ -6,8 +6,8 @@ namespace Project.Procedural.MazeGeneration
 {
     public abstract class Grid : IGrid
     {
-        public int Rows { get; }
-        public int Columns { get; }
+        public int Rows { get; protected set; }
+        public int Columns { get; protected set; }
         public float BraidRate { get; } = 0f;
 
 
@@ -55,7 +55,7 @@ namespace Project.Procedural.MazeGeneration
             }
         }
 
-        protected virtual void PrepareGrid()
+        public virtual void PrepareGrid()
         {
             _grid = new Cell[Rows][];
 
@@ -70,7 +70,7 @@ namespace Project.Procedural.MazeGeneration
 
         }
 
-        protected virtual void ConfigureCells()
+        public virtual void ConfigureCells()
         {
             for(int i = 0; i < Rows; i++)
             {

@@ -12,7 +12,7 @@ namespace Project.Procedural.MazeGeneration
     public class GrowingTree : IGeneration
     {
         private Func<List<Cell>, Cell> Lambda { get; }
-
+        public GenerationProgressReport Report { get; set; } = new();
 
         public GrowingTree(GenerationSettingsSO generationSettings)
         {
@@ -69,7 +69,7 @@ namespace Project.Procedural.MazeGeneration
 
         public IEnumerator ExecuteAsync(IGrid grid, IProgress<GenerationProgressReport> progress, Cell start = null)
         {
-            GenerationProgressReport report = new();
+            
             List<Cell> linkedCells = new();
 
             start ??= grid.RandomCell();
@@ -94,9 +94,9 @@ namespace Project.Procedural.MazeGeneration
                     active.Remove(cell);
                 }
 
-                report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
-                report.UpdateTrackTime(Time.deltaTime);
-                progress.Report(report);
+                Report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
+                Report.UpdateTrackTime(Time.deltaTime);
+                progress.Report(Report);
                 yield return null;
             }
         }

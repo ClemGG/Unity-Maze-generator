@@ -13,6 +13,9 @@ namespace Project.Procedural.MazeGeneration
         Cell RandomCell();
         Cell this[int row, int column] { get; }
 
+        void PrepareGrid();
+        void ConfigureCells();
+
         IEnumerable<Cell[]> EachRow();
         IEnumerable<Cell> EachCell();
 
@@ -48,5 +51,11 @@ namespace Project.Procedural.MazeGeneration
         //(like colored Tiles or chars)
         object IDrawableGrid.Draw(Cell cell) => Draw(cell);
         T Draw(Cell cell);
+    }
+
+
+    public interface IMaskable : IGrid
+    {
+        Mask Mask { get; set; }
     }
 }

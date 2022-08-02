@@ -38,7 +38,7 @@ namespace Project.Procedural.MazeGeneration
         [field: SerializeField, Range(0f, 1f)] public float HoustonSwapPercent { get; private set; } = .5f;
 
         [field: Tooltip("The Texture to use for masking the grid's cells.")]
-        [field: SerializeField] public Texture2D ImageAsset { get; private set; }
+        [field: SerializeField] public Texture2D ImageMask { get; private set; }
 
         [field: Tooltip("The txt file to use for masking the grid's cells.")]
         [field: SerializeField] public TextAsset AsciiMask { get; private set; }

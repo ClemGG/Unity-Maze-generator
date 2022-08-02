@@ -145,7 +145,7 @@ namespace Project.Procedural.MazeGeneration
             do
             {
                 int randX = Rows.Sample();
-                int randY = Rows.Sample();
+                int randY = Columns.Sample();
 
                 if (Bits[randX][randY])
                 {

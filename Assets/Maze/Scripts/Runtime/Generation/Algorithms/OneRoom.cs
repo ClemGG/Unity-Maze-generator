@@ -5,6 +5,8 @@ namespace Project.Procedural.MazeGeneration
 {
     public class OneRoom : IGeneration
     {
+        public GenerationProgressReport Report { get; set; } = new();
+
         public void ExecuteSync(IGrid grid, Cell start = null)
         {
             grid.LinkAll();
@@ -13,14 +15,14 @@ namespace Project.Procedural.MazeGeneration
 
         public IEnumerator ExecuteAsync(IGrid grid, IProgress<GenerationProgressReport> progress, Cell start = null)
         {
-            GenerationProgressReport report = new();
-            report.StartTrackTime();
+            
+            Report.StartTrackTime();
 
             grid.LinkAll();
 
-            report.StopTrackTime();
-            report.ProgressPercentage = 1f;
-            progress.Report(report);
+            Report.StopTrackTime();
+            Report.ProgressPercentage = 1f;
+            progress.Report(Report);
             yield return null;
         }
     }

@@ -63,6 +63,7 @@ namespace Project.Procedural.MazeGeneration
 
         #endregion
 
+        public GenerationProgressReport Report { get; set; } = new();
 
         public UIImageDraw(GenerationSettingsSO settings)
         {
@@ -102,7 +103,6 @@ namespace Project.Procedural.MazeGeneration
             _async = true;
             Cleanup();
 
-
             float cellSize = Mathf.Min(Bg.rect.width / grid.Columns, Bg.rect.height / grid.Rows);
             _inset = cellSize * _inset;
 
@@ -111,7 +111,6 @@ namespace Project.Procedural.MazeGeneration
 
 
             List<Cell> completedCells = new(grid.Size());
-            GenerationProgressReport report = new();
 
 
             for (int i = 0; i < grid.Rows; i++)
@@ -140,9 +139,9 @@ namespace Project.Procedural.MazeGeneration
                             DisplayLineImgWithoutInset(cell, cellSize, gridLongestSide);
                         }
 
-                        report.ProgressPercentage = (float)(completedCells.Count * 100 / grid.Size()) / 100f;
-                        report.UpdateTrackTime(Time.deltaTime);
-                        progress.Report(report);
+                        Report.ProgressPercentage = (float)(completedCells.Count * 100 / grid.Size()) / 100f;
+                        Report.UpdateTrackTime(Time.deltaTime);
+                        progress.Report(Report);
                         yield return null;
                     }
                 }
@@ -169,6 +168,7 @@ namespace Project.Procedural.MazeGeneration
             _async = false;
 
             Cleanup();
+
 
             float cellSize = Mathf.Min(Bg.rect.width / grid.Columns, Bg.rect.height / grid.Rows);
             _inset = cellSize * _inset;

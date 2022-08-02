@@ -12,7 +12,12 @@ namespace Project.Procedural.MazeGeneration
         //From 0 to 1
         public float ProgressPercentage { get; set; } = 0f;
         public float TimeElapsed { get; set; } = 0f;
+        private string ReportName { get; set; } = "Algorithm"; //Don't forget to assign this
 
+        public GenerationProgressReport(string reportName = "Algorithm")
+        {
+            ReportName = reportName;
+        }
 
 
         public void UpdateTrackTime(float frameDuration = 0f)
@@ -31,9 +36,11 @@ namespace Project.Procedural.MazeGeneration
             TimeElapsed = Time.time - TimeElapsed;
         }
 
-        internal void UpdateTrackTime(object deltaTime)
+
+        public override string ToString()
         {
-            throw new NotImplementedException();
+            Debug.Log(ReportName);
+            return string.Format($"{ReportName} completion: {ProgressPercentage * 100f}%; Time elapsed: {TimeElapsed:0.00}s");
         }
     }
 }

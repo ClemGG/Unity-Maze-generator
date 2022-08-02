@@ -5,6 +5,8 @@ namespace Project.Procedural.MazeGeneration
 {
     public interface IDrawMethod
     {
+        GenerationProgressReport Report { get; set; }
+
         void DrawSync(IDrawableGrid grid);
 
         /* Not really async, since it uses Coroutines.

@@ -10,6 +10,8 @@ namespace Project.Procedural.MazeGeneration
     //Unlike the True Prim, the Simplified gives all cells the same cost and chooses neightbors at random.
     public class SimplifiedPrim : IGeneration
     {
+        public GenerationProgressReport Report { get; set; } = new();
+
         public void ExecuteSync(IGrid grid, Cell start = null)
         {
             start ??= grid.RandomCell();
@@ -37,7 +39,7 @@ namespace Project.Procedural.MazeGeneration
 
         public IEnumerator ExecuteAsync(IGrid grid, IProgress<GenerationProgressReport> progress, Cell start = null)
         {
-            GenerationProgressReport report = new();
+            
             List<Cell> linkedCells = new();
 
             start ??= grid.RandomCell();
@@ -62,9 +64,9 @@ namespace Project.Procedural.MazeGeneration
                     active.Remove(cell);
                 }
 
-                report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
-                report.UpdateTrackTime(Time.deltaTime);
-                progress.Report(report);
+                Report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
+                Report.UpdateTrackTime(Time.deltaTime);
+                progress.Report(Report);
                 yield return null;
             }
         }

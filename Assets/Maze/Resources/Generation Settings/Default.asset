@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Default
   m_EditorClassIdentifier: 
   <DrawMode>k__BackingField: 1
-  <GenerationType>k__BackingField: 12
-  <GridSize>k__BackingField: {x: 15, y: 15}
+  <GenerationType>k__BackingField: 8
+  <GridSize>k__BackingField: {x: 30, y: 30}
   <MeshCellSize>k__BackingField: {x: 5, y: 5}
   <RoomSize>k__BackingField: {x: 5, y: 5}
-  <BiasTowardsRooms>k__BackingField: 0
+  <BiasTowardsRooms>k__BackingField: 1
   <LambdaSelection>k__BackingField: 2
   <Inset>k__BackingField: 0
   <BraidRate>k__BackingField: 0
   <HoustonSwapPercent>k__BackingField: 0.25
-  <ImageAsset>k__BackingField: {fileID: 0}
+  <ImageMask>k__BackingField: {fileID: 2800000, guid: 91822a5881ac70d40b7c74e8ec29ab3e, type: 3}
   <AsciiMask>k__BackingField: {fileID: 0}
   <Extension>k__BackingField: .png

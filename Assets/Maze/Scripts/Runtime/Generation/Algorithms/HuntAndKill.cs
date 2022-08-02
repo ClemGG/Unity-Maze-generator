@@ -13,6 +13,8 @@ namespace Project.Procedural.MazeGeneration
     //to a previously visited neighboring cell.
     public class HuntAndKill : IGeneration
     {
+        public GenerationProgressReport Report { get; set; } = new();
+
         public void ExecuteSync(IGrid grid, Cell start = null)
         {
             Cell current = start ?? grid.RandomCell();
@@ -70,7 +72,7 @@ namespace Project.Procedural.MazeGeneration
 
         public IEnumerator ExecuteAsync(IGrid grid, IProgress<GenerationProgressReport> progress, Cell start = null)
         {
-            GenerationProgressReport report = new();
+            
             List<Cell> linkedCells = new();
 
             Cell current = start ?? grid.RandomCell();
@@ -126,9 +128,9 @@ namespace Project.Procedural.MazeGeneration
 
 
 
-                report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
-                report.UpdateTrackTime(Time.deltaTime);
-                progress.Report(report);
+                Report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
+                Report.UpdateTrackTime(Time.deltaTime);
+                progress.Report(Report);
                 yield return null;
             }
         }

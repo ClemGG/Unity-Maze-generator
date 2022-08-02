@@ -12,6 +12,8 @@ namespace Project.Procedural.MazeGeneration
     //have been visited, and then switches to Wilson's.
     public class Houston : IGeneration
     {
+        public GenerationProgressReport Report { get; set; } = new();
+
         private readonly float _houstonSwapPercent = .5f;
 
         public Houston(GenerationSettingsSO settings)
@@ -88,7 +90,7 @@ namespace Project.Procedural.MazeGeneration
 
         public IEnumerator ExecuteAsync(IGrid grid, IProgress<GenerationProgressReport> progress, Cell start = null)
         {
-            GenerationProgressReport report = new();
+            
 
             List<Cell> unvisited = new(grid.Size());
             foreach (Cell c in grid.EachCell())
@@ -149,9 +151,9 @@ namespace Project.Procedural.MazeGeneration
                     }
                 }
 
-                report.ProgressPercentage = (float)((grid.Size() - unvisited.Count) * 100 / grid.Size()) / 100f;
-                report.UpdateTrackTime(Time.deltaTime);
-                progress.Report(report);
+                Report.ProgressPercentage = (float)((grid.Size() - unvisited.Count) * 100 / grid.Size()) / 100f;
+                Report.UpdateTrackTime(Time.deltaTime);
+                progress.Report(Report);
                 yield return null;
             }
         }

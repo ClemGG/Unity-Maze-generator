@@ -10,6 +10,8 @@ namespace Project.Procedural.MazeGeneration
     //then selects the cells with the lowest cost.
     public class TruePrim : IGeneration
     {
+        public GenerationProgressReport Report { get; set; } = new();
+
         public void ExecuteSync(IGrid grid, Cell start = null)
         {
             start ??= grid.RandomCell();
@@ -67,7 +69,7 @@ namespace Project.Procedural.MazeGeneration
 
         public IEnumerator ExecuteAsync(IGrid grid, IProgress<GenerationProgressReport> progress, Cell start = null)
         {
-            GenerationProgressReport report = new();
+            
             List<Cell> linkedCells = new();
 
             start ??= grid.RandomCell();
@@ -122,9 +124,9 @@ namespace Project.Procedural.MazeGeneration
                 }
 
 
-                report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
-                report.UpdateTrackTime(Time.deltaTime);
-                progress.Report(report);
+                Report.ProgressPercentage = (float)(linkedCells.Count * 100 / grid.Size()) / 100f;
+                Report.UpdateTrackTime(Time.deltaTime);
+                progress.Report(Report);
                 yield return null;
             }
         }

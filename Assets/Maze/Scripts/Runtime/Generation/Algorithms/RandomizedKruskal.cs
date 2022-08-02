@@ -9,6 +9,8 @@ namespace Project.Procedural.MazeGeneration
     //on the grid in their own set.
     public class RandomizedKruskal : IGeneration
     {
+        public GenerationProgressReport Report { get; set; } = new();
+
         private class State
         {
             public List<Cell[]> Neighbors { get; }
@@ -90,7 +92,7 @@ namespace Project.Procedural.MazeGeneration
 
         public IEnumerator ExecuteAsync(IGrid grid, IProgress<GenerationProgressReport> progress, Cell start = null)
         {
-            GenerationProgressReport report = new();
+            
             List<Cell> linkedCells = new();
 
             State state = new(grid);
@@ -106,9 +108,9 @@ namespace Project.Procedural.MazeGeneration
                 {
                     state.Merge(pair[0], pair[1]);
                 }
-                report.ProgressPercentage = (float)((count - shuffledNeighbors.Count) * 100 / grid.Size()) / 100f;
-                report.UpdateTrackTime(Time.deltaTime);
-                progress.Report(report);
+                Report.ProgressPercentage = (float)((count - shuffledNeighbors.Count) * 100 / grid.Size()) / 100f;
+                Report.UpdateTrackTime(Time.deltaTime);
+                progress.Report(Report);
                 yield return null;
             }
         }

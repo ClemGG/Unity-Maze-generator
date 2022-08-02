@@ -29,6 +29,7 @@ namespace Project.Procedural.MazeGeneration
 
         #endregion
 
+        public GenerationProgressReport Report { get; set; } = new();
 
         public MeshDraw(GenerationSettingsSO settings)
         {
@@ -56,8 +57,6 @@ namespace Project.Procedural.MazeGeneration
 
         public IEnumerator DrawAsync(IDrawableGrid<Color> grid, System.IProgress<GenerationProgressReport> progress)
         {
-            GenerationProgressReport report = new();
-
             //We create 1 Mesh for each surface
             //so that none reach the limit of triangles allowed by Unity.
             Mesh[] meshes = new Mesh[4];
@@ -92,9 +91,9 @@ namespace Project.Procedural.MazeGeneration
                     mc.sharedMesh = meshes[i];
 
 
-                report.ProgressPercentage = (float)((i+1) * 100 / meshes.Length) / 100f;
-                report.UpdateTrackTime(Time.deltaTime);
-                progress.Report(report);
+                Report.ProgressPercentage = (float)((i+1) * 100 / meshes.Length) / 100f;
+                Report.UpdateTrackTime(Time.deltaTime);
+                progress.Report(Report);
 
                 yield return null;
             }

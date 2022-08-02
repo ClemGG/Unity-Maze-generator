@@ -4,15 +4,14 @@ namespace Project.Procedural.MazeGeneration
     {
         public override void SetupGrid()
         {
-            if (Settings.ImageAsset == null)
+            if (Settings.ImageMask == null)
             {
                 Grid = new ColoredGrid(Settings);
             }
             else
             {
-                Mask m = Mask.FromImgFile(Settings.ImageAsset, Settings.Extension);
-                Grid = new MaskedGrid(m.Rows, m.Columns);
-                (Grid as MaskedGrid).SetMask(m);
+                Mask m = Mask.FromImgFile(Settings.ImageMask, Settings.Extension);
+                Grid = new MaskedGrid(m);
             }
         }
 

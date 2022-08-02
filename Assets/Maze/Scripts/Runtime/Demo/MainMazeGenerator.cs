@@ -47,7 +47,20 @@ namespace Project.Procedural.MazeGeneration
 
         public override void SetupGrid()
         {
-            Grid = Settings.DrawMode == DrawMode.Console ? new DistanceGrid(Settings) : new ColoredGrid(Settings);
+            if (Settings.AsciiMask || Settings.ImageMask)
+            {
+                Mask m = Settings.ImageMask ?
+                         Mask.FromImgFile(Settings.ImageMask, Settings.Extension) :
+                         Settings.AsciiMask ?
+                         Mask.FromText(Settings.AsciiMask.name) :
+                         new(Settings);
+                MaskedGrid mg = new(m);
+                Grid = mg;
+            }
+            else
+            {
+                Grid = Settings.DrawMode == DrawMode.Console ? new DistanceGrid(Settings) : new ColoredGrid(Settings);
+            }
         }
 
         public override void Generate()
@@ -56,7 +69,7 @@ namespace Project.Procedural.MazeGeneration
             genAlg.ExecuteSync(Grid);
             Grid.Braid();
 
-            Cell start = Grid[Grid.Rows / 2, Grid.Columns / 2];
+            Cell start = Grid.RandomCell();
             Grid.SetDistances(start.GetDistances());
 
         }
@@ -65,6 +78,7 @@ namespace Project.Procedural.MazeGeneration
         public IEnumerator GenerateAsync()
         {
             IGeneration genAlg = InterfaceFactory.GetGenerationAlgorithm(Settings);
+            genAlg.Report = new("Generation");
 
             Progress = new();
             Progress.ProgressChanged += OnGenerationProgressChanged;
@@ -81,6 +95,7 @@ namespace Project.Procedural.MazeGeneration
         {
             SceneLoader.LoadSceneForDrawMode(Settings.DrawMode);
             DrawMethod = InterfaceFactory.GetDrawMode(Settings);
+            DrawMethod.Report = new("Rendering");
 
             Progress = new();
             Progress.ProgressChanged += OnDrawProgressChanged;

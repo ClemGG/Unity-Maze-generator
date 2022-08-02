@@ -13,7 +13,8 @@ namespace Project.Procedural.MazeGeneration
         private Vector2Int RoomSize { get; set; } = new(1, 1);
         private bool BiasTowardsRooms { get; set; } = false;
 
-        private GenerationProgressReport _report;
+        public GenerationProgressReport Report { get; set; } = new();
+
         private List<Cell> _unlinkedCells;
         private IProgress<GenerationProgressReport> _progress;
 
@@ -41,7 +42,7 @@ namespace Project.Procedural.MazeGeneration
 
         public IEnumerator ExecuteAsync(IGrid grid, IProgress<GenerationProgressReport> progress, Cell start = null)
         {
-            _report = new();
+            Report = new();
             _unlinkedCells = new();
             _progress = progress;
 
@@ -53,9 +54,9 @@ namespace Project.Procedural.MazeGeneration
             else
                 yield return DivideAsync(grid, 0, 0, grid.Rows, grid.Columns);
 
-            _report.ProgressPercentage = (float)((grid.Size() - _unlinkedCells.Count) * 100 / grid.Size()) / 100f;
-            _report.UpdateTrackTime(Time.deltaTime);
-            _progress.Report(_report);
+            Report.ProgressPercentage = (float)((grid.Size() - _unlinkedCells.Count) * 100 / grid.Size()) / 100f;
+            Report.UpdateTrackTime(Time.deltaTime);
+            _progress.Report(Report);
         }
 
         #region Sync
@@ -207,9 +208,9 @@ namespace Project.Procedural.MazeGeneration
                 cell.Unlink(cell.South);
 
                 _unlinkedCells.Add(cell);
-                _report.ProgressPercentage = (float)((grid.Size() - _unlinkedCells.Count) * 100 / grid.Size()) / 100f;
-                _report.UpdateTrackTime(Time.deltaTime);
-                _progress.Report(_report);
+                Report.ProgressPercentage = (float)((grid.Size() - _unlinkedCells.Count) * 100 / grid.Size()) / 100f;
+                Report.UpdateTrackTime(Time.deltaTime);
+                _progress.Report(Report);
                 yield return null;
 
             }
@@ -239,9 +240,9 @@ namespace Project.Procedural.MazeGeneration
                 cell.Unlink(cell.East);
 
                 _unlinkedCells.Add(cell);
-                _report.ProgressPercentage = (float)((grid.Size() - _unlinkedCells.Count) * 100 / grid.Size()) / 100f;
-                _report.UpdateTrackTime(Time.deltaTime);
-                _progress.Report(_report);
+                Report.ProgressPercentage = (float)((grid.Size() - _unlinkedCells.Count) * 100 / grid.Size()) / 100f;
+                Report.UpdateTrackTime(Time.deltaTime);
+                _progress.Report(Report);
                 yield return null;
             }
 
