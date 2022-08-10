@@ -72,7 +72,7 @@ namespace Project.Procedural.MazeGeneration
                 _newUVs.Clear();
                 _newTriangles.Clear();
 
-                GenerateMesh(i, grid);
+                yield return GenerateMeshCo(i, grid, progress);
 
 
 
@@ -82,6 +82,7 @@ namespace Project.Procedural.MazeGeneration
 
                 meshes[i].RecalculateNormals();
 
+
                 MeshFilter mf = MazeObj.GetChild(i).GetComponent<MeshFilter>();
                 MeshCollider mc = MazeObj.GetChild(i).GetComponent<MeshCollider>();
                 mf.mesh = meshes[i];
@@ -90,11 +91,9 @@ namespace Project.Procedural.MazeGeneration
                 if (mc != null)
                     mc.sharedMesh = meshes[i];
 
-
-                Report.ProgressPercentage = (float)((i+1) * 100 / meshes.Length) / 100f;
+                Report.ProgressPercentage = (float)((i + 1) * 100 / meshes.Length) / 100f;
                 Report.UpdateTrackTime(Time.deltaTime);
                 progress.Report(Report);
-
                 yield return null;
             }
 
@@ -102,7 +101,77 @@ namespace Project.Procedural.MazeGeneration
             _newVertices.Clear();
             _newUVs.Clear();
             _newTriangles.Clear();
+
         }
+
+
+        private IEnumerator GenerateMeshCo(int meshID, IDrawableGrid<Color> grid, System.IProgress<GenerationProgressReport> progress)
+        {
+            float cellWidth = _meshCellSize.x;
+            float cellHeight = _meshCellSize.y;
+            _inset = cellWidth * _inset;
+
+            for (int i = 0; i < grid.Rows; i++)
+            {
+                for (int j = 0; j < grid.Columns; j++)
+                {
+                    Cell cell = grid[i, j];
+
+                    if (cell is null) continue;
+
+
+                    if (!Mathf.Approximately(_inset, 0f) && !Mathf.Approximately(_inset, .5f * cellWidth))
+                    {
+                        float x = cell.Column * cellWidth;
+                        float z = (cell.Row - grid.Rows + 1) * cellWidth;
+
+                        switch (meshID)
+                        {
+                            case 0:
+                                AddFloorWithInset(cell, cellWidth, x, z);
+                                break;
+                            case 1:
+                                AddCeilingWithInset(cell, cellWidth, cellHeight, x, z);
+                                break;
+                            case 2:
+                                AddWallsWithInset(cell, cellWidth, cellHeight, x, z);
+                                break;
+
+                                //No need for back walls when using _inset, the collisions work properly
+                        }
+                    }
+                    else
+                    {
+                        switch (meshID)
+                        {
+                            case 0:
+                                AddFloorWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
+                                break;
+                            case 1:
+                                AddCeilingWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
+                                break;
+                            case 2:
+                                AddWallsWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
+                                break;
+                            case 3:
+                                AddBackWallsWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
+                                break;
+                        }
+                    }
+
+
+                    //The 101f is a bit cheating, we don't want the progress canvas to dissapear immediately,
+                    //but rather when the meshes are all assigned.
+                    Report.ProgressPercentage = (float)((i + 1) * (j + 1) * 100 / grid.Size()) / 101f;
+                    Report.UpdateTrackTime(Time.deltaTime);
+                    progress.Report(Report);
+                    yield return null;
+                }
+            }
+        }
+
+
+
 
 
         public void DrawSync(IDrawableGrid<Color> grid)
@@ -114,7 +183,7 @@ namespace Project.Procedural.MazeGeneration
             {
                 meshes[i] = new Mesh
                 {
-                    name = $"Maze mesh {i+1}",
+                    name = $"Maze mesh {i + 1}",
                     indexFormat = UnityEngine.Rendering.IndexFormat.UInt32  //Allows us to get more triangles
                 };
 
@@ -146,8 +215,6 @@ namespace Project.Procedural.MazeGeneration
             _newUVs.Clear();
             _newTriangles.Clear();
         }
-
-
 
 
         private void GenerateMesh(int meshID, IDrawableGrid<Color> grid)
