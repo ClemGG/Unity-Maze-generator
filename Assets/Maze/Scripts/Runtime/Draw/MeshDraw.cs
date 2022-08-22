@@ -34,7 +34,7 @@ namespace Project.Procedural.MazeGeneration
         public MeshDraw(GenerationSettingsSO settings)
         {
             _meshCellSize = settings.MeshCellSize;
-            _inset = settings.Inset;
+            _inset = settings.Inset * _meshCellSize.x;
         }
 
         public void Cleanup()
@@ -109,7 +109,6 @@ namespace Project.Procedural.MazeGeneration
         {
             float cellWidth = _meshCellSize.x;
             float cellHeight = _meshCellSize.y;
-            _inset = cellWidth * _inset;
 
             for (int i = 0; i < grid.Rows; i++)
             {
@@ -145,10 +144,10 @@ namespace Project.Procedural.MazeGeneration
                         switch (meshID)
                         {
                             case 0:
-                                AddFloorWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
+                                AddFloorWithoutInset(cellWidth, cellHeight, i - grid.Rows + 1, j);
                                 break;
                             case 1:
-                                AddCeilingWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
+                                AddCeilingWithoutInset(cellWidth, cellHeight, i - grid.Rows + 1, j);
                                 break;
                             case 2:
                                 AddWallsWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
@@ -221,7 +220,6 @@ namespace Project.Procedural.MazeGeneration
         {
             float cellWidth = _meshCellSize.x;
             float cellHeight = _meshCellSize.y;
-            _inset = cellWidth * _inset;
 
             for (int i = 0; i < grid.Rows; i++)
             {
@@ -257,10 +255,10 @@ namespace Project.Procedural.MazeGeneration
                         switch (meshID)
                         {
                             case 0:
-                                AddFloorWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
+                                AddFloorWithoutInset(cellWidth, cellHeight, i - grid.Rows + 1, j);
                                 break;
                             case 1:
-                                AddCeilingWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
+                                AddCeilingWithoutInset(cellWidth, cellHeight, i - grid.Rows + 1, j);
                                 break;
                             case 2:
                                 AddWallsWithoutInset(cell, cellWidth, cellHeight, i - grid.Rows + 1, j);
@@ -298,19 +296,14 @@ namespace Project.Procedural.MazeGeneration
         private void AddFloorWithInset(Cell cell, float cellSize, float x, float z)
         {
             (Vector4 xc, Vector4 zc) = CellCoordsWithInset(x, z, cellSize);
-            float x1 = xc.x;
             float x2 = xc.y;
             float x3 = xc.z;
-            float x4 = xc.w;
 
             float z1 = zc.x;
             float z2 = zc.y;
-            float z3 = zc.z;
-            float z4 = zc.w;
 
             cellSize -= _inset * 2f;
             float halfCs = cellSize / 2f;
-            float halfI = _inset / 2f;
             Quaternion rot = Quaternion.LookRotation(Vector3.up);
 
             // center
@@ -339,19 +332,14 @@ namespace Project.Procedural.MazeGeneration
         private void AddCeilingWithInset(Cell cell, float cellSize, float cellHeight, float x, float z)
         {
             (Vector4 xc, Vector4 zc) = CellCoordsWithInset(x, z, cellSize);
-            float x1 = xc.x;
             float x2 = xc.y;
             float x3 = xc.z;
-            float x4 = xc.w;
 
             float z1 = zc.x;
             float z2 = zc.y;
-            float z3 = zc.z;
-            float z4 = zc.w;
 
             cellSize -= _inset * 2f;
             float halfCs = cellSize / 2f;
-            float halfI = _inset / 2f;
             Quaternion rot = Quaternion.LookRotation(Vector3.down);
 
 
@@ -381,15 +369,12 @@ namespace Project.Procedural.MazeGeneration
         private void AddWallsWithInset(Cell cell, float cellWidth, float cellHeight, float x, float z)
         {
             (Vector4 xc, Vector4 zc) = CellCoordsWithInset(x, z, cellWidth);
-            float x1 = xc.x;
             float x2 = xc.y;
             float x3 = xc.z;
-            float x4 = xc.w;
 
             float z1 = zc.x;
             float z2 = zc.y;
             float z3 = zc.z;
-            float z4 = zc.w;
 
             float doubleI = _inset * 2f;
             float cellSize = cellWidth - doubleI;
@@ -492,7 +477,7 @@ namespace Project.Procedural.MazeGeneration
 
         #region Without Inset
 
-        private void AddFloorWithoutInset(Cell cell, float cellWidth, float cellHeight, int i, int j)
+        private void AddFloorWithoutInset(float cellWidth, float cellHeight, int i, int j)
         {
             // floor
             AddQuad(
@@ -501,7 +486,7 @@ namespace Project.Procedural.MazeGeneration
                               new Vector3(cellWidth, cellWidth, 1)));
         }
 
-        private void AddCeilingWithoutInset(Cell cell, float cellWidth, float cellHeight, int i, int j)
+        private void AddCeilingWithoutInset(float cellWidth, float cellHeight, int i, int j)
         {
             // ceiling
             AddQuad(
